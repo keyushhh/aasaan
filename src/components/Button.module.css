@@ -19,3 +19,5 @@
   .btn:hover:not(:disabled) .trail { transform: translateX(2px); }
 }
 .btn:active:not(:disabled) { transform: scale(.975); transition-duration: var(--m-press); }
+
+.btn svg { flex-shrink: 0; }

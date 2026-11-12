@@ -28,6 +28,7 @@
   --sheet-glow: radial-gradient(ellipse 90% 300px at 0% 0%, var(--ground-c), transparent 85%), radial-gradient(ellipse 100% 340px at 100% 0%, var(--ground-b), transparent 85%), linear-gradient(to bottom, var(--ground-top), var(--sheet-bg) 380px);
   --nav-ground: linear-gradient(to top, var(--bg) 70%, transparent);
   --blur-sheet: 6px;
+  --detail-glow-opacity: .48;
   --track-tight: -.02em;
   --track-display: -.035em;
 

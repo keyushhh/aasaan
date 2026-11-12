@@ -1,13 +1,13 @@
 /* A queue row: round marker, title and reason, and a small pill with the action. */
-.alert { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; border: 0; border-bottom: 1px dotted var(--sep); padding: 24px 0; color: var(--text); background: none; transition: transform var(--m-out) var(--ease); }
+.alert { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; column-gap: 12px; row-gap: 8px; width: 100%; text-align: left; border: 0; border-bottom: 1px dotted var(--sep); padding: 24px 0; color: var(--text); background: none; transition: transform var(--m-out) var(--ease); }
 .alert:last-child { border-bottom: 0; }
-.ic { width: 44px; height: 44px; border-radius: var(--r-mark); display: grid; place-items: center; flex: none; background: var(--surface-2); color: var(--text); }
+.ic { width: 40px; height: 40px; grid-row: 1 / 3; border-radius: var(--r-mark); display: grid; place-items: center; flex: none; background: var(--surface-2); color: var(--text); }
 .danger .ic, .warn .ic { background: var(--hi-soft); color: var(--hi); }
-.body { flex: 1; min-width: 0; display: block; }
-.title { font-weight: var(--weight-medium); font-size: var(--type-row); line-height: 1.3; letter-spacing: -.01em; display: block; text-wrap: pretty; }
-.text { font-size: 15px; color: var(--muted); margin-top: 2px; display: block; line-height: 1.4; }
+.body { display: contents; }
+.title { grid-column: 2 / -1; font-weight: var(--weight-medium); font-size: var(--type-row); line-height: 1.3; letter-spacing: -.01em; display: block; text-wrap: pretty; }
+.text { grid-column: 2; font-size: 15px; color: var(--muted); margin-top: 2px; display: block; line-height: 1.4; }
 .danger .go, .warn .go { color: var(--hi); }
-.go { display: inline-flex; align-items: center; gap: 2px; flex: none; font-weight: 500; font-size: 14px; background: var(--surface-2); color: var(--text); padding: 0 10px 0 14px; min-height: 40px; border-radius: var(--r-pill); white-space: nowrap; max-width: 42%; }
+.go { display: inline-flex; align-items: center; gap: 2px; flex: none; font-weight: 500; font-size: 14px; background: var(--surface-2); color: var(--text); padding: 0 10px 0 14px; min-height: 40px; border-radius: var(--r-pill); white-space: nowrap; grid-column: 3; max-width: 130px; }
 .go > span { overflow: hidden; text-overflow: ellipsis; }
 .go svg { flex: none; color: var(--faint); transition: transform var(--m-in) var(--ease); }
 @media (hover: hover) and (pointer: fine) {
