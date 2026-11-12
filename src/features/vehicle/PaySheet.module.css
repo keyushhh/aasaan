@@ -1,0 +1,4 @@
+.amount { margin: 12px 0 0; }
+.note { text-align: center; }
+.success { text-align: center; padding: 6px 0; }
+.ring { width: 68px; height: 68px; border-radius: 50%; background: var(--ok); color: var(--white); display: grid; place-items: center; margin: 4px auto 12px; }
