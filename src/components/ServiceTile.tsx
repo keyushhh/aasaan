@@ -2,12 +2,14 @@ import type { Dept } from '../data/types';
 import { Icon, type IconName } from './Icon';
 import s from './ServiceTile.module.css';
 
-export function ServiceTile({ svc, icon, name, state, onClick }: { svc: Dept; icon: IconName; name: string; state: string; onClick: () => void }) {
+export function ServiceTile({ svc, icon, name, state, down, onClick }: { svc: Dept; icon: IconName; name: string; state: string; down?: boolean; onClick: () => void }) {
   return (
     <button type="button" className={s.tile} data-svc={svc} onClick={onClick}>
-      <Icon name={icon} size={30} />
-      <span className={s.name}>{name}</span>
-      <span className={s.state}>{state}</span>
+      <span className={s.mark}><Icon name={icon} size={20} /></span>
+      <span>
+        <span className={s.name}>{name}</span>
+        <span className={down ? `${s.state} ${s.down}` : s.state}>{state}</span>
+      </span>
     </button>
   );
 }

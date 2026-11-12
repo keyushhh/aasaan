@@ -77,7 +77,7 @@ test('allow a records request and it leaves the home queue', async ({ page }) =>
 
 test('search in Hindi and switch the language', async ({ page }) => {
   await signIn(page);
-  await page.getByRole('button', { name: 'Services' }).click();
+  await page.getByRole('button', { name: 'Services', exact: true }).click();
   await page.getByLabel('Search services').fill('चालान');
   await page.getByRole('button', { name: /Pay a traffic challan/ }).click();
   await expect(page).toHaveURL(/#\/vehicle$/);

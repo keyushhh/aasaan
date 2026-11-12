@@ -35,7 +35,7 @@ export function Health() {
             <div className="label">{t.abhaNumber}</div>
             <div className="big md">{abha.data!.number}</div>
             <div className="row-s">{abha.data!.address}</div>
-            <Button block onSign icon="download" onClick={() => toast(t.downloadToast)}>{t.downloadAbha}</Button>
+            <Button block icon="download" onClick={() => toast(t.downloadToast)}>{t.downloadAbha}</Button>
           </Card>
           <h2 className="h">{t.recordRequests}</h2>
           <div className="stack">

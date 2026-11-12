@@ -1,7 +1,9 @@
-.doc { border-radius: var(--r-hero); padding: 24px; background: var(--doc-card); color: var(--white); box-shadow: inset 0 0 0 6px var(--doc-card), inset 0 0 0 7.5px var(--on-sign-keyline); }
+.doc { position: relative; overflow: hidden; border-radius: var(--r-hero); padding: 22px; background: var(--text); color: var(--bg); }
+.doc::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; background: var(--svc-docs); opacity: .35; filter: blur(30px); }
+.doc > * { position: relative; z-index: 1; }
 .iss { font-size: 13px; opacity: .85; }
-.name { font-family: var(--display); font-weight: var(--dw); font-size: 27px; line-height: 1.2; }
+.name { font-weight: 650; font-size: 26px; line-height: 1.15; letter-spacing: var(--track-tight); margin-top: 2px; }
 .no { font-size: 18px; font-weight: 600; letter-spacing: .04em; margin-top: 10px; font-variant-numeric: tabular-nums; }
 .ver { display: flex; align-items: center; gap: 6px; font-size: 13px; margin-top: 10px; opacity: .9; }
-.code { font-family: var(--display); font-size: 42px; font-weight: 800; letter-spacing: .2em; text-align: center; padding: 16px; border: 2px dashed var(--accent); border-radius: var(--r-card); background: var(--accent-soft); color: var(--accent); margin: 14px 0 6px; font-variant-numeric: tabular-nums; }
+.code { font-size: 40px; font-weight: 650; letter-spacing: .18em; text-align: center; padding: 16px; border: 0; border-radius: var(--r-card); background: var(--surface-2); color: var(--text); margin: 14px 0 6px; font-variant-numeric: tabular-nums; }
 .expiryHead { margin-top: 18px; }

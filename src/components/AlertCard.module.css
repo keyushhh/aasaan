@@ -1,15 +1,15 @@
 .alert {
   display: flex; align-items: flex-start; gap: 14px; width: 100%; text-align: left; background: var(--surface); border: 0; box-shadow: var(--shadow-card);
-  border-radius: var(--r-card); padding: 16px 14px 16px 16px; margin-top: 10px; color: var(--text); 
+  border-radius: var(--r-card); padding: 16px; margin-top: 10px; color: var(--text);
   transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), border-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
 }
-.ic { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--accent-soft); color: var(--accent); }
+.ic { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--accent-soft); color: var(--accent); }
 .danger .ic { background: var(--danger-soft); color: var(--danger); }
 .warn .ic { background: var(--hi-soft); color: var(--hi); }
 .body { flex: 1; min-width: 0; display: block; }
-.title { font-family: var(--display); font-weight: 700; font-size: 21px; line-height: 1.1; display: block; text-wrap: balance; }
-.text { font-size: 14px; color: var(--muted); margin-top: 4px; display: block; line-height: 1.4; }
-.go { display: inline-flex; align-items: center; gap: 4px; margin-top: 12px; font-family: var(--display); font-weight: 700; font-size: 16px; background: var(--yel); color: var(--yel-ink); padding: 8px 14px 8px 16px; border-radius: var(--r-pill); white-space: nowrap; }
+.title { font-weight: 600; font-size: 16px; line-height: 1.3; letter-spacing: -.015em; display: block; text-wrap: pretty; }
+.text { font-size: 14px; color: var(--muted); margin-top: 3px; display: block; line-height: 1.4; }
+.go { display: inline-flex; align-items: center; gap: 4px; margin-top: 12px; font-weight: 600; font-size: 14px; background: var(--lime); color: var(--lime-ink); padding: 8px 12px 8px 14px; border-radius: var(--r-pill); white-space: nowrap; }
 .quiet .go { background: var(--surface-2); color: var(--text); }
 @media (hover: hover) and (pointer: fine) { .alert:hover { transform: translateY(-2px); transition-duration: var(--m-in); } }
 .alert:active { transform: scale(.985); transition-duration: var(--m-press); }

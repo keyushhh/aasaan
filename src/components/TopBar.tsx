@@ -2,13 +2,14 @@ import type { ReactNode } from 'react';
 import type { Dept } from '../data/types';
 import s from './TopBar.module.css';
 
-/** Screen header. With `svc`, the department line carries that department's signage colour. Without `start`, it is a large title. */
+/** With `start`, a detail header (back, centred title, action). Without it, a large tab title. */
 export function TopBar({ title, dept, svc, start, end }: { title: string; dept?: string; svc?: Dept; start?: ReactNode; end?: ReactNode }) {
+  if (!start) return <header className={`${s.top} ${s.large}`}><h1>{title}</h1>{end}</header>;
   return (
-    <header className={start ? s.top : `${s.top} ${s.large}`} data-svc={svc}>
+    <header className={s.top} data-svc={svc}>
       {start}
-      <h1>{title}{dept && <span className={s.dept}>{dept}</span>}</h1>
-      {end}
+      <h1 className={s.title}>{title}{dept && <span className={s.dept}>{dept}</span>}</h1>
+      {end ?? <span className={s.slot} />}
     </header>
   );
 }

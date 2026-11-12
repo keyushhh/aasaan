@@ -1,5 +1,5 @@
-.banner { display: flex; gap: 12px; align-items: flex-start; background: var(--hi-soft); color: var(--text); border-radius: 18px; padding: 14px 16px; margin-bottom: 14px; font-size: 15px; line-height: 1.4; }
+.banner { display: flex; gap: 12px; align-items: flex-start; background: var(--hi-soft); color: var(--text); border-radius: 20px; padding: 14px 16px; margin-bottom: 14px; font-size: 14px; line-height: 1.45; }
 .banner svg { color: var(--hi); flex: none; margin-top: 1px; }
-.banner b { display: block; margin-bottom: 2px; }
+.banner b { display: block; margin-bottom: 2px; font-weight: 600; font-size: 15px; }
 .inSheet { margin-top: 14px; }
 .inPay { margin-top: 16px; }

@@ -1,6 +1,6 @@
 .login { padding: 32px 22px 24px; }
-.login h1 { font-family: var(--display); font-weight: var(--dw); font-size: 46px; line-height: 1.02; letter-spacing: -.01em; margin: 22px 0 8px; max-width: 12ch; }
-.login :global(.logo) { background: var(--yel); color: var(--yel-ink); border-radius: 18px; width: 64px; height: 64px; font-size: 34px; box-shadow: var(--shadow-cta); }
+.login h1 { font-weight: 650; font-size: 40px; line-height: 1.05; letter-spacing: var(--track-display); margin: 28px 0 10px; max-width: 12ch; text-wrap: balance; }
+.login :global(.logo) { background: var(--lime); color: var(--lime-ink); width: 64px; height: 64px; font-size: 32px; box-shadow: var(--shadow-cta); }
 .hint { background: var(--accent-soft); color: var(--accent); border-radius: var(--r-pill); padding: 8px 12px; font-size: 14px; font-weight: 600; margin-top: 10px; display: inline-block; }
 .proto { font-size: 13px; color: var(--muted); text-align: center; margin-top: 20px; }
 .consents { margin-top: 16px; }

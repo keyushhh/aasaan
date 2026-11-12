@@ -1,20 +1,19 @@
 .btn {
-  border: 0; background: var(--surface-2); border-radius: var(--r-pill); padding: 12px 18px; white-space: nowrap;
-  font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: .01em; min-height: 52px;
+  border: 0; background: var(--surface-2); border-radius: var(--r-pill); padding: 12px 20px; white-space: nowrap;
+  font-weight: 600; font-size: 16px; letter-spacing: -.01em; min-height: 52px;
   display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--text);
   transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), border-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
 }
-.primary { background: var(--yel); color: var(--yel-ink); box-shadow: var(--shadow-cta); }
+.primary { background: var(--lime); color: var(--lime-ink); box-shadow: var(--shadow-cta); }
 .danger { color: var(--danger); }
-.small { min-height: 44px; padding: 6px 16px; font-size: 16px; }
+.small { min-height: 40px; padding: 6px 16px; font-size: 14px; }
 .small.primary { box-shadow: none; }
-.block { width: 100%; margin-top: 16px; }
-.onSign { background: var(--on-sign-fill); color: var(--white); }
-.btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+.block { width: 100%; margin-top: 18px; }
+.onSign { background: var(--surface-2); color: var(--text); }
+.btn:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
 @media (hover: hover) and (pointer: fine) {
   .btn:hover:not(:disabled) { transform: translateY(-1px); transition-duration: var(--m-in); }
-  .primary:hover:not(:disabled) { background: color-mix(in srgb, var(--btn-fill) 88%, var(--btn-ink)); }
-  .btn:not(.primary):hover:not(:disabled) { background: color-mix(in srgb, var(--surface-2) 88%, var(--text)); }
-  .onSign:hover:not(:disabled) { background: color-mix(in srgb, var(--on-sign-fill) 70%, var(--white)); color: var(--white); }
+  .primary:hover:not(:disabled) { background: color-mix(in srgb, var(--lime) 90%, var(--lime-ink)); }
+  .btn:not(.primary):hover:not(:disabled) { background: var(--surface-3); }
 }
-.btn:active:not(:disabled) { transform: translateY(1px) scale(.985); transition-duration: var(--m-press); }
+.btn:active:not(:disabled) { transform: scale(.97); transition-duration: var(--m-press); }

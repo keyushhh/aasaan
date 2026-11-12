@@ -1,24 +1,29 @@
-/* Every colour, radius, motion and type token from reference/index.html. Add none. */
+/*
+ * Aasaan design tokens. Neutral surfaces, one lime accent, Geist for Latin and Mukta for Devanagari.
+ * Department colours are markers only: a tinted avatar or a dot, never a whole surface.
+ */
 
 :root {
   /* type */
-  --font: 'Barlow', 'Mukta', system-ui, sans-serif;
-  --display: 'Barlow Condensed', 'Mukta', sans-serif;
+  --font: 'Geist Variable', 'Mukta', system-ui, sans-serif;
+  --display: 'Geist Variable', 'Mukta', system-ui, sans-serif;
   --logo-font: 'Mukta', var(--font);
-  --dw: 800;
-  --dw-big: 800;
-  --fs: 17px;
+  --dw: 650;
+  --dw-big: 600;
+  --fs: 16px;
+  --track-tight: -.035em;
+  --track-display: -.05em;
 
-  /* radius: soft, nested radii step down by the padding between them */
-  --r-card: 20px;
-  --r-hero: 26px;
-  --r-tile: 22px;
-  --r-btn: 14px;
-  --r-field: 14px;
+  /* radius */
+  --r-card: 24px;
+  --r-hero: 28px;
+  --r-tile: 24px;
+  --r-btn: 16px;
+  --r-field: 16px;
   --r-pill: 999px;
-  --r-logo: 12px;
-  --r-sheet: 28px;
-  --r-icon: 12px;
+  --r-logo: 50%;
+  --r-sheet: 30px;
+  --r-icon: 50%;
   --tabs-h: 104px;
 
   /* motion */
@@ -28,112 +33,96 @@
   --m-out: 120ms;
   --m-press: 90ms;
 
-  /* signage (same in both themes) */
-  --sign: #0B3D91;
-  --yel: #FFC72C;
-  --yel-ink: #0A1730;
-  --top-bg: #0B3D91;
-  --top-ink: #FFFFFF;
+  /* accent: one colour for calls to action, selection and focus */
+  --lime: #C8F169;
+  --lime-ink: #11160A;
+  --btn-fill: var(--lime);
+  --btn-ink: var(--lime-ink);
   --white: #fff;
-  --on-sign-muted: rgba(255, 255, 255, .82);
-  --on-sign-rule: rgba(255, 255, 255, .3);
-  --on-sign-line: rgba(255, 255, 255, .4);
-  --on-sign-btn-line: rgba(255, 255, 255, .5);
-  --top-shadow: rgba(0, 0, 0, .08);
-  --knob-shadow: rgba(10, 23, 48, .22);
-  --on-sign-fill: rgba(255, 255, 255, .14);
-  --on-sign-keyline: rgba(255, 255, 255, .85);
-  --btn-fill: var(--yel);
-  --btn-ink: var(--yel-ink);
+  --knob-shadow: rgba(0, 0, 0, .22);
 
-  /* one signage colour per department */
-  --svc-epf: #0B3D91;
-  --svc-docs: #0E7A3B;
-  --svc-vehicle: #FFC72C;
-  --svc-vehicle-ink: #0A1730;
-  --svc-tax: #6B3B1F;
-  --svc-health: #C8102E;
-  --doc-card: #0E7A3B;
+  /* department markers */
+  --svc-epf: #6C7CFF;
+  --svc-docs: #2FBF71;
+  --svc-vehicle: #F2A93B;
+  --svc-tax: #E0795A;
+  --svc-health: #F0607E;
 
-  /* light theme: white cards on a cool grey ground */
-  --bg: #EEF1F5;
+  /* light */
+  --bg: #F3F3F1;
   --surface: #FFFFFF;
-  --surface-2: #E0E5EC;
-  --text: #0A1730;
-  --muted: #47546C;
-  --line: #CCD3DE;
-  --accent: #0B3D91;
-  --accent-ink: #FFFFFF;
-  --accent-soft: #DCE5F5;
-  --hi: #7A5A00;
-  --hi-bg: #FFC72C;
-  --hi-ink: #0A1730;
-  --hi-soft: #FFF0C2;
-  --danger: #C8102E;
-  --danger-soft: #FBDDE1;
-  --ok: #0E7A3B;
-  --ok-soft: #D5EFDE;
-  --scrim: rgba(5, 15, 35, .55);
-  --shadow-card: 0 1px 2px rgba(10, 23, 48, .05), 0 4px 14px rgba(10, 23, 48, .05);
-  --shadow-float: 0 8px 28px rgba(10, 23, 48, .16), 0 2px 6px rgba(10, 23, 48, .08);
-  --shadow-cta: 0 6px 18px rgba(255, 199, 44, .35);
+  --surface-2: #ECECE9;
+  --surface-3: #E2E2DE;
+  --text: #121212;
+  --muted: #6C6C68;
+  --line: #E4E4E0;
+  --accent: #4E7A0A;          /* lime, darkened for text and icons on light */
+  --accent-fill: var(--lime);
+  --accent-ink: var(--lime-ink);
+  --accent-soft: #EAF6CF;
+  --hi: #8A5A00;
+  --hi-soft: #FBEFD4;
+  --danger: #C62F45;
+  --danger-soft: #FBE3E6;
+  --ok: #23824F;
+  --ok-soft: #DDF2E5;
+  --scrim: rgba(10, 10, 10, .45);
+  --shadow-card: 0 1px 2px rgba(18, 18, 18, .04), 0 6px 20px rgba(18, 18, 18, .05);
+  --shadow-float: 0 12px 36px rgba(18, 18, 18, .14), 0 2px 8px rgba(18, 18, 18, .06);
+  --shadow-cta: 0 8px 22px rgba(120, 170, 30, .28);
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #08101F;
-    --surface: #121D33;
-    --surface-2: #1B2843;
-    --text: #F1F4FA;
-    --muted: #9EABC4;
-    --line: #26365A;
-    --accent: #86A9F2;
-    --accent-ink: #071331;
-    --accent-soft: #18284B;
-    --hi: #FFD45C;
-    --hi-bg: #FFC72C;
-    --hi-ink: #0A1730;
-    --hi-soft: #382C06;
-    --danger: #FF7D8E;
-    --danger-soft: #3D121A;
-    --ok: #5FD28C;
-    --ok-soft: #10301E;
-    --scrim: rgba(0, 0, 0, .65);
-    --shadow-card: 0 0 0 0 transparent;
-    --shadow-float: 0 10px 32px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .06);
-    --shadow-cta: 0 6px 20px rgba(255, 199, 44, .18);
+    --bg: #0A0A0B;
+    --surface: #161617;
+    --surface-2: #212123;
+    --surface-3: #2C2C2F;
+    --text: #F4F4F2;
+    --muted: #9C9C98;
+    --line: #262628;
+    --accent: #C8F169;
+    --accent-soft: #233012;
+    --hi: #F5C46A;
+    --hi-soft: #2E2410;
+    --danger: #FF7A8C;
+    --danger-soft: #34151B;
+    --ok: #6FDB9B;
+    --ok-soft: #12291C;
+    --scrim: rgba(0, 0, 0, .6);
+    --shadow-card: 0 0 0 1px rgba(255, 255, 255, .03);
+    --shadow-float: 0 14px 40px rgba(0, 0, 0, .6), 0 0 0 1px rgba(255, 255, 255, .06);
+    --shadow-cta: 0 8px 26px rgba(200, 241, 105, .14);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #08101F;
-  --surface: #121D33;
-  --surface-2: #1B2843;
-  --text: #F1F4FA;
-  --muted: #9EABC4;
-  --line: #26365A;
-  --accent: #86A9F2;
-  --accent-ink: #071331;
-  --accent-soft: #18284B;
-  --hi: #FFD45C;
-  --hi-bg: #FFC72C;
-  --hi-ink: #0A1730;
-  --hi-soft: #382C06;
-  --danger: #FF7D8E;
-  --danger-soft: #3D121A;
-  --ok: #5FD28C;
-  --ok-soft: #10301E;
-  --scrim: rgba(0, 0, 0, .65);
-  --shadow-card: 0 0 0 0 transparent;
-  --shadow-float: 0 10px 32px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .06);
-  --shadow-cta: 0 6px 20px rgba(255, 199, 44, .18);
+  --bg: #0A0A0B;
+  --surface: #161617;
+  --surface-2: #212123;
+  --surface-3: #2C2C2F;
+  --text: #F4F4F2;
+  --muted: #9C9C98;
+  --line: #262628;
+  --accent: #C8F169;
+  --accent-soft: #233012;
+  --hi: #F5C46A;
+  --hi-soft: #2E2410;
+  --danger: #FF7A8C;
+  --danger-soft: #34151B;
+  --ok: #6FDB9B;
+  --ok-soft: #12291C;
+  --scrim: rgba(0, 0, 0, .6);
+  --shadow-card: 0 0 0 1px rgba(255, 255, 255, .03);
+  --shadow-float: 0 14px 40px rgba(0, 0, 0, .6), 0 0 0 1px rgba(255, 255, 255, .06);
+  --shadow-cta: 0 8px 26px rgba(200, 241, 105, .14);
   color-scheme: dark;
 }
 
 [data-svc=epf] { --svc: var(--svc-epf); }
 [data-svc=docs] { --svc: var(--svc-docs); }
-[data-svc=vehicle] { --svc: var(--svc-vehicle); --svc-ink: var(--svc-vehicle-ink); }
+[data-svc=vehicle] { --svc: var(--svc-vehicle); }
 [data-svc=tax] { --svc: var(--svc-tax); }
 [data-svc=health] { --svc: var(--svc-health); }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AlertCard } from '../../components/AlertCard';
 import { Card } from '../../components/Card';
+import { Icon } from '../../components/Icon';
 import { ServiceTile } from '../../components/ServiceTile';
 import { DEPTS } from '../../data/types';
 import { useChallans, useConsents, useDepartments, useRegistration, useRequests } from '../../data/hooks';
@@ -30,6 +31,7 @@ export function Home() {
   useEffect(() => void (entered = true), []);
 
   const items = attention({ challans, registration, consents, requests, linked, down }, t);
+  const open = requests.filter((r) => r.status !== 'done').length;
   const first = name.split(' ')[0];
   const date = new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
   const run = (target: Target) => {
@@ -42,21 +44,28 @@ export function Home() {
   return (
     <>
       <header className={`${s.head} ${enter ? s.enter : ''}`}>
-        <div className={s.brand}>
-          <span className="logo" aria-hidden="true">आ</span>
-          <span>{t.brand}</span>
-          <span className={s.date}>{date}</span>
+        <div className={s.bar}>
+          <span className={s.brand}><span className="logo" aria-hidden="true">आ</span>{t.brand}</span>
+          <button type="button" className={s.chip} aria-label={`${t.tabs.requests}: ${open}`} onClick={() => nav.tab('requests')}>
+            <Icon name="clock" size={18} />{open}
+          </button>
+          <button type="button" className={s.round} aria-label={t.searchLabel} onClick={() => nav.tab('services')}>
+            <Icon name="search" size={19} />
+          </button>
         </div>
         <h1 className={s.count}>
           <span className={s.num}>{items.length}</span>
           <span className={s.lbl}>{t.needYou(items.length, first)}</span>
         </h1>
+        <div className={s.date}>{date}</div>
       </header>
       <main className="pad" id="main">
-        {items.map(({ key, target, ...x }, i) => <AlertCard key={key} {...x} first={i === 0} onClick={() => run(target)} />)}
+        <div className={s.queue}>
+          {items.map(({ key, target, ...x }, i) => <AlertCard key={key} {...x} first={i === 0} onClick={() => run(target)} />)}
+        </div>
         <h2 className="h">{t.yourServices}</h2>
         <div className={s.tiles}>
-          {DEPTS.map((d) => <ServiceTile key={d} svc={d} icon={SVC_ICON[d]} name={t.svc[d]} state={state(d)} onClick={() => nav.go(d)} />)}
+          {DEPTS.map((d) => <ServiceTile key={d} svc={d} icon={SVC_ICON[d]} name={t.svc[d]} state={state(d)} down={linked[d] && down[d]} onClick={() => nav.go(d)} />)}
         </div>
         <h2 className="h">{t.recent}</h2>
         <Card variant="list">{requests.slice(0, 3).map((r) => <RequestRow key={r.id} r={r} />)}</Card>
