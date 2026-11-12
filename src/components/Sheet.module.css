@@ -1,6 +1,7 @@
-.wrap { position: fixed; inset: 0; z-index: 30; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: var(--scrim); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; align-items: flex-end; justify-content: center; animation: fade .2s var(--ease); color: var(--text); }
+.wrap { position: fixed; inset: 0; z-index: 30; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: var(--scrim); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: flex; align-items: flex-end; justify-content: center; animation: fade .2s var(--ease); color: var(--text); }
 .wrap::backdrop { background: transparent; }
-.sheet { background: var(--glass-strong); backdrop-filter: blur(var(--blur)) saturate(1.5); -webkit-backdrop-filter: blur(var(--blur)) saturate(1.5); width: calc(100% - 12px); max-width: 468px; margin-bottom: max(6px, env(safe-area-inset-bottom, 0px)); border-radius: var(--r-sheet); padding: 10px 20px 22px; max-height: 90%; overflow-y: auto; animation: up .36s var(--ease-enter); outline: none; box-shadow: inset 0 0 0 1px var(--hairline-strong), inset 0 1px 0 var(--highlight), var(--shadow-float); }
+/* The sheet rises from the bottom edge, with its own teal glow at the top. */
+.sheet { background: radial-gradient(90% 240px at 50% 0, var(--glow), transparent 100%) no-repeat, var(--sheet-bg); width: 100%; max-width: 480px; border-radius: var(--r-sheet) var(--r-sheet) 0 0; padding: 12px 20px calc(24px + env(safe-area-inset-bottom, 0px)); max-height: 92%; overflow-y: auto; animation: up .36s var(--ease-enter); outline: none; box-shadow: var(--shadow-float); }
 .core { display: contents; }
-.grab { width: 36px; height: 5px; border-radius: var(--r-pill); background: var(--hairline-strong); margin: 0 auto 18px; }
-.title { font-weight: 600; margin: 0 0 6px; font-size: 26px; line-height: 1.12; letter-spacing: var(--track-tight); text-wrap: balance; }
+.head { display: flex; justify-content: flex-end; margin: 0 -8px 2px 0; }
+.title { font-weight: 600; margin: 0 0 6px; font-size: 24px; line-height: 1.15; letter-spacing: var(--track-tight); text-wrap: balance; }

@@ -1,25 +1,21 @@
 .btn {
-  border: 0; background: var(--glass-2); border-radius: var(--r-pill); padding: 12px 20px; white-space: nowrap;
-  font-weight: 550; font-size: 16px; letter-spacing: -.012em; min-height: 52px;
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--text);
-  box-shadow: inset 0 0 0 1px var(--hairline), inset 0 1px 0 var(--highlight);
-  transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
+  border: 0; background: var(--surface-2); border-radius: var(--r-btn); padding: 0 22px; white-space: nowrap;
+  font-weight: 600; font-size: 17px; letter-spacing: -.01em; min-height: 56px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; color: var(--text);
+  transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), opacity var(--m-out) var(--ease);
 }
-/* The one filled action per view: solid, no colour, maximum contrast. */
-.primary { background: var(--primary); color: var(--primary-ink); box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .5); }
+/* The filled action: solid white in the dark, solid ink in the light. */
+.primary { background: var(--primary); color: var(--primary-ink); }
 .danger { color: var(--danger); }
-.small { min-height: 40px; padding: 6px 16px; font-size: 14px; }
-.small.primary { box-shadow: none; }
+.small { min-height: 44px; padding: 0 18px; font-size: 15px; gap: 6px; }
 .block { width: 100%; margin-top: 18px; }
-.onSign { background: var(--glass-2); color: var(--text); }
-.btn:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
-.hasTrail { padding-right: 8px; justify-content: space-between; }
-.hasTrail > span:first-child { flex: 1; text-align: center; padding-left: 12px; }
-.trail { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex: none; margin-left: 12px; background: var(--inset); box-shadow: inset 0 0 0 1px var(--hairline); transition: transform var(--m-in) var(--ease); }
-.primary .trail { background: color-mix(in srgb, var(--primary-ink) 12%, transparent); box-shadow: none; }
+.onSign { background: var(--surface-2); color: var(--text); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.hasTrail > span:first-child { display: inline-flex; align-items: center; gap: 10px; }
+.trail { display: inline-flex; margin-left: -2px; transition: transform var(--m-in) var(--ease); }
 @media (hover: hover) and (pointer: fine) {
-  .btn:hover:not(:disabled) { transform: translateY(-1px); transition-duration: var(--m-in); }
-  .btn:not(.primary):hover:not(:disabled) { background: var(--glass-strong); }
+  .btn:not(.primary):hover:not(:disabled) { background: var(--surface-3); }
+  .primary:hover:not(:disabled) { opacity: .92; }
   .btn:hover:not(:disabled) .trail { transform: translateX(2px); }
 }
 .btn:active:not(:disabled) { transform: scale(.975); transition-duration: var(--m-press); }

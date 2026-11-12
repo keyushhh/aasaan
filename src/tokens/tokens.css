@@ -1,39 +1,28 @@
 /*
- * Aasaan design tokens: the glass console.
- * An OLED-black ground with soft department-coloured glows, frosted panels bounded by hairlines,
- * and a white-glass primary action. Light mode is frosted white on pale grey.
- * Every colour, radius, blur, motion and type value lives here. Components reference tokens, never literals.
+ * Aasaan design tokens: the audit console.
+ * A near-black ground with one deep-teal glow at the top, flat surfaces that are a shade lighter than the ground,
+ * dotted hairlines between rows, white pill actions, amber for anything worth checking and green for anything confirmed.
+ * Light mode is the same world on pale grey. Every colour, radius, motion and type value lives here.
  */
 
 :root {
   /* type */
   --font: 'Geist Variable', 'Mukta', system-ui, sans-serif;
-  --display: 'Geist Variable', 'Mukta', system-ui, sans-serif;
-  --mono: 'Geist Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
   --logo-font: 'Mukta', var(--font);
-  --dw: 600;
-  --dw-big: 500;
   --fs: 16px;
-  --track-tight: -.03em;
-  --track-display: -.05em;
-  --track-mono: .04em;
+  --track-tight: -.02em;
+  --track-display: -.035em;
 
   /* radius */
-  --r-panel: 26px;
-  --r-card: 22px;
-  --r-tile: 22px;
-  --r-btn: 16px;
-  --r-field: 14px;
+  --r-card: 18px;
+  --r-item: 14px;
+  --r-field: 18px;
+  --r-btn: 999px;
   --r-pill: 999px;
-  --r-logo: 12px;
-  --r-mark: 12px;
+  --r-logo: 50%;
+  --r-mark: 50%;
   --r-sheet: 32px;
-  --r-icon: 12px;
-  --tabs-h: 104px;
-
-  /* glass */
-  --blur: 28px;
-  --blur-bar: 22px;
+  --tabs-h: 92px;
 
   /* motion */
   --ease: cubic-bezier(.32, .72, 0, 1);
@@ -41,122 +30,107 @@
   --m-in: 180ms;
   --m-out: 140ms;
   --m-press: 90ms;
-  --m-enter: 700ms;
+  --m-enter: 600ms;
 
-  /* department glows */
+  /* department markers */
   --svc-epf: #7C8CFF;
-  --svc-docs: #41C98A;
-  --svc-vehicle: #F2B544;
+  --svc-docs: #52D17A;
+  --svc-vehicle: #F2A52E;
   --svc-tax: #F08A5D;
   --svc-health: #FF6B8E;
 
-  /* light: frosted white on pale grey */
-  --bg: #ECEEF3;
-  --glow-a: rgba(124, 140, 255, .26);
-  --glow-b: rgba(65, 201, 138, .16);
-  --glow-c: rgba(242, 181, 68, .14);
-  --glass: rgba(255, 255, 255, .62);
-  --glass-2: rgba(255, 255, 255, .85);
-  --glass-strong: rgba(255, 255, 255, .92);
-  --inset: rgba(20, 22, 30, .05);
-  --hairline: rgba(20, 22, 30, .08);
-  --hairline-strong: rgba(20, 22, 30, .14);
-  --highlight: rgba(255, 255, 255, .9);
-  --line: rgba(20, 22, 30, .08);
-  --text: #121419;
-  --muted: #5F6473;
-  --faint: #9096A6;
-  --primary: #121419;
+  /* light */
+  --bg: #F3F5F4;
+  --glow: rgba(36, 92, 76, .22);
+  --surface: rgba(10, 11, 11, .05);
+  --surface-2: rgba(10, 11, 11, .08);
+  --surface-3: rgba(10, 11, 11, .12);
+  --sep: rgba(10, 11, 11, .24);
+  --line: rgba(10, 11, 11, .1);
+  --text: #0A0B0B;
+  --muted: #5E6461;
+  --faint: #8C918F;
+  --hero-label: #2F5C4E;
+  --primary: #0A0B0B;
   --primary-ink: #FFFFFF;
-  --accent: #3D5CFF;
-  --accent-soft: rgba(61, 92, 255, .12);
-  --hi: #8A5A00;
-  --hi-soft: rgba(242, 181, 68, .2);
-  --danger: #C8304A;
-  --danger-soft: rgba(200, 48, 74, .12);
-  --ok: #1E7F4F;
-  --ok-soft: rgba(30, 127, 79, .14);
+  --accent: #1E9A4E;
+  --accent-soft: rgba(30, 154, 78, .14);
+  --hi: #A8650A;
+  --hi-soft: rgba(242, 165, 46, .16);
+  --danger: #D23B3B;
+  --danger-soft: rgba(210, 59, 59, .12);
+  --ok: #1E9A4E;
+  --ok-soft: rgba(30, 154, 78, .14);
   --warn-fill: #E2A43A;
-  --info-fill: #3D5CFF;
   --knob: #FFFFFF;
-  --knob-shadow: rgba(20, 22, 30, .25);
-  --scrim: rgba(20, 22, 30, .4);
-  --shadow-panel: 0 20px 50px -24px rgba(20, 22, 30, .25);
-  --shadow-float: 0 24px 60px -20px rgba(20, 22, 30, .35);
+  --knob-shadow: rgba(10, 11, 11, .25);
+  --scrim: rgba(10, 11, 11, .45);
+  --sheet-bg: #FFFFFF;
+  --shadow-float: 0 24px 60px -20px rgba(10, 11, 11, .35);
   --white: #fff;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #050507;
-    --glow-a: rgba(124, 140, 255, .28);
-    --glow-b: rgba(65, 201, 138, .16);
-    --glow-c: rgba(242, 181, 68, .14);
-    --glass: rgba(255, 255, 255, .045);
-    --glass-2: rgba(255, 255, 255, .08);
-    --glass-strong: rgba(18, 18, 22, .78);
-    --inset: rgba(255, 255, 255, .04);
-    --hairline: rgba(255, 255, 255, .09);
-    --hairline-strong: rgba(255, 255, 255, .16);
-    --highlight: rgba(255, 255, 255, .14);
-    --line: rgba(255, 255, 255, .07);
-    --text: #F3F3F6;
-    --muted: #9A9DAB;
-    --faint: #5E6170;
+    --bg: #0A0B0B;
+    --glow: rgba(36, 92, 76, .72);
+    --surface: rgba(255, 255, 255, .06);
+    --surface-2: rgba(255, 255, 255, .1);
+    --surface-3: rgba(255, 255, 255, .14);
+    --sep: rgba(255, 255, 255, .18);
+    --line: rgba(255, 255, 255, .08);
+    --text: #FFFFFF;
+    --muted: #A3A7A5;
+    --faint: #6B706E;
+    --hero-label: #9DB9AE;
     --primary: #FFFFFF;
-    --primary-ink: #0A0A0E;
-    --accent: #9FB0FF;
-    --accent-soft: rgba(124, 140, 255, .16);
-    --hi: #F2C66F;
-    --hi-soft: rgba(242, 181, 68, .16);
-    --danger: #FF7A93;
-    --danger-soft: rgba(255, 107, 142, .16);
-    --ok: #6FDDA3;
-    --ok-soft: rgba(65, 201, 138, .16);
-    --warn-fill: #F2B544;
-    --info-fill: #9FB0FF;
+    --primary-ink: #0A0B0B;
+    --accent: #52D17A;
+    --accent-soft: rgba(82, 209, 122, .14);
+    --hi: #F2A52E;
+    --hi-soft: rgba(242, 165, 46, .12);
+    --danger: #FF6B6B;
+    --danger-soft: rgba(255, 107, 107, .12);
+    --ok: #52D17A;
+    --ok-soft: rgba(82, 209, 122, .14);
+    --warn-fill: #F2A52E;
     --knob: #FFFFFF;
     --knob-shadow: rgba(0, 0, 0, .5);
-    --scrim: rgba(0, 0, 0, .55);
-    --shadow-panel: 0 30px 60px -30px rgba(0, 0, 0, .8);
+    --scrim: rgba(0, 0, 0, .6);
+    --sheet-bg: #121413;
     --shadow-float: 0 30px 80px -20px rgba(0, 0, 0, .9);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #050507;
-  --glow-a: rgba(124, 140, 255, .28);
-  --glow-b: rgba(65, 201, 138, .16);
-  --glow-c: rgba(242, 181, 68, .14);
-  --glass: rgba(255, 255, 255, .045);
-  --glass-2: rgba(255, 255, 255, .08);
-  --glass-strong: rgba(18, 18, 22, .78);
-  --inset: rgba(255, 255, 255, .04);
-  --hairline: rgba(255, 255, 255, .09);
-  --hairline-strong: rgba(255, 255, 255, .16);
-  --highlight: rgba(255, 255, 255, .14);
-  --line: rgba(255, 255, 255, .07);
-  --text: #F3F3F6;
-  --muted: #9A9DAB;
-  --faint: #5E6170;
+  --bg: #0A0B0B;
+  --glow: rgba(36, 92, 76, .72);
+  --surface: rgba(255, 255, 255, .06);
+  --surface-2: rgba(255, 255, 255, .1);
+  --surface-3: rgba(255, 255, 255, .14);
+  --sep: rgba(255, 255, 255, .18);
+  --line: rgba(255, 255, 255, .08);
+  --text: #FFFFFF;
+  --muted: #A3A7A5;
+  --faint: #6B706E;
+  --hero-label: #9DB9AE;
   --primary: #FFFFFF;
-  --primary-ink: #0A0A0E;
-  --accent: #9FB0FF;
-  --accent-soft: rgba(124, 140, 255, .16);
-  --hi: #F2C66F;
-  --hi-soft: rgba(242, 181, 68, .16);
-  --danger: #FF7A93;
-  --danger-soft: rgba(255, 107, 142, .16);
-  --ok: #6FDDA3;
-  --ok-soft: rgba(65, 201, 138, .16);
-  --warn-fill: #F2B544;
-  --info-fill: #9FB0FF;
+  --primary-ink: #0A0B0B;
+  --accent: #52D17A;
+  --accent-soft: rgba(82, 209, 122, .14);
+  --hi: #F2A52E;
+  --hi-soft: rgba(242, 165, 46, .12);
+  --danger: #FF6B6B;
+  --danger-soft: rgba(255, 107, 107, .12);
+  --ok: #52D17A;
+  --ok-soft: rgba(82, 209, 122, .14);
+  --warn-fill: #F2A52E;
   --knob: #FFFFFF;
   --knob-shadow: rgba(0, 0, 0, .5);
-  --scrim: rgba(0, 0, 0, .55);
-  --shadow-panel: 0 30px 60px -30px rgba(0, 0, 0, .8);
+  --scrim: rgba(0, 0, 0, .6);
+  --sheet-bg: #121413;
   --shadow-float: 0 30px 80px -20px rgba(0, 0, 0, .9);
   color-scheme: dark;
 }

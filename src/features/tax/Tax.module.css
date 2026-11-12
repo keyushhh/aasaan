@@ -1,2 +1,2 @@
 .pan { display: flex; gap: 12px; align-items: center; }
-.clear { display: flex; gap: 10px; align-items: center; color: var(--ok); font-weight: 550; }
+.clear { display: flex; gap: 10px; align-items: center; color: var(--ok); font-weight: 600; }

@@ -1,5 +1,6 @@
 .amount { margin: 14px 0 0; }
 .note { text-align: center; }
 .success { text-align: center; padding: 6px 0; }
-.ring { width: 68px; height: 68px; border-radius: 50%; background: var(--ok); color: var(--white); display: grid; place-items: center; margin: 4px auto 12px; box-shadow: 0 0 0 8px var(--ok-soft), 0 0 40px -6px var(--ok); animation: pop .5s var(--ease-enter) both; }
+.success h2 { text-wrap: balance; margin-left: auto; margin-right: auto; }
+.ring { width: 68px; height: 68px; border-radius: 50%; background: var(--ok); color: var(--primary-ink); display: grid; place-items: center; margin: 4px auto 12px; animation: pop .5s var(--ease-enter) both; }
 @keyframes pop { from { transform: scale(.6); opacity: 0; } }

@@ -18,6 +18,7 @@ const PATHS = {
   download: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
   shield: '<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/>',
   clock: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+  close: '<path d="M6 6l12 12M18 6L6 18"/>',
 };
 export type IconName = keyof typeof PATHS;
 

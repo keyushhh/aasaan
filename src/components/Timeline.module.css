@@ -1,9 +1,6 @@
-.tl { list-style: none; padding: 0; margin: 16px 0 0; }
-.tl li { position: relative; padding: 0 0 18px 32px; }
-.tl li::before { content: ""; position: absolute; left: 8px; top: 22px; bottom: 2px; width: 2px; border-radius: 2px; background: var(--hairline-strong); }
-.tl li.done::before { background: var(--ok); }
-.tl li:last-child { padding-bottom: 0; }
-.tl li:last-child::before { display: none; }
-.dot { position: absolute; left: 0; top: 2px; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--hairline-strong); background: transparent; }
-.done .dot { background: var(--ok); border-color: var(--ok); box-shadow: 0 0 10px -2px var(--ok); }
-.current .dot { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft), 0 0 14px -2px var(--accent); }
+.tl { list-style: none; padding: 0; margin: 10px 0 0; }
+.tl li { position: relative; padding: 16px 0 16px 48px; border-bottom: 1px dotted var(--sep); }
+.tl li:last-child { border-bottom: 0; }
+.dot { position: absolute; left: 0; top: 18px; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: var(--faint); box-shadow: inset 0 0 0 1.5px var(--sep); }
+.done .dot { background: var(--surface-3); color: var(--text); box-shadow: none; }
+.current .dot { background: var(--accent-soft); color: var(--accent); box-shadow: none; }

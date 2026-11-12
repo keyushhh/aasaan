@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { useLocation } from 'react-router';
+import { useT } from '../app/session';
+import { IconButton } from './IconButton';
 import s from './Sheet.module.css';
 
 interface SheetApi {
@@ -32,6 +34,7 @@ export function SheetProvider({ children }: { children: ReactNode }) {
 
 function Dialog({ children, onClose }: { children: ReactNode; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const t = useT();
   // Layout effect: the cleanup must close the dialog while it is still in the page, so focus returns to the opener.
   useLayoutEffect(() => {
     const d = ref.current!;
@@ -49,7 +52,7 @@ function Dialog({ children, onClose }: { children: ReactNode; onClose: () => voi
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className={s.sheet} tabIndex={-1} autoFocus>
         <div className={s.core}>
-          <div className={s.grab} />
+          <div className={s.head}><IconButton icon="close" label={t.close} onClick={onClose} /></div>
           {children}
         </div>
       </div>

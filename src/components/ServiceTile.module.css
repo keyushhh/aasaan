@@ -1,12 +1,11 @@
-.tile { position: relative; overflow: hidden; color: var(--text); border: 0; border-radius: var(--r-tile); padding: 16px; min-height: 128px; text-align: left; display: flex; flex-direction: column; background: var(--glass); backdrop-filter: blur(var(--blur)) saturate(1.5); -webkit-backdrop-filter: blur(var(--blur)) saturate(1.5); box-shadow: inset 0 0 0 1px var(--hairline), inset 0 1px 0 var(--highlight), var(--shadow-panel); transition: transform var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease); }
-.tile::before { content: ""; position: absolute; width: 140px; height: 140px; right: -50px; top: -60px; border-radius: 50%; background: var(--svc); opacity: .22; filter: blur(34px); pointer-events: none; }
-.tile > * { position: relative; }
-.tile:last-child:nth-child(odd) { grid-column: span 2; min-height: 0; flex-direction: row; align-items: center; gap: 14px; }
-.tile:last-child:nth-child(odd) .name { margin-top: 0; }
-.mark { width: 40px; height: 40px; border-radius: var(--r-mark); display: grid; place-items: center; flex: none; background: color-mix(in srgb, var(--svc) 14%, transparent); color: var(--svc); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--svc) 30%, transparent); }
-.name { font-weight: 600; font-size: 17px; line-height: 1.2; letter-spacing: -.02em; margin-top: auto; padding-top: 18px; display: block; }
-.tile:last-child:nth-child(odd) .name { padding-top: 0; }
-.state { font-family: var(--mono); font-size: 11px; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); margin-top: 4px; display: block; }
+/* A department row: round marker, name, state, chevron. */
+.tile { display: flex; align-items: center; gap: 14px; width: 100%; color: var(--text); border: 0; border-bottom: 1px dotted var(--sep); padding: 18px 0; text-align: left; background: none; transition: transform var(--m-out) var(--ease); }
+.tile:last-child { border-bottom: 0; }
+.mark { width: 44px; height: 44px; border-radius: var(--r-mark); display: grid; place-items: center; flex: none; background: color-mix(in srgb, var(--svc) 16%, transparent); color: var(--svc); }
+.body { flex: 1; min-width: 0; }
+.name { font-weight: 600; font-size: 17px; line-height: 1.3; letter-spacing: -.01em; display: block; }
+.state { font-size: 15px; color: var(--muted); margin-top: 2px; display: block; }
 .down { color: var(--hi); }
-@media (hover: hover) and (pointer: fine) { .tile:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px var(--hairline-strong), inset 0 1px 0 var(--highlight), var(--shadow-float); transition-duration: var(--m-in); } }
-.tile:active { transform: scale(.98); transition-duration: var(--m-press); }
+.chev { color: var(--faint); flex: none; transition: transform var(--m-in) var(--ease), color var(--m-in) var(--ease); }
+@media (hover: hover) and (pointer: fine) { .tile:hover .chev { transform: translateX(2px); color: var(--text); } }
+.tile:active { transform: scale(.985); transition-duration: var(--m-press); }

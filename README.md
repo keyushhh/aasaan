@@ -131,9 +131,9 @@ With a live source, a successful read marks the department as synced, and the de
 ## Design system
 
 - **Tokens:** every colour, radius, shadow, motion and type value lives in `src/tokens/tokens.css`, in light and dark sets. Profile → Appearance picks System, Light or Dark. System follows the device; the other two set `data-theme` on `<html>`.
-- **Surfaces:** a glass console. An OLED-black ground (pale grey in light mode) with soft department-coloured glows behind frosted panels bounded by hairlines. The main action on each screen is a solid high-contrast pill.
-- **Type:** Geist for Latin script, Geist Mono for labels and reference numbers, and Mukta for Devanagari, all self-hosted.
-- **Departments:** each has one colour, used for the glow behind its panels and its marker, never for whole surfaces.
+- **Surfaces:** an audit console. A near-black ground (pale grey in light mode) with one deep-teal glow at the top, flat surfaces a shade lighter than the ground, and rows divided by dotted hairlines. The main action on each screen is a solid high-contrast pill; amber marks anything worth checking, green anything confirmed.
+- **Type:** Geist for Latin script and Mukta for Devanagari, both self-hosted. Labels are sentence case.
+- **Departments:** each has one colour, used for its round marker only, never for whole surfaces.
 - **Components** live in `src/components`: Button, IconButton, Card, Row, Pill, Switch, Segmented, Sheet, Toast, Timeline, TabBar, ServiceTile, AlertCard, Banner, Skeleton, TopBar, Field and KeyValue.
 - **Motion:** one entrance moment on Home, a 1px lift on hover and a press on buttons, a 2px lift on cards. Hover effects apply only on fine pointers, nothing animates on scroll, and reduced motion turns everything still.
 
