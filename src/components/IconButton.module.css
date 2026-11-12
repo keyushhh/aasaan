@@ -1,0 +1,9 @@
+.iconBtn {
+  width: 44px; height: 44px; border-radius: var(--r-btn); border: 1px solid var(--line); background: var(--surface);
+  display: grid; place-items: center; flex: none; color: var(--text);
+  transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), border-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
+}
+.onSign { background: transparent; border-color: var(--on-sign-line); color: var(--white); }
+.spin svg { animation: spin .8s linear infinite; }
+@media (hover: hover) and (pointer: fine) { .iconBtn:hover { transform: translateY(-1px); } }
+.iconBtn:active { transform: scale(.985); transition-duration: var(--m-press); }

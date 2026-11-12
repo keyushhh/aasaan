@@ -1,0 +1,7 @@
+.seg { display: flex; background: var(--surface-2); border-radius: var(--r-btn); padding: 3px; gap: 3px; }
+.seg button {
+  flex: 1; min-height: 44px; border: 0; background: none; border-radius: var(--r-btn); padding: 8px;
+  font-family: var(--display); font-weight: 600; font-size: 17px; color: var(--muted);
+  transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), border-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
+}
+.seg button.on { background: var(--yel); color: var(--yel-ink); }

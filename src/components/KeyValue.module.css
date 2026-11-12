@@ -1,0 +1,4 @@
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; font-size: 15px; margin: 12px 0 0; align-items: center; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; text-align: right; font-weight: 600; }
+.flush { margin-top: 0; }

@@ -1,0 +1,5 @@
+.pill { display: inline-block; font-family: var(--display); font-weight: 700; font-size: 15px; border-radius: var(--r-pill); padding: 2px 10px; background: var(--surface-2); color: var(--muted); white-space: nowrap; }
+.ok { background: var(--ok-soft); color: var(--ok); }
+.warn { background: var(--hi-soft); color: var(--hi); }
+.danger { background: var(--danger-soft); color: var(--danger); }
+.info { background: var(--accent-soft); color: var(--accent); }

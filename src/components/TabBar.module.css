@@ -1,0 +1,11 @@
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface); border-top: 0; box-shadow: 0 -1px 0 var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.inner { max-width: 480px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+.tab {
+  background: none; border: 0; padding: 10px 0 9px; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--muted); position: relative; isolation: isolate;
+  transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), border-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
+}
+.tab:active { transform: scale(.985); transition-duration: var(--m-press); }
+.on { color: var(--yel-ink); }
+.on::before { content: ""; position: absolute; inset: 5px 8%; background: var(--yel); border-radius: 10px; z-index: -1; }
+.badge { position: absolute; top: 5px; left: calc(50% + 6px); background: var(--hi-bg); color: var(--hi-ink); font-size: 11px; font-weight: 700; border-radius: 99px; min-width: 18px; height: 18px; line-height: 18px; padding: 0 5px; }
