@@ -1,17 +1,15 @@
 .alert {
-  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: var(--surface); border: 0; border-left: 8px solid var(--accent);
-  border-radius: 12px; padding: 14px 12px 14px 14px; margin-top: 10px; color: var(--text); min-height: 76px;
+  display: flex; align-items: flex-start; gap: 14px; width: 100%; text-align: left; background: var(--surface); border: 0; box-shadow: var(--shadow-card);
+  border-radius: var(--r-card); padding: 16px 14px 16px 16px; margin-top: 10px; color: var(--text); 
   transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), border-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
 }
-.danger { border-left-color: var(--danger); }
-.warn { border-left-color: var(--yel); }
-.ic { color: var(--accent); flex: none; }
-.danger .ic { color: var(--danger); }
-.warn .ic { color: var(--hi); }
+.ic { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--accent-soft); color: var(--accent); }
+.danger .ic { background: var(--danger-soft); color: var(--danger); }
+.warn .ic { background: var(--hi-soft); color: var(--hi); }
 .body { flex: 1; min-width: 0; display: block; }
-.title { font-family: var(--display); font-weight: 700; font-size: 21px; line-height: 1.08; display: block; }
-.text { font-size: 14px; color: var(--muted); margin-top: 2px; display: block; }
-.go { font-family: var(--display); font-weight: 800; font-size: 16px; background: var(--yel); color: var(--yel-ink); padding: 7px 10px; border-radius: 7px; white-space: nowrap; flex: none; }
-.quiet .go { background: transparent; color: var(--text); box-shadow: inset 0 0 0 2px var(--line); }
+.title { font-family: var(--display); font-weight: 700; font-size: 21px; line-height: 1.1; display: block; text-wrap: balance; }
+.text { font-size: 14px; color: var(--muted); margin-top: 4px; display: block; line-height: 1.4; }
+.go { display: inline-flex; align-items: center; gap: 4px; margin-top: 12px; font-family: var(--display); font-weight: 700; font-size: 16px; background: var(--yel); color: var(--yel-ink); padding: 8px 14px 8px 16px; border-radius: var(--r-pill); white-space: nowrap; }
+.quiet .go { background: var(--surface-2); color: var(--text); }
 @media (hover: hover) and (pointer: fine) { .alert:hover { transform: translateY(-2px); transition-duration: var(--m-in); } }
 .alert:active { transform: scale(.985); transition-duration: var(--m-press); }

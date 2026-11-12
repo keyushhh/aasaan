@@ -1,7 +1,8 @@
-.seg { display: flex; background: var(--surface-2); border-radius: var(--r-btn); padding: 3px; gap: 3px; }
+.seg { display: flex; background: var(--surface); box-shadow: var(--shadow-card); border-radius: var(--r-pill); padding: 4px; gap: 4px; }
 .seg button {
-  flex: 1; min-height: 44px; border: 0; background: none; border-radius: var(--r-btn); padding: 8px;
-  font-family: var(--display); font-weight: 600; font-size: 17px; color: var(--muted);
+  flex: 1; min-height: 44px; border: 0; background: none; border-radius: var(--r-pill); padding: 8px;
+  font-family: var(--display); font-weight: 700; font-size: 17px; color: var(--muted);
   transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), border-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
 }
 .seg button.on { background: var(--yel); color: var(--yel-ink); }
+@media (hover: hover) and (pointer: fine) { .seg button:not(.on):hover { color: var(--text); } }

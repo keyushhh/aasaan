@@ -9,14 +9,17 @@
   --dw-big: 800;
   --fs: 17px;
 
-  /* radius */
-  --r-card: 12px;
-  --r-hero: 14px;
-  --r-btn: 10px;
-  --r-pill: 6px;
-  --r-logo: 10px;
-  --r-sheet: 18px;
-  --r-icon: 9px;
+  /* radius: soft, nested radii step down by the padding between them */
+  --r-card: 20px;
+  --r-hero: 26px;
+  --r-tile: 22px;
+  --r-btn: 14px;
+  --r-field: 14px;
+  --r-pill: 999px;
+  --r-logo: 12px;
+  --r-sheet: 28px;
+  --r-icon: 12px;
+  --tabs-h: 104px;
 
   /* motion */
   --ease: cubic-bezier(.2, .8, .2, 1);
@@ -37,7 +40,9 @@
   --on-sign-line: rgba(255, 255, 255, .4);
   --on-sign-btn-line: rgba(255, 255, 255, .5);
   --top-shadow: rgba(0, 0, 0, .08);
-  --knob-shadow: rgba(0, 0, 0, .25);
+  --knob-shadow: rgba(10, 23, 48, .22);
+  --on-sign-fill: rgba(255, 255, 255, .14);
+  --on-sign-keyline: rgba(255, 255, 255, .85);
   --btn-fill: var(--yel);
   --btn-ink: var(--yel-ink);
 
@@ -50,9 +55,9 @@
   --svc-health: #C8102E;
   --doc-card: #0E7A3B;
 
-  /* light theme */
-  --bg: #FFFFFF;
-  --surface: #EEF1F5;
+  /* light theme: white cards on a cool grey ground */
+  --bg: #EEF1F5;
+  --surface: #FFFFFF;
   --surface-2: #E0E5EC;
   --text: #0A1730;
   --muted: #47546C;
@@ -69,6 +74,9 @@
   --ok: #0E7A3B;
   --ok-soft: #D5EFDE;
   --scrim: rgba(5, 15, 35, .55);
+  --shadow-card: 0 1px 2px rgba(10, 23, 48, .05), 0 4px 14px rgba(10, 23, 48, .05);
+  --shadow-float: 0 8px 28px rgba(10, 23, 48, .16), 0 2px 6px rgba(10, 23, 48, .08);
+  --shadow-cta: 0 6px 18px rgba(255, 199, 44, .35);
   color-scheme: light;
 }
 
@@ -92,6 +100,9 @@
     --ok: #5FD28C;
     --ok-soft: #10301E;
     --scrim: rgba(0, 0, 0, .65);
+    --shadow-card: 0 0 0 0 transparent;
+    --shadow-float: 0 10px 32px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .06);
+    --shadow-cta: 0 6px 20px rgba(255, 199, 44, .18);
     color-scheme: dark;
   }
 }
@@ -115,6 +126,9 @@
   --ok: #5FD28C;
   --ok-soft: #10301E;
   --scrim: rgba(0, 0, 0, .65);
+  --shadow-card: 0 0 0 0 transparent;
+  --shadow-float: 0 10px 32px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .06);
+  --shadow-cta: 0 6px 20px rgba(255, 199, 44, .18);
   color-scheme: dark;
 }
 

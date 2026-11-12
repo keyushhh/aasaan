@@ -1,2 +1,8 @@
-.field { display: block; margin-top: 14px; font-size: 14px; font-weight: 600; color: var(--muted); }
-.field input, .field select { display: block; width: 100%; margin-top: 6px; padding: 12px 14px; border: 2px solid var(--line); border-radius: var(--r-btn); background: var(--bg); font-size: 17px; color: var(--text); font-weight: 500; min-height: 50px; }
+.field { display: block; margin-top: 16px; font-size: 14px; font-weight: 600; color: var(--muted); }
+.field input, .field select {
+  display: block; width: 100%; margin-top: 8px; padding: 13px 16px; border: 1.5px solid transparent; border-radius: var(--r-field);
+  background: var(--bg); font-size: 17px; color: var(--text); font-weight: 500; min-height: 54px;
+  transition: border-color var(--m-in) var(--ease), background-color var(--m-in) var(--ease);
+}
+.field input::placeholder { color: var(--muted); opacity: .8; }
+.field input:focus, .field select:focus { border-color: var(--accent); outline: none; background: var(--surface); }

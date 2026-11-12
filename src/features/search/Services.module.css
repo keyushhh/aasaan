@@ -1,4 +1,4 @@
-.search { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 2px solid var(--line); border-radius: var(--r-btn); padding: 0 14px; color: var(--muted); }
-.search input { flex: 1; border: 0; background: none; padding: 13px 0; font-size: 17px; outline: none; min-width: 0; color: var(--text); }
+.search { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1.5px solid transparent; box-shadow: var(--shadow-card); border-radius: var(--r-pill); padding: 0 18px; color: var(--muted); transition: border-color var(--m-in) var(--ease); }
+.search input { flex: 1; border: 0; background: none; padding: 15px 0; font-size: 17px; outline: none; min-width: 0; color: var(--text); }
 .search:focus-within { border-color: var(--accent); }
-.results { margin-top: 10px; }
+.results { margin-top: 12px; }

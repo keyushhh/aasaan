@@ -1,6 +1,6 @@
 import { defineConfig } from '@playwright/test';
 
-/** Side-by-side screenshots of reference/index.html and the app. Output: e2e/parity-shots. */
+/** Side-by-side screenshots of reference/index.html (left) and the app (right), with a pixel count. Output: e2e/parity-shots. */
 export default defineConfig({
   testDir: 'e2e',
   testMatch: 'parity.spec.ts',

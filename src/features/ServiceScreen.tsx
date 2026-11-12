@@ -71,8 +71,9 @@ export function ServiceScreen({ svc, queries, children }: { svc: Dept; queries: 
       <TopBar
         title={t.svc[svc]}
         dept={dept}
-        start={<IconButton icon="back" label={t.back} onSign onClick={nav.back} />}
-        end={linked[svc] && <IconButton icon="refresh" size={19} label={t.refreshFrom(dept)} onSign spin={spinning} onClick={refresh} />}
+        svc={svc}
+        start={<IconButton icon="back" label={t.back} onClick={nav.back} />}
+        end={linked[svc] && <IconButton icon="refresh" size={19} label={t.refreshFrom(dept)} spin={spinning} onClick={refresh} />}
       />
       <main className="pad" id="main">{body}</main>
     </>
