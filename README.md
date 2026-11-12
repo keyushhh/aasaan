@@ -46,7 +46,7 @@ Across all five:
 - **Home** leads with what needs you today: a count, an urgency meter, the departments involved, and a card for each item with its next action.
 - **Requests** tracks everything you have applied for or paid, in every department, each with a timeline.
 - **Search** works in English and Hindi, for example "pay challan" or "चालान".
-- **Language** switches between English and हिन्दी.
+- **Language and appearance:** switch between English and हिन्दी, and between light, dark or the device setting.
 - **When a department is down**, Aasaan shows your last synced data with the time it was updated, saves submissions on your phone, and sends them automatically when the department is back. Profile has prototype switches to simulate an outage for each department.
 
 ## Try it
@@ -130,7 +130,7 @@ With a live source, a successful read marks the department as synced, and the de
 
 ## Design system
 
-- **Tokens:** every colour, radius, shadow, motion and type value lives in `src/tokens/tokens.css`, in light and dark sets. Dark mode follows the system setting; `data-theme="light"` or `"dark"` on `<html>` forces one.
+- **Tokens:** every colour, radius, shadow, motion and type value lives in `src/tokens/tokens.css`, in light and dark sets. Profile → Appearance picks System, Light or Dark. System follows the device; the other two set `data-theme` on `<html>`.
 - **Surfaces:** neutral near-black and off-white, with one lime accent reserved for the main action, selection and focus.
 - **Type:** Geist for Latin script and Mukta for Devanagari, both self-hosted.
 - **Departments:** each has one marker colour, used for tinted avatars and dots, never for whole surfaces.
@@ -147,12 +147,13 @@ With a live source, a successful read marks the department as synced, and the de
 
 ## Testing
 
-- **Unit and UI** (`npm test`, 22 tests):
+- **Unit and UI** (`npm test`, 23 tests):
   - claim validation: empty, under ₹1,000, over the eligible limit;
   - outage queueing and automatic sending on recovery;
   - challan payment, and refusal while Parivahan is down;
   - creating, expiring and revoking share codes;
-  - allowing and denying records requests.
+  - allowing and denying records requests;
+  - switching between light, dark and system appearance.
 
   UI tests render the whole app and drive it through the screens.
 - **End to end** (`npm run e2e`, 6 flows): sign-in with its errors, paying from Home, a queued claim surviving a reload and sending on recovery, sharing and revoking, Hindi search and language switching, and keyboard access with focus kept inside sheets.

@@ -10,7 +10,7 @@ async function openApp(route: string) {
   const { App } = await import('./App');
   window.location.hash = '#/' + route;
   render(<App />);
-  return { data, user: userEvent.setup() };
+  return { data, user: userEvent.setup({ delay: null }) };
 }
 const sheet = () => screen.getByRole('dialog');
 
@@ -103,5 +103,20 @@ describe('records requests', () => {
     await user.click(await screen.findByRole('button', { name: 'Deny' }));
     expect(await screen.findByText('Request denied. Nothing was shared.')).toBeInTheDocument();
     expect(screen.getByText('Denied')).toBeInTheDocument();
+  });
+});
+
+describe('appearance', () => {
+  it('switches between light, dark and the device setting, and remembers the choice', async () => {
+    const { user } = await openApp('profile');
+    const root = document.documentElement;
+    await user.click(await screen.findByRole('button', { name: 'Light' }));
+    expect(root.dataset.theme).toBe('light');
+    expect(screen.getByRole('button', { name: 'Light' })).toHaveAttribute('aria-pressed', 'true');
+    await user.click(screen.getByRole('button', { name: 'Dark' }));
+    expect(root.dataset.theme).toBe('dark');
+    expect(JSON.parse(localStorage.getItem('aasaan-session-v1')!).theme).toBe('dark');
+    await user.click(screen.getByRole('button', { name: 'System' }));
+    expect(root.hasAttribute('data-theme')).toBe(false);
   });
 });

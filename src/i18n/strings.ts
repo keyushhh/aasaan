@@ -223,6 +223,8 @@ export const en = {
   // profile
   verified: (m: string) => `+91 ${m}, verified`,
   language: 'Language',
+  appearance: 'Appearance',
+  themes: [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']] as ['system' | 'light' | 'dark', string][],
   linkedAccounts: 'Linked accounts',
   linkedActive: 'Linked, consent active',
   linkSwitch: (name: string) => `Link ${name}`,

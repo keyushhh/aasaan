@@ -9,7 +9,7 @@ import { DEPTS, type Dept } from '../../data/types';
 import { useActions, useDepartments } from '../../data/hooks';
 import { en, type Lang } from '../../i18n/strings';
 import { SVC_ICON, useNav } from '../../app/nav';
-import { setSession, useSession, useT } from '../../app/session';
+import { setSession, useSession, useT, type Theme } from '../../app/session';
 import s from './Profile.module.css';
 
 export function Profile() {
@@ -17,7 +17,7 @@ export function Profile() {
   const nav = useNav();
   const toast = useToast();
   const act = useActions();
-  const { name, mobile, lang } = useSession();
+  const { name, mobile, lang, theme = 'system' } = useSession();
   const { linked, down } = useDepartments();
   const masked = mobile ? mobile.slice(0, 2) + '••••••' + mobile.slice(-2) : '98••••••21';
 
@@ -52,6 +52,9 @@ export function Profile() {
         <h2 className="h">{t.language}</h2>
         <Segmented<Lang> label={t.language} value={lang} onChange={(v) => setSession({ lang: v })}
           options={[{ value: 'en', label: 'English' }, { value: 'hi', label: 'हिन्दी', lang: 'hi' }]} />
+        <h2 className="h">{t.appearance}</h2>
+        <Segmented<Theme> label={t.appearance} value={theme} onChange={(v) => setSession({ theme: v })}
+          options={t.themes.map(([value, label]) => ({ value, label }))} />
         <h2 className="h">{t.linkedAccounts}</h2>
         <Card variant="list">
           {DEPTS.map((d) => (
