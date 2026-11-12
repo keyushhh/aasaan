@@ -1,0 +1,10 @@
+.login { padding: 32px 22px 24px; }
+.login h1 { font-family: var(--display); font-weight: var(--dw); font-size: 42px; line-height: 1.08; margin: 22px 0 8px; max-width: 12ch; }
+.login :global(.logo) { background: var(--yel); color: var(--yel-ink); border-radius: 12px; width: 60px; height: 60px; font-size: 32px; }
+.hint { background: var(--accent-soft); color: var(--accent); border-radius: var(--r-btn); padding: 8px 12px; font-size: 14px; font-weight: 600; margin-top: 10px; display: inline-block; }
+.proto { font-size: 13px; color: var(--muted); text-align: center; margin-top: 20px; }
+.consents { margin-top: 16px; }
+.check { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+.check:last-child { border-bottom: 0; }
+.check input { width: 22px; height: 22px; accent-color: var(--accent); flex: none; }
+.body { flex: 1; min-width: 0; }
