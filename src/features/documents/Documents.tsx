@@ -1,4 +1,5 @@
 import { Button } from '../../components/Button';
+import { Empty } from '../../components/Empty';
 import { Card } from '../../components/Card';
 import { Row, RowIcon } from '../../components/Row';
 import { useSheet } from '../../components/Sheet';
@@ -49,7 +50,7 @@ export function Documents() {
                 ))}
               </Card>
             ) : (
-              <p className="note">{t.noCodes}</p>
+              <Empty icon="share">{t.noCodes}</Empty>
             )}
           </>
         );

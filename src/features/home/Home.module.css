@@ -2,14 +2,15 @@
 .bar { display: flex; align-items: center; gap: 10px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; font-size: 18px; letter-spacing: -.02em; flex: 1; }
 .brand :global(.logo) { width: 40px; height: 40px; font-size: 20px; }
-.chip { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 14px 0 12px; border: 0; border-radius: var(--r-pill); background: var(--surface); box-shadow: var(--shadow-card); color: var(--text); font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums; }
-.round { width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center; background: var(--surface); box-shadow: var(--shadow-card); color: var(--text); }
+.chip { display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 14px 0 12px; border: 0; border-radius: var(--r-pill); background: var(--surface); box-shadow: inset 0 1px 0 var(--highlight), var(--shadow-card); color: var(--text); font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums; }
+.round { width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center; background: var(--surface); box-shadow: inset 0 1px 0 var(--highlight), var(--shadow-card); color: var(--text); }
 .chip, .round, .dept { transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease); }
 .chip:active, .round:active, .dept:active { transform: scale(.94); transition-duration: var(--m-press); }
 @media (hover: hover) and (pointer: fine) { .chip:hover, .round:hover, .dept:hover { background: var(--surface-2); } }
 
 /* Hero: what needs you, how urgent, and from which departments. */
-.hero { margin-top: 16px; padding: 18px 20px 20px; border-radius: var(--r-hero); background: var(--surface); box-shadow: var(--shadow-card); }
+.hero { margin-top: 16px; background: var(--shell); border-radius: var(--r-shell); padding: var(--bezel); box-shadow: inset 0 0 0 1px var(--hairline); }
+.core { border-radius: calc(var(--r-shell) - var(--bezel)); background: var(--surface); padding: 18px 20px 20px; box-shadow: inset 0 1px 0 var(--highlight), var(--shadow-card); }
 .heroTop { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; color: var(--muted); }
 .heroTop span:first-child { font-weight: 550; color: var(--text); }
 
@@ -24,12 +25,13 @@
 .info { background: var(--info-fill); }
 
 .depts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-.dept { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 6px; border: 0; border-radius: var(--r-pill); background: var(--surface-2); color: var(--text); font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums; }
-.deptMark { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--svc) 22%, transparent); color: color-mix(in srgb, var(--svc) 82%, var(--text)); }
+.dept { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 6px; border: 0; border-radius: var(--r-pill); background: var(--surface-2); box-shadow: inset 0 1px 0 var(--highlight); color: var(--text); font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums; }
+.deptMark { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: color-mix(in srgb, var(--svc) 22%, transparent); color: color-mix(in srgb, var(--svc) 82%, var(--text)); }
 
 .clear { display: flex; align-items: center; gap: 14px; margin: 16px 0 2px; font-size: 20px; font-weight: 550; letter-spacing: -.025em; line-height: 1.25; }
-.clearMark { width: 48px; height: 48px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--ok-soft); color: var(--ok); }
+.clearMark { width: 48px; height: 48px; flex: none; border-radius: var(--r-mark); display: grid; place-items: center; background: var(--ok-soft); color: var(--ok); }
 
+.enter .hero { animation: rise var(--m-enter) var(--ease-enter) both; }
 .enter .num { animation: numIn .8s var(--ease-enter) both; }
 .enter .lbl { animation: rise .6s var(--ease-enter) .12s both; }
 .enter .meter span { animation: grow .7s var(--ease-enter) both; }
@@ -42,3 +44,5 @@
 
 .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .queue { margin-top: 6px; }
+.enter .queue > * { animation: rise var(--m-enter) var(--ease-enter) both; animation-delay: calc(.3s + var(--i, 0) * 70ms); }
+.enter .tiles, .enter .recent { animation: rise var(--m-enter) var(--ease-enter) both; animation-delay: .55s; }

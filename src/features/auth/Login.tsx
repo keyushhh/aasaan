@@ -52,7 +52,7 @@ function MobileStep({ onDone }: { onDone: (m: string) => void }) {
         <input ref={ref} inputMode="numeric" maxLength={10} placeholder={t.mobilePlaceholder} autoComplete="tel-national" value={v} onChange={(e) => setV(e.target.value)} />
       </Field>
       <div className="err" role="alert">{err}</div>
-      <Button type="submit" variant="primary" block>{t.getOtp}</Button>
+      <Button type="submit" variant="primary" block trail="chev">{t.getOtp}</Button>
       <p className={s.proto}>{t.protoLogin}</p>
     </form>
   );
@@ -84,7 +84,7 @@ function OtpStep({ mobile, onDone, onChange }: { mobile: string; onDone: () => v
       </Field>
       <span className={s.hint}>{t.demoOtp}</span>
       <div className="err" role="alert">{err}</div>
-      <Button type="submit" variant="primary" block>{t.verify}</Button>
+      <Button type="submit" variant="primary" block trail="chev">{t.verify}</Button>
       <Button block onClick={onChange}>{t.changeNumber}</Button>
     </form>
   );
@@ -111,7 +111,7 @@ function LinkStep({ mobile }: { mobile: string }) {
           </label>
         ))}
       </Card>
-      <Button variant="primary" block onClick={finish}>{t.linkContinue}</Button>
+      <Button variant="primary" block trail="chev" onClick={finish}>{t.linkContinue}</Button>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { Icon } from '../../components/Icon';
 import { KeyValue } from '../../components/KeyValue';
+import { MonoIn } from '../../components/MonoIn';
 import { Pill } from '../../components/Pill';
 import { SheetTitle, useSheet } from '../../components/Sheet';
 import { useToast } from '../../components/Toast';
@@ -39,7 +40,7 @@ function PaySheet({ id }: { id: string }) {
   return (
     <>
       <SheetTitle>{t.payTitle}</SheetTitle>
-      <p className="row-s">{c.offence}, {fd(c.date)}<br />{t.challanNo(c.no)}</p>
+      <p className="row-s">{c.offence}, {fd(c.date)}<br /><MonoIn line={t.challanNo(c.no)} part={c.no} /></p>
       <div className={`big ${s.amount}`}>{inr(c.amount)}</div>
       <Field label={t.payWith}>
         <select value={method} onChange={(e) => setMethod(e.target.value as PayMethod)}>
@@ -47,7 +48,7 @@ function PaySheet({ id }: { id: string }) {
         </select>
       </Field>
       {paused && <Banner spacing="pay" title={t.paymentsPausedTitle}>{t.paymentsPausedBody}</Banner>}
-      <Button variant="primary" block disabled={paused || paying} onClick={pay}>{paying ? t.confirming : t.pay(inr(c.amount))}</Button>
+      <Button variant="primary" block trail="chev" disabled={paused || paying} onClick={pay}>{paying ? t.confirming : t.pay(inr(c.amount))}</Button>
       <p className={`note ${s.note}`}>{t.noMoney}</p>
     </>
   );
@@ -64,7 +65,7 @@ function PaidSheet({ c, receipt }: { c: Challan; receipt: Receipt }) {
         <SheetTitle>{t.challanPaid}</SheetTitle>
         <p className="row-s">{t.paidFor(inr(receipt.amount), c.no)}</p>
       </div>
-      <KeyValue items={[[t.utr, receipt.utr], [t.paidOn, fd(receipt.paidOn)], [t.status, <Pill tone="ok">{t.closed}</Pill>]]} />
+      <KeyValue items={[[t.utr, <span className="mono">{receipt.utr}</span>], [t.paidOn, fd(receipt.paidOn)], [t.status, <Pill tone="ok">{t.closed}</Pill>]]} />
       <div className="btn-row">
         <Button icon="download" onClick={() => toast(t.downloadToast)}>{t.receipt}</Button>
         <Button variant="primary" onClick={sheet.close}>{t.done}</Button>

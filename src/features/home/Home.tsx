@@ -57,6 +57,7 @@ export function Home() {
           </button>
         </div>
         <section className={s.hero} aria-labelledby="hero-count">
+          <div className={s.core}>
           <div className={s.heroTop}>
             <span>{items.length ? t.attention : `${t.hello}, ${first}`}</span>
             <span>{date}</span>
@@ -86,18 +87,19 @@ export function Home() {
               <span className={s.clearMark}><Icon name="check" size={22} /></span>{t.allClear}
             </h1>
           )}
+          </div>
         </section>
       </header>
-      <main className="pad" id="main">
+      <main className={`pad ${enter ? s.enter : ''}`} id="main">
         <div className={s.queue}>
-          {items.map(({ key, target, svc: _svc, ...x }, i) => <AlertCard key={key} {...x} first={i === 0} onClick={() => run(target)} />)}
+          {items.map(({ key, target, svc: _svc, ...x }, i) => <div key={key} style={{ '--i': i } as React.CSSProperties}><AlertCard {...x} first={i === 0} onClick={() => run(target)} /></div>)}
         </div>
         <h2 className="h">{t.yourServices}</h2>
         <div className={s.tiles}>
           {DEPTS.map((d) => <ServiceTile key={d} svc={d} icon={SVC_ICON[d]} name={t.svc[d]} state={state(d)} down={linked[d] && down[d]} onClick={() => nav.go(d)} />)}
         </div>
         <h2 className="h">{t.recent}</h2>
-        <Card variant="list">{requests.slice(0, 3).map((r) => <RequestRow key={r.id} r={r} />)}</Card>
+        <Card variant="list" className={s.recent}>{requests.slice(0, 3).map((r) => <RequestRow key={r.id} r={r} />)}</Card>
       </main>
     </>
   );

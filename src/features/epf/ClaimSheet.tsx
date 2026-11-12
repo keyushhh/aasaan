@@ -46,7 +46,7 @@ export function ClaimSheet({ eligible }: { eligible: number }) {
       </Field>
       <div className="err" role="alert">{error}</div>
       <Card className={s.bank}><span className="row-s">{t.payingInto}</span><span className="row-t">{t.payingBank}</span></Card>
-      <Button type="submit" variant="primary" block>{down ? t.saveLater : t.submitClaim}</Button>
+      <Button type="submit" variant="primary" block trail="chev">{down ? t.saveLater : t.submitClaim}</Button>
     </form>
   );
 }

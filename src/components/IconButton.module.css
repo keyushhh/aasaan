@@ -1,9 +1,9 @@
 .iconBtn {
-  width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 0; background: var(--surface); box-shadow: var(--shadow-card);
+  width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 0; background: var(--surface); box-shadow: inset 0 1px 0 var(--highlight), var(--shadow-card);
   display: grid; place-items: center; flex: none; color: var(--text);
-  transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), border-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
+  transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
 }
-.onSign { background: var(--surface-2); box-shadow: none; }
+.onSign { background: var(--surface-2); }
 .spin svg { animation: spin .8s linear infinite; }
-@media (hover: hover) and (pointer: fine) { .iconBtn:hover { background: var(--surface-2); } }
-.iconBtn:active { transform: scale(.94); transition-duration: var(--m-press); }
+@media (hover: hover) and (pointer: fine) { .iconBtn:hover { background: var(--surface-2); transform: translateY(-1px); } }
+.iconBtn:active { transform: scale(.93); transition-duration: var(--m-press); }

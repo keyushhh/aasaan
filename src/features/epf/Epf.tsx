@@ -1,5 +1,7 @@
 import { Button } from '../../components/Button';
+import { Empty } from '../../components/Empty';
 import { Card } from '../../components/Card';
+import { MonoIn } from '../../components/MonoIn';
 import { Row } from '../../components/Row';
 import { useSheet } from '../../components/Sheet';
 import { useDepartments, useEpfSummary, usePassbook, useRequests } from '../../data/hooks';
@@ -30,11 +32,11 @@ export function Epf() {
                 <div><span>{t.employerShare}</span><b>{inr(e.employer)}</b></div>
                 <div><span>{t.pension}</span><b>{inr(e.eps)}</b></div>
               </div>
-              <div className="meta">{t.uanLine(e.uan, e.org)}</div>
+              <div className="meta"><MonoIn line={t.uanLine(e.uan, e.org)} part={e.uan} /></div>
             </Card>
-            <Button variant="primary" block onClick={() => sheet.open(<ClaimSheet eligible={e.eligible} />)}>{t.withdraw}</Button>
+            <Button variant="primary" block trail="chev" onClick={() => sheet.open(<ClaimSheet eligible={e.eligible} />)}>{t.withdraw}</Button>
             <h2 className="h">{t.yourClaims}</h2>
-            {claims.length ? <Card variant="list">{claims.map((r) => <RequestRow key={r.id} r={r} />)}</Card> : <Card className="row-s">{t.noClaims}</Card>}
+            {claims.length ? <Card variant="list">{claims.map((r) => <RequestRow key={r.id} r={r} />)}</Card> : <Empty icon="wallet">{t.noClaims}</Empty>}
             <h2 className="h">{t.passbook}</h2>
             <Card variant="list">
               {b.months.map((m) => (

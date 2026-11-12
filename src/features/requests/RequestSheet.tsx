@@ -14,12 +14,12 @@ function RequestSheet({ r }: { r: Request }) {
   return (
     <>
       <SheetTitle>{r.title}</SheetTitle>
-      <p className="row-s">{r.ref}{r.amount ? <><br />{t.amount(inr(r.amount))}</> : null}</p>
+      <p className="row-s"><span className="mono">{r.ref}</span>{r.amount ? <><br />{t.amount(inr(r.amount))}</> : null}</p>
       {r.status === 'queued' && <Banner icon="clock" spacing="sheet" title={t.savedTitle}>{t.savedBody(t.dept[r.svc])}</Banner>}
       <Timeline steps={r.steps} />
       <div className="btn-row">
         <Button onClick={sheet.close}>{t.close}</Button>
-        <Button variant="primary" onClick={() => nav.go(r.svc)}>{t.openSvc(t.svc[r.svc])}</Button>
+        <Button variant="primary" trail="chev" onClick={() => nav.go(r.svc)}>{t.openSvc(t.svc[r.svc])}</Button>
       </div>
     </>
   );

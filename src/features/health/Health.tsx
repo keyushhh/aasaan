@@ -33,7 +33,7 @@ export function Health() {
         <>
           <Card variant="hero">
             <div className="label">{t.abhaNumber}</div>
-            <div className="big md">{abha.data!.number}</div>
+            <div className="big md mono">{abha.data!.number}</div>
             <div className="row-s">{abha.data!.address}</div>
             <Button block icon="download" onClick={() => toast(t.downloadToast)}>{t.downloadAbha}</Button>
           </Card>
@@ -46,7 +46,7 @@ export function Health() {
                 {c.status === 'pending' ? (
                   <div className="btn-row">
                     <Button onClick={() => respond(c.id, 'denied')}>{t.deny}</Button>
-                    <Button variant="primary" onClick={() => respond(c.id, 'allowed')}>{t.allowFor(c.until)}</Button>
+                    <Button variant="primary" trail="check" onClick={() => respond(c.id, 'allowed')}>{t.allowFor(c.until)}</Button>
                   </div>
                 ) : (
                   <div className={s.status}>{c.status === 'allowed' ? <Pill tone="ok">{t.allowed}</Pill> : <Pill>{t.denied}</Pill>}</div>

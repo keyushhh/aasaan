@@ -51,7 +51,7 @@ export function ServiceScreen({ svc, queries, children }: { svc: Dept; queries: 
         <RowIcon icon={SVC_ICON[svc]} svc={svc} size={22} className={s.linkIcon} />
         <div className="row-t">{t.linkTitle(dept)}</div>
         <p className="row-s">{t.linkBody}</p>
-        <Button variant="primary" block onClick={link}>{t.linkCta(dept)}</Button>
+        <Button variant="primary" block trail="chev" onClick={link}>{t.linkCta(dept)}</Button>
       </Card>
     );
   } else if (loading) {

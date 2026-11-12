@@ -48,8 +48,10 @@ function Dialog({ children, onClose }: { children: ReactNode; onClose: () => voi
       onCancel={(e) => { e.preventDefault(); onClose(); }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className={s.sheet} tabIndex={-1} autoFocus>
-        <div className={s.grab} />
-        {children}
+        <div className={s.core}>
+          <div className={s.grab} />
+          {children}
+        </div>
       </div>
     </dialog>
   );

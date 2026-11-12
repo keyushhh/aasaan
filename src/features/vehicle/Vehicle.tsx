@@ -30,7 +30,7 @@ export function Vehicle() {
           <>
             <Card variant="hero">
               <div className="label">{t.rcLabel}</div>
-              <div className="big md">{r.number}</div>
+              <div className="big md mono">{r.number}</div>
               <div className="row-s">{t.rcLine(r.model, r.fuel, fd(r.registered))}</div>
               <KeyValue items={[
                 [t.insurance, <Validity date={r.insuranceTill} t={t} />],
@@ -47,7 +47,7 @@ export function Vehicle() {
             </Card>
             <h2 className="h">{t.licence}</h2>
             <Card>
-              <span className="row-t">{l.number}</span>
+              <span className="row-t mono">{l.number}</span>
               <span className="row-s">{t.licenceLine(l.classes, l.rto)}</span>
               <KeyValue items={[[t.status, <Pill tone="ok">{l.status}</Pill>], [t.validTillLabel, fd(l.validTill)]]} />
             </Card>

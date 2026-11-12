@@ -1,8 +1,8 @@
-.seg { display: flex; background: var(--surface-2); border-radius: var(--r-pill); padding: 4px; gap: 4px; }
+.seg { display: flex; background: var(--shell); box-shadow: inset 0 0 0 1px var(--hairline); border-radius: var(--r-pill); padding: 4px; gap: 4px; }
 .seg button {
   flex: 1; min-height: 44px; border: 0; background: none; border-radius: var(--r-pill); padding: 8px;
   font-weight: 550; font-size: 15px; color: var(--muted);
-  transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), border-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
+  transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), box-shadow var(--m-out) var(--ease), color var(--m-out) var(--ease);
 }
-.seg button.on { background: var(--text); color: var(--bg); }
+.seg button.on { background: var(--text); color: var(--bg); box-shadow: 0 4px 12px -6px rgba(0, 0, 0, .4); }
 @media (hover: hover) and (pointer: fine) { .seg button:not(.on):hover { color: var(--text); } }

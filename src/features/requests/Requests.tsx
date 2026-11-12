@@ -1,4 +1,5 @@
 import { Card } from '../../components/Card';
+import { Empty } from '../../components/Empty';
 import { TopBar } from '../../components/TopBar';
 import { useRequests } from '../../data/hooks';
 import { useT } from '../../app/session';
@@ -16,9 +17,9 @@ export function Requests() {
       <main className="pad" id="main">
         <p className={`note ${s.intro}`}>{t.requestsIntro}</p>
         <h2 className="h">{t.inProgress}</h2>
-        {active.length ? <Card variant="list">{active.map((r) => <RequestRow key={r.id} r={r} />)}</Card> : <Card className="row-s">{t.nothingInProgress}</Card>}
+        {active.length ? <Card variant="list">{active.map((r) => <RequestRow key={r.id} r={r} />)}</Card> : <Empty icon="list">{t.nothingInProgress}</Empty>}
         <h2 className="h">{t.completed}</h2>
-        {done.length ? <Card variant="list">{done.map((r) => <RequestRow key={r.id} r={r} />)}</Card> : <Card className="row-s">{t.nothingCompleted}</Card>}
+        {done.length ? <Card variant="list">{done.map((r) => <RequestRow key={r.id} r={r} />)}</Card> : <Empty icon="check">{t.nothingCompleted}</Empty>}
       </main>
     </>
   );

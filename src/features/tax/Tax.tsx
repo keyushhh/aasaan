@@ -1,4 +1,5 @@
 import { Card } from '../../components/Card';
+import { MonoIn } from '../../components/MonoIn';
 import { Icon } from '../../components/Icon';
 import { KeyValue } from '../../components/KeyValue';
 import { Pill } from '../../components/Pill';
@@ -22,7 +23,7 @@ export function Tax() {
           <>
             <Card className={s.pan}>
               <RowIcon icon="check" size={20} ok />
-              <div><span className="row-t">{t.panLinked}</span><span className="row-s">{t.panLine(l.pan, fd(l.linkedOn))}</span></div>
+              <div><span className="row-t">{t.panLinked}</span><span className="row-s"><MonoIn line={t.panLine(l.pan, fd(l.linkedOn))} part={l.pan} /></span></div>
             </Card>
             <h2 className="h">{t.returnFor(r.ay)}</h2>
             <Card>

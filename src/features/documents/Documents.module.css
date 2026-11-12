@@ -1,9 +1,9 @@
-.doc { position: relative; overflow: hidden; border-radius: var(--r-hero); padding: 22px; background: var(--text); color: var(--bg); }
+.doc { position: relative; overflow: hidden; border-radius: var(--r-hero); padding: 22px; background: var(--text); color: var(--bg); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12), var(--shadow-float); }
 .doc::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; background: var(--svc-docs); opacity: .35; filter: blur(30px); }
 .doc > * { position: relative; z-index: 1; }
 .iss { font-size: 13px; opacity: .85; }
 .name { font-weight: 650; font-size: 26px; line-height: 1.15; letter-spacing: var(--track-tight); margin-top: 2px; }
-.no { font-size: 18px; font-weight: 600; letter-spacing: .04em; margin-top: 10px; font-variant-numeric: tabular-nums; }
+.no { font-size: 18px; margin-top: 12px; }
 .ver { display: flex; align-items: center; gap: 6px; font-size: 13px; margin-top: 10px; opacity: .9; }
-.code { font-size: 40px; font-weight: 650; letter-spacing: .18em; text-align: center; padding: 16px; border: 0; border-radius: var(--r-card); background: var(--surface-2); color: var(--text); margin: 14px 0 6px; font-variant-numeric: tabular-nums; }
+.code { font-size: 38px; font-weight: 600; letter-spacing: .16em; text-align: center; padding: 16px; border: 0; border-radius: var(--r-card); background: var(--surface-2); color: var(--text); margin: 14px 0 6px; font-variant-numeric: tabular-nums; }
 .expiryHead { margin-top: 18px; }

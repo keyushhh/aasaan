@@ -1,7 +1,8 @@
-.card { background: var(--surface); border: 0; border-radius: var(--r-card); padding: 18px; box-shadow: var(--shadow-card); }
+.card { background: var(--surface); border: 0; border-radius: var(--r-card); padding: 18px; box-shadow: inset 0 1px 0 var(--highlight), var(--shadow-card); }
 .list { padding: 2px 18px; }
 .list > [data-row] { min-height: 66px; }
 .svc { padding: 2px 16px; }
-/* The screen's one big figure: same surface, more room. */
-.hero { border-radius: var(--r-hero); padding: 22px 22px 20px; }
-.hero dl { margin-top: 18px; }
+/* Hero: the screen's one big figure, in a double bezel. */
+.hero { background: var(--shell); border-radius: var(--r-shell); padding: var(--bezel); box-shadow: inset 0 0 0 1px var(--hairline); }
+.heroCore { border-radius: calc(var(--r-shell) - var(--bezel)); background: var(--surface); padding: 20px 20px 18px; box-shadow: inset 0 1px 0 var(--highlight), var(--shadow-card); }
+.heroCore dl { margin-top: 18px; }
