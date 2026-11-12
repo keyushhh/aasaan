@@ -1,4 +1,6 @@
-.head { padding: 14px 20px 4px; }
+/* Home's ground: the bright green-to-teal wash behind the greeting and the count, fading to black. */
+.ground { position: absolute; inset: 0 0 auto; height: 490px; z-index: -1; pointer-events: none; background: var(--home-glow); }
+.head { padding: 28px 20px 4px; }
 .bar { display: flex; align-items: center; gap: 12px; }
 .who { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .hi { font-weight: 600; font-size: 18px; letter-spacing: -.015em; line-height: 1.25; }
@@ -8,10 +10,10 @@
 @media (hover: hover) and (pointer: fine) { .round:hover { background: var(--surface-2); } }
 
 /* The hero sits on the glow: a tinted label, the count, a chip, then the two white actions. */
-.hero { padding: 26px 0 8px; }
+.hero { padding: 42px 0 8px; }
 .heroLabel { display: block; font-size: 17px; color: var(--hero-label); margin-bottom: 4px; }
 .count { margin: 0; font-weight: inherit; font-size: inherit; display: flex; flex-direction: column; gap: 6px; }
-.num { font-weight: 600; font-size: 64px; line-height: 1; letter-spacing: var(--track-display); font-variant-numeric: tabular-nums; }
+.num { font-weight: var(--weight-medium); font-size: var(--type-count); line-height: 1; letter-spacing: var(--track-display); font-variant-numeric: tabular-nums; }
 .lbl { font-size: 17px; font-weight: 400; line-height: 1.35; color: var(--muted); text-wrap: pretty; max-width: 26ch; }
 .clear { display: flex; align-items: center; gap: 12px; margin: 4px 0 0; font-size: 20px; font-weight: 600; letter-spacing: -.015em; line-height: 1.25; max-width: 20ch; }
 .clearMark { width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--ok-soft); color: var(--ok); }
@@ -20,12 +22,12 @@
 .chipIc { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-3); color: var(--text); }
 .chip:active { transform: scale(.97); transition-duration: var(--m-press); }
 @media (hover: hover) and (pointer: fine) { .chip:hover { background: var(--surface-3); } }
-.actions { display: flex; gap: 10px; margin-top: 24px; }
+.actions { display: flex; gap: 10px; margin-top: 30px; }
 .actions > * { flex: 1; min-width: 0; padding: 0 14px; }
 .actions > * > span:last-child, .actions > * { overflow: hidden; text-overflow: ellipsis; }
 
 .list { margin-top: 2px; }
-.queue { margin-top: 22px; border-top: 1px dotted var(--sep); }
+.queue { margin-top: 8px; }
 
 .enter .hero > * { animation: rise var(--m-enter) var(--ease-enter) both; }
 .enter .hero > :nth-child(2) { animation-delay: .06s; }

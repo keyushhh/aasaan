@@ -1,5 +1,5 @@
 /* Flat: icons and labels on a fade from the ground, no container. */
-.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; padding: 22px 8px calc(10px + env(safe-area-inset-bottom, 0px)); pointer-events: none; background: linear-gradient(to top, var(--bg) 62%, transparent); }
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; padding: 22px 8px calc(10px + env(safe-area-inset-bottom, 0px)); pointer-events: none; background: var(--nav-ground); }
 .inner { pointer-events: auto; max-width: 480px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
 .tab { background: none; border: 0; padding: 4px 0; display: flex; flex-direction: column; align-items: center; gap: 5px; min-height: 56px; justify-content: center; font-size: 14px; font-weight: 500; letter-spacing: -.005em; color: var(--faint); position: relative; transition: transform var(--m-out) var(--ease), color var(--m-out) var(--ease); }
 .tab svg { width: 26px; height: 26px; }

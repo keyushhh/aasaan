@@ -7,9 +7,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 84px); background: var(--bg); overflow-x: clip; }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: var(--fs, 16px); line-height: 1.45; letter-spacing: -.005em; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; overflow-x: clip; }
-/* The ground: one deep-teal glow at the top of the screen, fading into the black by a third of the way down. Still. */
-body::before { content: ""; position: fixed; left: 0; right: 0; top: 0; height: 60vh; z-index: -1; pointer-events: none; background: radial-gradient(90% 100% at 50% -10%, var(--glow), transparent 72%); }
+body { margin: 0; position: relative; color: var(--text); font-family: var(--font); font-size: var(--fs, 16px); line-height: 1.45; letter-spacing: -.005em; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; overflow-x: clip; }
+/* The ground: a still gradient at the top of every screen that scrolls away with the page.
+   body has no background of its own (html carries it) so this layer is never covered. */
 ::selection { background: var(--accent); color: var(--primary-ink); }
 button, input, select { font: inherit; color: inherit; letter-spacing: inherit; }
 button { cursor: pointer; }
@@ -33,7 +33,7 @@ main:focus { outline: none; }
 .stack { display: grid; gap: 10px; }
 .btn-row { display: flex; gap: 10px; margin-top: 18px; }
 .btn-row > * { flex: 1; }
-.big { font-weight: 600; font-size: 52px; line-height: 1.05; letter-spacing: var(--track-display); margin: 6px 0 18px; font-variant-numeric: tabular-nums; }
+.big { font-weight: var(--weight-medium); font-size: var(--type-number); line-height: 1.05; letter-spacing: var(--track-display); margin: 6px 0 18px; font-variant-numeric: tabular-nums; }
 .big.md { font-size: 34px; letter-spacing: var(--track-tight); margin: 4px 0 6px; }
 .big.mono { font-size: 30px; letter-spacing: 0; white-space: nowrap; }
 .label { font-size: 15px; color: var(--muted); }

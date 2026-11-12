@@ -49,6 +49,7 @@ export function Home() {
 
   return (
     <>
+      <div className={s.ground} aria-hidden="true" />
       <header className={`${s.head} ${enter ? s.enter : ''}`}>
         <div className={s.bar}>
           <span className="logo" aria-hidden="true">{name[0]}</span>
@@ -87,6 +88,7 @@ export function Home() {
           </div>
         </section>
 
+        {items.length > 0 && <h2 className="h"><Icon name="receipt" size={22} />{t.attention}</h2>}
         {items.length > 0 && <Card variant="list" className={s.queue}>{items.map((x) => <AlertCard key={x.key} {...strip(x)} onClick={() => run(x.target)} />)}</Card>}
 
         <h2 className="h"><Icon name="grid" size={22} />{t.yourServices}</h2>

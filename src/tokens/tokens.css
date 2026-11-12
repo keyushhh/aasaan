@@ -10,6 +10,24 @@
   --font: 'Geist Variable', 'Mukta', system-ui, sans-serif;
   --logo-font: 'Mukta', var(--font);
   --fs: 16px;
+  --type-caption: 13px;
+  --type-small: 14px;
+  --type-body: 15px;
+  --type-row: 17px;
+  --type-section: 20px;
+  --type-title: 22px;
+  --type-sheet: 24px;
+  --type-number: 52px;
+  --type-count: 64px;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-strong: 600;
+  --r-focus: 6px;
+  --page-glow: radial-gradient(ellipse 95% 65% at 0% 0%, var(--ground-c), transparent 85%), radial-gradient(ellipse 95% 75% at 95% 0%, var(--ground-b), transparent 82%), linear-gradient(to bottom, var(--ground-top), var(--bg) 100%);
+  --home-glow: radial-gradient(ellipse 80% 65% at 0% 23%, var(--ground-a), transparent 85%), radial-gradient(ellipse 100% 80% at 100% 0%, var(--ground-b), transparent 85%), linear-gradient(to bottom, var(--ground-top), var(--bg) 95%);
+  --sheet-glow: radial-gradient(ellipse 90% 300px at 0% 0%, var(--ground-c), transparent 85%), radial-gradient(ellipse 100% 340px at 100% 0%, var(--ground-b), transparent 85%), linear-gradient(to bottom, var(--ground-top), var(--sheet-bg) 380px);
+  --nav-ground: linear-gradient(to top, var(--bg) 70%, transparent);
+  --blur-sheet: 6px;
   --track-tight: -.02em;
   --track-display: -.035em;
 
@@ -42,6 +60,12 @@
   /* light */
   --bg: #F3F5F4;
   --glow: rgba(36, 92, 76, .22);
+  /* the ground gradient: green top-left, teal top-right, olive for detail screens, fading into the ground */
+  --ground-top: #D5E8DE;
+  --ground-a: rgba(110, 185, 135, .55);
+  --ground-b: rgba(30, 135, 120, .4);
+  --ground-c: rgba(165, 170, 90, .3);
+  --flag: rgba(242, 165, 46, .14);
   --surface: rgba(10, 11, 11, .05);
   --surface-2: rgba(10, 11, 11, .08);
   --surface-3: rgba(10, 11, 11, .12);
@@ -73,8 +97,13 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0A0B0B;
-    --glow: rgba(36, 92, 76, .72);
+    --bg: #0B0B0A;
+    --glow: rgba(28, 92, 78, .85);
+    --ground-top: #082A28;
+    --ground-a: rgba(103, 136, 77, .68);
+    --ground-b: rgba(0, 83, 79, .92);
+    --ground-c: rgba(79, 86, 43, .36);
+    --flag: #2A2113;
     --surface: rgba(255, 255, 255, .06);
     --surface-2: rgba(255, 255, 255, .1);
     --surface-3: rgba(255, 255, 255, .14);
@@ -83,7 +112,7 @@
     --text: #FFFFFF;
     --muted: #A3A7A5;
     --faint: #6B706E;
-    --hero-label: #9DB9AE;
+    --hero-label: #A8CDB6;
     --primary: #FFFFFF;
     --primary-ink: #0A0B0B;
     --accent: #52D17A;
@@ -98,15 +127,20 @@
     --knob: #FFFFFF;
     --knob-shadow: rgba(0, 0, 0, .5);
     --scrim: rgba(0, 0, 0, .6);
-    --sheet-bg: #121413;
+    --sheet-bg: #0B0B0A;
     --shadow-float: 0 30px 80px -20px rgba(0, 0, 0, .9);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #0A0B0B;
-  --glow: rgba(36, 92, 76, .72);
+  --bg: #0B0B0A;
+  --glow: rgba(28, 92, 78, .85);
+  --ground-top: #082A28;
+  --ground-a: rgba(103, 136, 77, .68);
+  --ground-b: rgba(0, 83, 79, .92);
+  --ground-c: rgba(79, 86, 43, .36);
+  --flag: #2A2113;
   --surface: rgba(255, 255, 255, .06);
   --surface-2: rgba(255, 255, 255, .1);
   --surface-3: rgba(255, 255, 255, .14);
@@ -115,7 +149,7 @@
   --text: #FFFFFF;
   --muted: #A3A7A5;
   --faint: #6B706E;
-  --hero-label: #9DB9AE;
+  --hero-label: #A8CDB6;
   --primary: #FFFFFF;
   --primary-ink: #0A0B0B;
   --accent: #52D17A;
@@ -130,7 +164,7 @@
   --knob: #FFFFFF;
   --knob-shadow: rgba(0, 0, 0, .5);
   --scrim: rgba(0, 0, 0, .6);
-  --sheet-bg: #121413;
+  --sheet-bg: #0B0B0A;
   --shadow-float: 0 30px 80px -20px rgba(0, 0, 0, .9);
   color-scheme: dark;
 }

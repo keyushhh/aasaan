@@ -1,4 +1,4 @@
-.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: var(--text); display: flex; align-items: center; gap: 2px; padding: 10px 12px 8px; margin-bottom: 8px; }
+.top { position: relative; top: env(safe-area-inset-top, 0px); z-index: 5; background: transparent; color: var(--text); display: flex; align-items: center; gap: 2px; padding: 10px 12px 8px; margin-bottom: 8px; }
 .top h1 { font-weight: 600; font-size: 22px; line-height: 1.2; letter-spacing: -.02em; margin: 0; flex: 1; min-width: 0; text-align: left; }
 .large { padding: 20px 20px 8px; }
 .large h1 { font-size: 28px; letter-spacing: var(--track-tight); }
