@@ -1,0 +1,125 @@
+/* Every colour, radius, motion and type token from reference/index.html. Add none. */
+
+:root {
+  /* type */
+  --font: 'Barlow', 'Mukta', system-ui, sans-serif;
+  --display: 'Barlow Condensed', 'Mukta', sans-serif;
+  --logo-font: 'Mukta', var(--font);
+  --dw: 800;
+  --dw-big: 800;
+  --fs: 17px;
+
+  /* radius */
+  --r-card: 12px;
+  --r-hero: 14px;
+  --r-btn: 10px;
+  --r-pill: 6px;
+  --r-logo: 10px;
+  --r-sheet: 18px;
+  --r-icon: 9px;
+
+  /* motion */
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --ease-enter: cubic-bezier(.22, 1, .36, 1);
+  --m-in: 150ms;
+  --m-out: 120ms;
+  --m-press: 90ms;
+
+  /* signage (same in both themes) */
+  --sign: #0B3D91;
+  --yel: #FFC72C;
+  --yel-ink: #0A1730;
+  --top-bg: #0B3D91;
+  --top-ink: #FFFFFF;
+  --white: #fff;
+  --on-sign-muted: rgba(255, 255, 255, .82);
+  --on-sign-rule: rgba(255, 255, 255, .3);
+  --on-sign-line: rgba(255, 255, 255, .4);
+  --on-sign-btn-line: rgba(255, 255, 255, .5);
+  --top-shadow: rgba(0, 0, 0, .08);
+  --knob-shadow: rgba(0, 0, 0, .25);
+  --btn-fill: var(--yel);
+  --btn-ink: var(--yel-ink);
+
+  /* one signage colour per department */
+  --svc-epf: #0B3D91;
+  --svc-docs: #0E7A3B;
+  --svc-vehicle: #FFC72C;
+  --svc-vehicle-ink: #0A1730;
+  --svc-tax: #6B3B1F;
+  --svc-health: #C8102E;
+  --doc-card: #0E7A3B;
+
+  /* light theme */
+  --bg: #FFFFFF;
+  --surface: #EEF1F5;
+  --surface-2: #E0E5EC;
+  --text: #0A1730;
+  --muted: #47546C;
+  --line: #CCD3DE;
+  --accent: #0B3D91;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #DCE5F5;
+  --hi: #7A5A00;
+  --hi-bg: #FFC72C;
+  --hi-ink: #0A1730;
+  --hi-soft: #FFF0C2;
+  --danger: #C8102E;
+  --danger-soft: #FBDDE1;
+  --ok: #0E7A3B;
+  --ok-soft: #D5EFDE;
+  --scrim: rgba(5, 15, 35, .55);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #08101F;
+    --surface: #121D33;
+    --surface-2: #1B2843;
+    --text: #F1F4FA;
+    --muted: #9EABC4;
+    --line: #26365A;
+    --accent: #86A9F2;
+    --accent-ink: #071331;
+    --accent-soft: #18284B;
+    --hi: #FFD45C;
+    --hi-bg: #FFC72C;
+    --hi-ink: #0A1730;
+    --hi-soft: #382C06;
+    --danger: #FF7D8E;
+    --danger-soft: #3D121A;
+    --ok: #5FD28C;
+    --ok-soft: #10301E;
+    --scrim: rgba(0, 0, 0, .65);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #08101F;
+  --surface: #121D33;
+  --surface-2: #1B2843;
+  --text: #F1F4FA;
+  --muted: #9EABC4;
+  --line: #26365A;
+  --accent: #86A9F2;
+  --accent-ink: #071331;
+  --accent-soft: #18284B;
+  --hi: #FFD45C;
+  --hi-bg: #FFC72C;
+  --hi-ink: #0A1730;
+  --hi-soft: #382C06;
+  --danger: #FF7D8E;
+  --danger-soft: #3D121A;
+  --ok: #5FD28C;
+  --ok-soft: #10301E;
+  --scrim: rgba(0, 0, 0, .65);
+  color-scheme: dark;
+}
+
+[data-svc=epf] { --svc: var(--svc-epf); }
+[data-svc=docs] { --svc: var(--svc-docs); }
+[data-svc=vehicle] { --svc: var(--svc-vehicle); --svc-ink: var(--svc-vehicle-ink); }
+[data-svc=tax] { --svc: var(--svc-tax); }
+[data-svc=health] { --svc: var(--svc-health); }
