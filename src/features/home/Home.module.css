@@ -1,0 +1,15 @@
+.head { background: var(--sign); color: var(--white); padding: 14px 18px 26px; border-radius: 0 0 22px 22px; margin-bottom: 6px; position: relative; overflow: hidden; }
+.head::after { content: ""; position: absolute; left: 18px; right: 18px; bottom: 12px; height: 4px; background: repeating-linear-gradient(90deg, var(--yel) 0 22px, transparent 22px 36px); opacity: .9; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-size: 22px; font-weight: 800; }
+.brand :global(.logo) { width: 36px; height: 36px; font-size: 20px; background: var(--yel); color: var(--yel-ink); border-radius: 8px; }
+.date { margin-left: auto; font-family: var(--font); font-size: 14px; font-weight: 600; opacity: .85; }
+.count { display: flex; align-items: flex-end; gap: 14px; margin: 22px 0 6px; font-weight: inherit; }
+.num { font-family: var(--display); font-weight: 800; font-size: 112px; line-height: .78; color: var(--yel); font-variant-numeric: tabular-nums; overflow: hidden; }
+.lbl { font-family: var(--display); font-weight: 700; font-size: 27px; line-height: 1.02; padding-bottom: 2px; max-width: 12ch; }
+.enter .num { animation: numIn .7s var(--ease-enter) both; }
+.enter .lbl { animation: rise .55s var(--ease-enter) .22s both; }
+.enter::after { animation: lane .9s var(--ease-enter) .2s both; }
+@keyframes numIn { from { transform: translateY(35%); opacity: 0; } }
+@keyframes rise { from { transform: translateY(8px); opacity: 0; } }
+@keyframes lane { from { clip-path: inset(0 100% 0 0); } }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
