@@ -17,6 +17,10 @@ export const en = {
 
   // home
   brand: 'Aasaan',
+  attention: 'Needs your attention',
+  hello: 'Namaste',
+  allClear: 'All clear. Nothing needs you right now.',
+  deptCount: (svc: string, n: number) => `${svc}: ${n}`,
   needYou: (n: number, name: string) => `${plural(n, 'thing needs', 'things need')} you today, ${name}`,
   yourServices: 'Your services',
   recent: 'Recent activity',
@@ -243,6 +247,9 @@ export const hi: Partial<Strings> = {
   tabs: { home: 'होम', services: 'सेवाएँ', requests: 'अनुरोध', profile: 'प्रोफ़ाइल' },
   svc: { epf: 'पीएफ़ (भविष्य निधि)', docs: 'दस्तावेज़', vehicle: 'वाहन और लाइसेंस', tax: 'आयकर', health: 'स्वास्थ्य आईडी' },
   yourServices: 'आपकी सेवाएँ',
+  attention: 'आपके ध्यान के लिए',
+  hello: 'नमस्ते',
+  allClear: 'सब ठीक है। अभी कुछ करना नहीं है।',
   recent: 'हाल की गतिविधि',
   search: 'खोजें, जैसे “चालान” या “पीएफ़ बैलेंस”',
 };
