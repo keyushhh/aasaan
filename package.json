@@ -10,7 +10,8 @@
     "typecheck": "tsc -b",
     "test": "vitest run",
     "e2e": "playwright test",
-    "parity": "playwright test --config playwright.parity.config.ts"
+    "parity": "playwright test --config playwright.parity.config.ts parity.spec",
+    "screenshots": "playwright test --config playwright.parity.config.ts screenshots.spec && for f in docs/screenshots/*.png; do cwebp -quiet -q 82 \"$f\" -o \"${f%.png}.webp\" && rm \"$f\"; done"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",
