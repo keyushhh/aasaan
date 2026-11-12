@@ -28,7 +28,7 @@ export function Vehicle() {
         const r = reg.data!, l = lic.data!;
         return (
           <>
-            <Card variant="hero">
+            <Card variant="hero" data-svc="vehicle">
               <div className="label">{t.rcLabel}</div>
               <div className="big md mono">{r.number}</div>
               <div className="row-s">{t.rcLine(r.model, r.fuel, fd(r.registered))}</div>

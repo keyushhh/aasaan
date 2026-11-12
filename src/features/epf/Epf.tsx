@@ -24,7 +24,7 @@ export function Epf() {
         const e = summary.data!, b = passbook.data!;
         return (
           <>
-            <Card variant="hero">
+            <Card variant="hero" data-svc="epf">
               <div className="label">{t.totalPf}</div>
               <div className="big">{inr(e.employee + e.employer)}</div>
               <div className={s.split}>

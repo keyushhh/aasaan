@@ -31,7 +31,7 @@ export function Health() {
     <ServiceScreen svc="health" queries={[abha, consents, records]}>
       {() => (
         <>
-          <Card variant="hero">
+          <Card variant="hero" data-svc="health">
             <div className="label">{t.abhaNumber}</div>
             <div className="big md mono">{abha.data!.number}</div>
             <div className="row-s">{abha.data!.address}</div>

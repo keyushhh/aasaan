@@ -1,4 +1,4 @@
-.sync { font-size: 13px; color: var(--muted); margin: 0 4px 14px; display: flex; align-items: center; gap: 6px; }
+.sync { font-family: var(--mono); font-size: 11px; letter-spacing: .03em; text-transform: uppercase; color: var(--muted); margin: 0 6px 14px; display: flex; align-items: center; gap: 6px; }
 .sync::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; box-shadow: 0 0 0 3px var(--ok-soft); }
 .down::before { background: var(--hi); box-shadow: 0 0 0 3px var(--hi-soft); }
 .linkIcon { margin-bottom: 12px; }

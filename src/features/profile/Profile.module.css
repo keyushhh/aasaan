@@ -1,2 +1,2 @@
 .me { display: flex; gap: 14px; align-items: center; }
-.proto { font-size: 13px; color: var(--muted); text-align: center; margin-top: 20px; }
+.proto { font-size: 12px; font-family: var(--mono); letter-spacing: .01em; color: var(--muted); text-align: center; margin-top: 20px; }

@@ -4,16 +4,17 @@ import { Card } from '../../components/Card';
 import { Icon } from '../../components/Icon';
 import { ServiceTile } from '../../components/ServiceTile';
 import { DEPTS } from '../../data/types';
-import { useChallans, useConsents, useDepartments, useRegistration, useRequests } from '../../data/hooks';
+import { useChallans, useConsents, useDepartments, useEpfSummary, useRegistration, useRequests } from '../../data/hooks';
+import { inr } from '../../lib/format';
 import { SVC_ICON, useNav } from '../../app/nav';
 import { useSession, useT } from '../../app/session';
 import { RequestRow } from '../requests/RequestRow';
 import { useOpenRequest } from '../requests/RequestSheet';
 import { useOpenPay } from '../vehicle/PaySheet';
-import { attention, type Target } from './attention';
+import { attention, type Attention, type Target } from './attention';
 import s from './Home.module.css';
 
-const TONES = ['danger', 'warn', 'info'] as const;
+const strip = ({ key: _k, svc: _s, target: _t, ...x }: Attention) => x;
 
 /** The entrance animation plays once per app session. */
 let entered = false;
@@ -27,13 +28,14 @@ export function Home() {
   const registration = useRegistration().data;
   const consents = useConsents().data ?? [];
   const requests = useRequests().data ?? [];
+  const epf = useEpfSummary(linked.epf).data;
   const openRequest = useOpenRequest();
   const openPay = useOpenPay();
   const [enter] = useState(() => !entered);
   useEffect(() => void (entered = true), []);
 
   const items = attention({ challans, registration, consents, requests, linked, down }, t);
-  const byDept = DEPTS.map((d) => [d, items.filter((x) => x.svc === d).length] as const).filter(([, n]) => n > 0);
+  const [lead, ...rest] = items;
   const open = requests.filter((r) => r.status !== 'done').length;
   const first = name.split(' ')[0];
   const date = new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
@@ -49,51 +51,44 @@ export function Home() {
       <header className={`${s.head} ${enter ? s.enter : ''}`}>
         <div className={s.bar}>
           <span className={s.brand}><span className="logo" aria-hidden="true">आ</span>{t.brand}</span>
-          <button type="button" className={s.chip} aria-label={`${t.tabs.requests}: ${open}`} onClick={() => nav.tab('requests')}>
-            <Icon name="clock" size={18} />{open}
-          </button>
+          <span className={s.date}>{date}</span>
           <button type="button" className={s.round} aria-label={t.searchLabel} onClick={() => nav.tab('services')}>
             <Icon name="search" size={19} />
           </button>
         </div>
-        <section className={s.hero} aria-labelledby="hero-count">
-          <div className={s.core}>
-          <div className={s.heroTop}>
-            <span>{items.length ? t.attention : `${t.hello}, ${first}`}</span>
-            <span>{date}</span>
-          </div>
-          {items.length ? (
-            <>
-              <h1 className={s.count} id="hero-count">
+      </header>
+      <main className={`pad ${enter ? s.enter : ''}`} id="main">
+        <div className={s.bento}>
+          <section className={`${s.panel} ${s.count}`} aria-labelledby="hero-count">
+            <span className="label">{items.length ? t.attention : `${t.hello}, ${first}`}</span>
+            {items.length ? (
+              <h1 className={s.countIn} id="hero-count">
                 <span className={s.num}>{items.length}</span>
                 <span className={s.lbl}>{t.needYou(items.length, first)}</span>
               </h1>
-              <div className={s.meter} aria-hidden="true">
-                {TONES.map((tone) => {
-                  const n = items.filter((x) => x.tone === tone).length;
-                  return n ? <span key={tone} className={s[tone]} style={{ flexGrow: n }} /> : null;
-                })}
-              </div>
-              <div className={s.depts}>
-                {byDept.map(([d, n]) => (
-                  <button key={d} type="button" className={s.dept} data-svc={d} aria-label={t.deptCount(t.svc[d], n)} onClick={() => nav.go(d)}>
-                    <span className={s.deptMark}><Icon name={SVC_ICON[d]} size={15} /></span>{n}
-                  </button>
-                ))}
-              </div>
-            </>
+            ) : (
+              <h1 className={s.clear} id="hero-count"><span className={s.clearMark}><Icon name="check" size={20} /></span>{t.allClear}</h1>
+            )}
+          </section>
+
+          {epf ? (
+            <button type="button" className={`${s.panel} ${s.stat}`} data-svc="epf" onClick={() => nav.go('epf')}>
+              <span className="label">{t.totalPf}</span>
+              <span className={s.statNum}>{inr(epf.employee + epf.employer)}</span>
+              <span className={s.statSub}>{t.dept.epf}<Icon name="chev" size={14} /></span>
+            </button>
           ) : (
-            <h1 className={s.clear} id="hero-count">
-              <span className={s.clearMark}><Icon name="check" size={22} /></span>{t.allClear}
-            </h1>
+            <button type="button" className={`${s.panel} ${s.stat}`} onClick={() => nav.tab('requests')}>
+              <span className="label">{t.tabs.requests}</span>
+              <span className={s.statNum}>{open}</span>
+              <span className={s.statSub}>{t.inProgress}<Icon name="chev" size={14} /></span>
+            </button>
           )}
-          </div>
-        </section>
-      </header>
-      <main className={`pad ${enter ? s.enter : ''}`} id="main">
-        <div className={s.queue}>
-          {items.map(({ key, target, svc: _svc, ...x }, i) => <div key={key} style={{ '--i': i } as React.CSSProperties}><AlertCard {...x} first={i === 0} onClick={() => run(target)} /></div>)}
+
+          {lead && <div className={s.lead}><AlertCard {...strip(lead)} first onClick={() => run(lead.target)} /></div>}
+          {rest.length > 0 && <div className={s.more}>{rest.map((x) => <AlertCard key={x.key} {...strip(x)} first={false} compact onClick={() => run(x.target)} />)}</div>}
         </div>
+
         <h2 className="h">{t.yourServices}</h2>
         <div className={s.tiles}>
           {DEPTS.map((d) => <ServiceTile key={d} svc={d} icon={SVC_ICON[d]} name={t.svc[d]} state={state(d)} down={linked[d] && down[d]} onClick={() => nav.go(d)} />)}

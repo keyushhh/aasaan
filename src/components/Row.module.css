@@ -1,7 +1,7 @@
 .row { display: flex; align-items: center; gap: 14px; padding: 14px 0; border: 0; border-bottom: 1px solid var(--line); width: 100%; background: none; text-align: left; color: var(--text); }
 .row:last-child { border-bottom: 0; }
 .body { flex: 1; min-width: 0; }
-.right { text-align: right; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.right { text-align: right; font-weight: 550; white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: -.01em; font-family: var(--mono); font-size: 15px; }
 .chev { color: var(--faint); flex: none; transition: transform var(--m-in) var(--ease), color var(--m-in) var(--ease); }
 @media (hover: hover) and (pointer: fine) {
   button.row:hover :global(.row-t) { color: var(--accent); }
@@ -9,8 +9,8 @@
 }
 button.row:active { transform: scale(.985); transition-duration: var(--m-press); }
 
-/* Marker: a squircle tinted with the department colour. */
-.ic { width: 42px; height: 42px; border-radius: var(--r-mark); display: grid; place-items: center; background: var(--surface-2); color: var(--text); flex: none; box-shadow: inset 0 1px 0 var(--highlight); }
-.ic[data-svc] { background: color-mix(in srgb, var(--svc) 16%, transparent); color: color-mix(in srgb, var(--svc) 80%, var(--text)); }
+/* Marker: a department-tinted glass square with the glyph lit in that colour. */
+.ic { width: 42px; height: 42px; border-radius: var(--r-mark); display: grid; place-items: center; background: var(--inset); color: var(--text); flex: none; box-shadow: inset 0 0 0 1px var(--hairline); }
+.ic[data-svc] { background: color-mix(in srgb, var(--svc) 14%, transparent); color: var(--svc); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--svc) 30%, transparent); }
 .ok { background: var(--ok-soft); color: var(--ok); }
 .row .ic { width: 40px; height: 40px; }
