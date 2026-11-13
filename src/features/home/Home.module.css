@@ -27,8 +27,8 @@
 .actions > * > span:last-child, .actions > * { overflow: hidden; text-overflow: ellipsis; }
 
 .list { margin-top: 2px; }
-/* The queue: numbered items stacked with a small gap, flagged ones in amber blocks. */
-.queue { display: grid; gap: 8px; margin-top: 12px; }
+/* The queue: one grouped list in a rounded container. */
+.queue { margin-top: 10px; border-radius: 20px; overflow: hidden; background: var(--surface); }
 
 .enter .hero > * { animation: rise var(--m-enter) var(--ease-enter) both; }
 .enter .hero > :nth-child(2) { animation-delay: .06s; }

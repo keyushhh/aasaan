@@ -5,16 +5,19 @@ import s from './AlertCard.module.css';
 export interface AlertCardProps { tone: 'danger' | 'warn' | 'info'; icon: IconName; title: string; body: string; cta: string; onClick: () => void }
 
 /**
- * One item in the home queue, numbered by priority. Anything with a deadline or a fine (danger, warn) sits in an
- * amber block with a bar down its left edge; the rest are plain rows. The whole item is the button.
+ * One row of the home queue, in a grouped list: tinted icon tile, title, one line of reason, chevron.
+ * The whole row is the action; its label is spoken but not shown, as in a native list.
  */
-export function AlertCard({ tone, title, body, cta, onClick, n }: AlertCardProps & { n: number }) {
+export function AlertCard({ tone, icon, title, body, cta, onClick }: AlertCardProps) {
   return (
     <button type="button" className={cx(s.item, tone !== 'info' && s.flag)} onClick={onClick}>
-      <span className={s.n} aria-hidden="true">{String(n).padStart(2, '0')}</span>
-      <span className={s.title}>{title}</span>
-      <span className={s.text}>{body}</span>
-      <span className={s.go}>{cta}<Icon name="chev" size={16} /></span>
+      <span className={s.ic}><Icon name={icon} size={20} /></span>
+      <span className={s.body}>
+        <span className={s.title}>{title}</span>
+        <span className={s.text}>{body}</span>
+        <span className={s.sr}>{cta}</span>
+      </span>
+      <span className={s.chev}><Icon name="chev" size={18} /></span>
     </button>
   );
 }
