@@ -93,7 +93,7 @@ function Shell() {
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </div>
-      <TabBar active={active} labels={t.tabs} badge={open} onSelect={nav.tab} label={t.mainNav} />
+      <TabBar active={active} labels={t.tabs} badge={open} onSelect={nav.tab} label={t.mainNav} searchLabel={t.searchLabel} onSearch={nav.search} />
     </>
   );
 }

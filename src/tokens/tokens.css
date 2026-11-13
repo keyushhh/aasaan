@@ -33,15 +33,16 @@
   --track-display: -.035em;
 
   /* radius */
-  --r-card: 18px;
+  --r-card: 26px;
+  --r-tile: 18px;
   --r-item: 14px;
   --r-field: 18px;
-  --r-btn: 999px;
+  --r-btn: 20px;
   --r-pill: 999px;
   --r-logo: 50%;
   --r-mark: 50%;
   --r-sheet: 32px;
-  --tabs-h: 92px;
+  --tabs-h: 112px;
 
   /* motion */
   --ease: cubic-bezier(.32, .72, 0, 1);
@@ -91,6 +92,17 @@
   --knob-shadow: rgba(10, 11, 11, .25);
   --scrim: rgba(10, 11, 11, .45);
   --sheet-bg: #FFFFFF;
+  /* raised cards: a white card with a hairline edge on the grey ground, rows as recessed tiles inside it */
+  --card: #FFFFFF;
+  --card-edge: rgba(10, 11, 11, .07);
+  --well: #F1F3F2;
+  --well-2: #E7EAE8;
+  --raised: #FFFFFF;
+  --dock: rgba(236, 239, 237, .9);
+  --dock-on: rgba(10, 11, 11, .07);
+  --btn-ledge: rgba(255, 255, 255, .1);
+  --shadow-card: 0 1px 2px rgba(10, 11, 11, .04), 0 10px 28px -14px rgba(10, 11, 11, .16);
+  --shadow-dock: 0 12px 32px -12px rgba(10, 11, 11, .22);
   --shadow-float: 0 24px 60px -20px rgba(10, 11, 11, .35);
   --white: #fff;
   color-scheme: light;
@@ -129,6 +141,26 @@
     --knob-shadow: rgba(0, 0, 0, .5);
     --scrim: rgba(0, 0, 0, .6);
     --sheet-bg: #0B0B0A;
+  --card: #141615;
+  --card-edge: rgba(255, 255, 255, .07);
+  --well: #1D201E;
+  --well-2: #262927;
+  --raised: #2A2D2B;
+  --dock: rgba(22, 24, 23, .88);
+  --dock-on: rgba(255, 255, 255, .1);
+  --btn-ledge: rgba(10, 11, 11, .16);
+  --shadow-card: inset 0 1px 0 rgba(255, 255, 255, .03), 0 14px 32px -18px rgba(0, 0, 0, .9);
+  --shadow-dock: 0 16px 40px -10px rgba(0, 0, 0, .85);
+    --card: #141615;
+    --card-edge: rgba(255, 255, 255, .07);
+    --well: #1D201E;
+    --well-2: #262927;
+    --raised: #2A2D2B;
+    --dock: rgba(22, 24, 23, .88);
+    --dock-on: rgba(255, 255, 255, .1);
+    --btn-ledge: rgba(10, 11, 11, .16);
+    --shadow-card: inset 0 1px 0 rgba(255, 255, 255, .03), 0 14px 32px -18px rgba(0, 0, 0, .9);
+    --shadow-dock: 0 16px 40px -10px rgba(0, 0, 0, .85);
     --shadow-float: 0 30px 80px -20px rgba(0, 0, 0, .9);
     color-scheme: dark;
   }

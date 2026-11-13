@@ -1,2 +1,2 @@
-.me { display: flex; gap: 14px; align-items: center; background: none; padding: 6px 0 2px; }
+.me { display: flex; gap: 14px; align-items: center; }
 .proto { font-size: 13px; color: var(--muted); text-align: center; margin-top: 20px; }

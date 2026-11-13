@@ -1,7 +1,8 @@
-.card { border: 0; border-radius: var(--r-card); padding: 18px; background: var(--surface); }
-/* A list is flat: rows on the ground, divided by dotted hairlines. */
-.list { padding: 0; background: none; border-radius: 0; }
-.svc { padding: 2px 16px; }
-/* Hero: the screen's one big figure, straight on the ground under the glow. */
-.hero { background: none; padding: 4px 2px 0; border-radius: 0; }
-.hero dl { margin-top: 12px; }
+/* A raised card: a shade off the ground, hairline edge, soft shadow. */
+.card { border: 1px solid var(--card-edge); border-radius: var(--r-card); padding: 18px; background: var(--card); box-shadow: var(--shadow-card); }
+/* A list holds its rows as recessed tiles with a small gap between them. */
+.list { --tile: var(--well); padding: 6px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; }
+.list > * { border-radius: var(--r-tile); }
+/* Hero: the screen's one big figure, on a card tinted in the department colour, details in an inset panel. */
+.hero { padding: 20px; background: linear-gradient(165deg, color-mix(in srgb, var(--svc, var(--accent)) 24%, var(--card)), var(--card) 72%); }
+.hero dl { margin: 18px -8px -8px; padding: 2px 16px; background: var(--well); border-radius: var(--r-tile); }

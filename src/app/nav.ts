@@ -32,6 +32,11 @@ export function useNav() {
         navigate(-1);
       } else navigate('/home');
     },
+    /** The dock's search button: Services with its search field focused, even when already there. */
+    search() {
+      depth = 0;
+      navigate('/services', { state: { focus: Date.now() } });
+    },
     home: () => navigate('/home'),
   };
 }

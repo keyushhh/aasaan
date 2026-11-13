@@ -1,5 +1,5 @@
 .split { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.split > div { background: var(--surface); border-radius: var(--r-item); padding: 12px 14px; min-width: 0; }
+.split > div { background: var(--well); border-radius: var(--r-item); padding: 12px 14px; min-width: 0; }
 .split span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 2px; }
 .split b { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
 .bank { padding: 14px 16px; margin-top: 4px; }

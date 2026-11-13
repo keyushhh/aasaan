@@ -1,12 +1,12 @@
-.row { display: flex; align-items: center; gap: 14px; padding: 18px 0; border: 0; border-bottom: 1px dotted var(--sep); width: 100%; background: none; text-align: left; color: var(--text); }
-.row:last-child { border-bottom: 0; }
+.row { display: flex; align-items: center; gap: 14px; padding: 14px; border: 0; width: 100%; background: var(--tile, none); text-align: left; color: var(--text); -webkit-tap-highlight-color: transparent; transition: background-color var(--m-out) var(--ease); }
 .body { flex: 1; min-width: 0; }
 .right { text-align: right; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: -.01em; font-size: 17px; }
 .chev { color: var(--faint); flex: none; transition: transform var(--m-in) var(--ease), color var(--m-in) var(--ease); }
 @media (hover: hover) and (pointer: fine) {
+  button.row:hover { background: var(--well-2); }
   button.row:hover .chev { transform: translateX(2px); color: var(--text); }
 }
-button.row:active { transform: scale(.985); transition-duration: var(--m-press); }
+button.row:active { background: var(--well-2); transition-duration: 0ms; }
 
 /* Marker: a round avatar, lit in the department colour. */
 .ic { width: 44px; height: 44px; border-radius: var(--r-mark); display: grid; place-items: center; background: var(--surface-2); color: var(--text); flex: none; }

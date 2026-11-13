@@ -91,7 +91,7 @@ export function Home() {
         {items.length > 0 && (
           <section aria-labelledby="queue-h">
             <h2 className="h" id="queue-h"><Icon name="list" size={22} />{t.attention}</h2>
-            <div className={s.queue}>{items.map((x) => <AlertCard key={x.key} {...strip(x)} onClick={() => run(x.target)} />)}</div>
+            <Card variant="list" className={s.list}>{items.map((x) => <AlertCard key={x.key} {...strip(x)} onClick={() => run(x.target)} />)}</Card>
           </section>
         )}
 
