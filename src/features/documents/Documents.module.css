@@ -7,3 +7,4 @@
 .ver { display: flex; align-items: center; gap: 6px; font-size: 14px; margin-top: 10px; color: var(--muted); }
 .code { font-size: 36px; font-weight: var(--weight-strong); letter-spacing: .14em; text-align: center; padding: 18px; border: 0; border-radius: var(--r-card); background: var(--surface); color: var(--text); margin: 14px 0 6px; font-variant-numeric: tabular-nums; }
 .expiryHead { margin-top: 18px; }
+.scan { text-align: center; margin: 10px 0 0; }

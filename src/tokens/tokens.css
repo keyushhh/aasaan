@@ -23,6 +23,9 @@
   --weight-medium: 500;
   --weight-strong: 600;
   --r-focus: 6px;
+  /* QR codes stay dark on light in both themes so every scanner reads them */
+  --qr-plate: #FFFFFF;
+  --qr-ink: #0A0B0B;
   --page-glow: radial-gradient(ellipse 95% 65% at 0% 0%, var(--ground-c), transparent 85%), radial-gradient(ellipse 95% 75% at 95% 0%, var(--ground-b), transparent 82%), linear-gradient(to bottom, var(--ground-top), var(--bg) 100%);
   --home-glow: radial-gradient(ellipse 80% 65% at 0% 23%, var(--ground-a), transparent 85%), radial-gradient(ellipse 100% 80% at 100% 0%, var(--ground-b), transparent 85%), linear-gradient(to bottom, var(--ground-top), var(--bg) 95%);
   --sheet-glow: radial-gradient(ellipse 90% 300px at 0% 0%, var(--ground-c), transparent 85%), radial-gradient(ellipse 100% 340px at 100% 0%, var(--ground-b), transparent 85%), linear-gradient(to bottom, var(--ground-top), var(--sheet-bg) 380px);
@@ -141,16 +144,6 @@
     --knob-shadow: rgba(0, 0, 0, .5);
     --scrim: rgba(0, 0, 0, .6);
     --sheet-bg: #0B0B0A;
-  --card: #141615;
-  --card-edge: rgba(255, 255, 255, .07);
-  --well: #1D201E;
-  --well-2: #262927;
-  --raised: #2A2D2B;
-  --dock: rgba(22, 24, 23, .88);
-  --dock-on: rgba(255, 255, 255, .1);
-  --btn-ledge: rgba(10, 11, 11, .16);
-  --shadow-card: inset 0 1px 0 rgba(255, 255, 255, .03), 0 14px 32px -18px rgba(0, 0, 0, .9);
-  --shadow-dock: 0 16px 40px -10px rgba(0, 0, 0, .85);
     --card: #141615;
     --card-edge: rgba(255, 255, 255, .07);
     --well: #1D201E;
@@ -198,6 +191,16 @@
   --knob-shadow: rgba(0, 0, 0, .5);
   --scrim: rgba(0, 0, 0, .6);
   --sheet-bg: #0B0B0A;
+  --card: #141615;
+  --card-edge: rgba(255, 255, 255, .07);
+  --well: #1D201E;
+  --well-2: #262927;
+  --raised: #2A2D2B;
+  --dock: rgba(22, 24, 23, .88);
+  --dock-on: rgba(255, 255, 255, .1);
+  --btn-ledge: rgba(10, 11, 11, .16);
+  --shadow-card: inset 0 1px 0 rgba(255, 255, 255, .03), 0 14px 32px -18px rgba(0, 0, 0, .9);
+  --shadow-dock: 0 16px 40px -10px rgba(0, 0, 0, .85);
   --shadow-float: 0 30px 80px -20px rgba(0, 0, 0, .9);
   color-scheme: dark;
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '../../components/Button';
 import { Icon } from '../../components/Icon';
+import { Qr } from '../../components/Qr';
 import { KeyValue } from '../../components/KeyValue';
 import { Segmented } from '../../components/Segmented';
 import { SheetTitle, useSheet } from '../../components/Sheet';
@@ -73,6 +74,8 @@ function CodeSheet({ d, share }: { d: Document; share: Share }) {
     <>
       <SheetTitle>{t.codeReady}</SheetTitle>
       <p className="row-s">{t.codeReadyBody(d.name, fts(share.exp))}</p>
+      <Qr text={share.code} label={t.scanOrRead} />
+      <p className={`row-s ${s.scan}`}>{t.scanOrRead}</p>
       <div className={`${s.code} mono`} aria-label={t.codeAria(share.code)}>{share.code}</div>
       <KeyValue items={[[t.shareDoc, d.name], [t.worksUntil, fts(share.exp)]]} />
       <div className="btn-row">

@@ -1,0 +1,3 @@
+.qr { display: block; width: 184px; height: 184px; margin: 18px auto 0; border-radius: var(--r-item); }
+.plate { fill: var(--qr-plate); }
+.ink { fill: var(--qr-ink); }
