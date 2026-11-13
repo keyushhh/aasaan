@@ -1,13 +1,14 @@
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { Row, RowIcon } from '../../components/Row';
-import { Segmented } from '../../components/Segmented';
+import { Icon } from '../../components/Icon';
+import { SheetTitle, useSheet } from '../../components/Sheet';
 import { Switch } from '../../components/Switch';
 import { TopBar } from '../../components/TopBar';
 import { useToast } from '../../components/Toast';
 import { DEPTS, type Dept } from '../../data/types';
 import { useActions, useDepartments } from '../../data/hooks';
-import { en, type Lang } from '../../i18n/strings';
+import { en, LANGS } from '../../i18n/strings';
 import { SVC_ICON, useNav } from '../../app/nav';
 import { setSession, useSession, useT, type Theme } from '../../app/session';
 import s from './Profile.module.css';
@@ -17,6 +18,7 @@ export function Profile() {
   const nav = useNav();
   const toast = useToast();
   const act = useActions();
+  const sheet = useSheet();
   const { name, mobile, lang, theme = 'system' } = useSession();
   const { linked, down } = useDepartments();
   const masked = mobile ? mobile.slice(0, 2) + '••••••' + mobile.slice(-2) : '98••••••21';
@@ -49,12 +51,19 @@ export function Profile() {
           <span className="logo" aria-hidden="true">{name[0]}</span>
           <div><span className="row-t">{name}</span><span className="row-s">{t.verified(masked)}</span></div>
         </Card>
-        <h2 className="h">{t.language}</h2>
-        <Segmented<Lang> label={t.language} value={lang} onChange={(v) => setSession({ lang: v })}
-          options={[{ value: 'en', label: 'English' }, { value: 'hi', label: 'हिन्दी', lang: 'hi' }]} />
-        <h2 className="h">{t.appearance}</h2>
-        <Segmented<Theme> label={t.appearance} value={theme} onChange={(v) => setSession({ theme: v })}
-          options={t.themes.map(([value, label]) => ({ value, label }))} />
+        <Card variant="list" className={s.settings}>
+          <Row icon={<RowIcon icon="globe" />} title={t.language} sub={<span lang={lang}>{LANGS.find(([k]) => k === lang)![1]}</span>} chevron
+            onClick={() => sheet.open(<LanguageSheet />)} />
+          <Row icon={<RowIcon icon="contrast" />} title={t.appearance}
+            right={
+              <span className={s.pick}>
+                <select aria-label={t.appearance} value={theme} onChange={(e) => setSession({ theme: e.target.value as Theme })}>
+                  {t.themes.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                </select>
+                <Icon name="down" size={16} />
+              </span>
+            } />
+        </Card>
         <h2 className="h">{t.linkedAccounts}</h2>
         <Card variant="list">
           {DEPTS.map((d) => (
@@ -76,6 +85,25 @@ export function Profile() {
         </div>
         <p className={s.proto}>{t.protoProfile}</p>
       </main>
+    </>
+  );
+}
+
+/** Every language on offer, each in its own script with its English name under it. Choosing one applies it and closes the sheet. */
+function LanguageSheet() {
+  const t = useT();
+  const sheet = useSheet();
+  const { lang } = useSession();
+  return (
+    <>
+      <SheetTitle>{t.language}</SheetTitle>
+      <Card variant="list" className={s.langs}>
+        {LANGS.map(([code, own, english]) => (
+          <Row key={code} pressed={code === lang} title={<span lang={code}>{own}</span>} sub={code === 'en' ? undefined : english}
+            right={code === lang ? <span className={s.on}><Icon name="check" size={18} /></span> : undefined}
+            onClick={() => { setSession({ lang: code }); sheet.close(); }} />
+        ))}
+      </Card>
     </>
   );
 }

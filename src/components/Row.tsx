@@ -14,12 +14,14 @@ interface Props {
   /** bold right-aligned figure */
   figure?: ReactNode;
   chevron?: boolean;
+  /** for a row that is one choice of several: marks the chosen one for assistive tech */
+  pressed?: boolean;
   onClick?: () => void;
   children?: ReactNode;
 }
 
 /** A list row. Pass onClick to make the whole row a button. */
-export function Row({ title, sub, icon, right, figure, chevron, onClick, children }: Props) {
+export function Row({ title, sub, icon, right, figure, chevron, pressed, onClick, children }: Props) {
   const inner = (
     <>
       {icon}
@@ -36,7 +38,7 @@ export function Row({ title, sub, icon, right, figure, chevron, onClick, childre
     </>
   );
   return onClick ? (
-    <button type="button" data-row className={s.row} onClick={onClick}>{inner}</button>
+    <button type="button" data-row className={s.row} aria-pressed={pressed} onClick={onClick}>{inner}</button>
   ) : (
     <div data-row className={s.row}>{inner}</div>
   );

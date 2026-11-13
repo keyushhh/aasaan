@@ -19,6 +19,9 @@ const PATHS = {
   shield: '<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/>',
   clock: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
   close: '<path d="M6 6l12 12M18 6L6 18"/>',
+  down: '<path d="M6 9l6 6 6-6"/>',
+  globe: '<circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.4 2.2 3.5 5 3.5 8s-1.1 5.8-3.5 8c-2.4-2.2-3.5-5-3.5-8s1.1-5.8 3.5-8z"/>',
+  contrast: '<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/>',
 };
 export type IconName = keyof typeof PATHS;
 
