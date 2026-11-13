@@ -110,14 +110,17 @@ describe('appearance', () => {
   it('switches between light, dark and the device setting, and remembers the choice', async () => {
     const { user } = await openApp('profile');
     const root = document.documentElement;
-    const pick = await screen.findByRole('combobox', { name: 'Appearance' });
-    await user.selectOptions(pick, 'light');
+    const choose = async (name: string) => {
+      await user.click(await screen.findByRole('button', { name: /^Appearance:/ }));
+      await user.click(screen.getByRole('menuitemradio', { name }));
+    };
+    await choose('Light');
     expect(root.dataset.theme).toBe('light');
-    expect(pick).toHaveValue('light');
-    await user.selectOptions(pick, 'dark');
+    expect(screen.getByRole('button', { name: 'Appearance: Light' })).toHaveAttribute('aria-expanded', 'false');
+    await choose('Dark');
     expect(root.dataset.theme).toBe('dark');
     expect(JSON.parse(localStorage.getItem('aasaan-session-v1')!).theme).toBe('dark');
-    await user.selectOptions(pick, 'system');
+    await choose('System');
     expect(root.hasAttribute('data-theme')).toBe(false);
   });
 });

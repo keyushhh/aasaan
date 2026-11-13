@@ -83,7 +83,9 @@ test('search in Hindi and switch the language', async ({ page }) => {
   await expect(page).toHaveURL(/#\/vehicle$/);
   await page.getByRole('button', { name: 'Profile' }).click();
   await page.getByRole('button', { name: /^Language/ }).click();
-  await page.getByRole('button', { name: /हिन्दी/ }).click();
+  await page.getByRole('radio', { name: /हिन्दी/ }).check();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await page.getByRole('button', { name: 'Save changes' }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'hi');
   await expect(page.getByRole('button', { name: 'होम' })).toBeVisible();
 });

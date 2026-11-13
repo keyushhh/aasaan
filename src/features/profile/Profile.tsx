@@ -1,7 +1,8 @@
-import { Button } from '../../components/Button';
+import { useState } from 'react';
 import { Card } from '../../components/Card';
 import { Row, RowIcon } from '../../components/Row';
-import { Icon } from '../../components/Icon';
+import { Button } from '../../components/Button';
+import { Select } from '../../components/Select';
 import { SheetTitle, useSheet } from '../../components/Sheet';
 import { Switch } from '../../components/Switch';
 import { TopBar } from '../../components/TopBar';
@@ -55,14 +56,7 @@ export function Profile() {
           <Row icon={<RowIcon icon="globe" />} title={t.language} sub={<span lang={lang}>{LANGS.find(([k]) => k === lang)![1]}</span>} chevron
             onClick={() => sheet.open(<LanguageSheet />)} />
           <Row icon={<RowIcon icon="contrast" />} title={t.appearance}
-            right={
-              <span className={s.pick}>
-                <select aria-label={t.appearance} value={theme} onChange={(e) => setSession({ theme: e.target.value as Theme })}>
-                  {t.themes.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-                </select>
-                <Icon name="down" size={16} />
-              </span>
-            } />
+            right={<Select<Theme> label={t.appearance} value={theme} options={t.themes} onChange={(v) => setSession({ theme: v })} />} />
         </Card>
         <h2 className="h">{t.linkedAccounts}</h2>
         <Card variant="list">
@@ -89,21 +83,34 @@ export function Profile() {
   );
 }
 
-/** Every language on offer, each in its own script with its English name under it. Choosing one applies it and closes the sheet. */
+/**
+ * Every language on offer as a radio list, each in its own script with its English name under it.
+ * Picking one only marks it; Save changes applies it, Cancel leaves the language as it was.
+ */
 function LanguageSheet() {
   const t = useT();
   const sheet = useSheet();
   const { lang } = useSession();
+  const [pick, setPick] = useState(lang);
   return (
     <>
       <SheetTitle>{t.language}</SheetTitle>
-      <Card variant="list" className={s.langs}>
+      <Card variant="list" className={s.langs} role="radiogroup" aria-label={t.language}>
         {LANGS.map(([code, own, english]) => (
-          <Row key={code} pressed={code === lang} title={<span lang={code}>{own}</span>} sub={code === 'en' ? undefined : english}
-            right={code === lang ? <span className={s.on}><Icon name="check" size={18} /></span> : undefined}
-            onClick={() => { setSession({ lang: code }); sheet.close(); }} />
+          <label key={code} className={s.lang}>
+            <input type="radio" name="lang" value={code} checked={pick === code} onChange={() => setPick(code)} />
+            <span className={s.langName}>
+              <span className="row-t" lang={code}>{own}</span>
+              {code !== 'en' && <span className="row-s">{english}</span>}
+            </span>
+            <span className={s.radio} aria-hidden="true" />
+          </label>
         ))}
       </Card>
+      <div className={s.foot}>
+        <Button onClick={sheet.close}>{t.cancel}</Button>
+        <Button variant="primary" disabled={pick === lang} onClick={() => { setSession({ lang: pick }); sheet.close(); }}>{t.saveChanges}</Button>
+      </div>
     </>
   );
 }

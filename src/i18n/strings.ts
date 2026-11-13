@@ -223,6 +223,8 @@ export const en = {
   // profile
   verified: (m: string) => `+91 ${m}, verified`,
   language: 'Language',
+  saveChanges: 'Save changes',
+  cancel: 'Cancel',
   appearance: 'Appearance',
   themes: [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']] as ['system' | 'light' | 'dark', string][],
   linkedAccounts: 'Linked accounts',
@@ -254,6 +256,9 @@ export const hi: Partial<Strings> = {
   allClear: 'सब ठीक है। अभी कुछ करना नहीं है।',
   recent: 'हाल की गतिविधि',
   search: 'खोजें, जैसे “चालान” या “पीएफ़ बैलेंस”',
+  language: 'भाषा',
+  saveChanges: 'बदलाव सहेजें',
+  cancel: 'रद्द करें',
 };
 
 /*
