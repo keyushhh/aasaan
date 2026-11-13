@@ -55,7 +55,7 @@ export function Health() {
             ))}
           </div>
           <h2 className="h">{t.yourRecords}</h2>
-          <Card variant="list">{records.data!.map((r) => <Row key={r.name} title={r.name} sub={`${r.facility}, ${fd(r.date)}`} />)}</Card>
+          <Card variant="rows">{records.data!.map((r) => <Row key={r.name} title={r.name} sub={`${r.facility}, ${fd(r.date)}`} />)}</Card>
         </>
       )}
     </ServiceScreen>

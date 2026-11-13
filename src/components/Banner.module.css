@@ -1,7 +1,7 @@
 /* Worth checking: an amber-tinted item with a bar down its left edge. */
 .banner { display: flex; gap: 12px; align-items: flex-start; background: var(--hi-soft); color: var(--text); border-radius: var(--r-item); border-left: 3px solid var(--hi); padding: 14px 16px 14px 14px; margin-bottom: 14px; font-size: 15px; line-height: 1.45; }
 .banner svg { color: var(--hi); flex: none; margin-top: 1px; }
-.banner b { display: block; margin-bottom: 2px; font-weight: 600; font-size: 16px; letter-spacing: -.01em; }
+.banner b { display: block; margin-bottom: 2px; font-weight: var(--weight-strong); font-size: 16px; letter-spacing: -.01em; }
 .banner div { color: var(--muted); }
 .banner b { color: var(--text); }
 .inSheet { margin-top: 14px; }

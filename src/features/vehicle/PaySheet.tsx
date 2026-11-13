@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Banner } from '../../components/Banner';
 import { Button } from '../../components/Button';
-import { Field } from '../../components/Field';
+import { Select } from '../../components/Select';
+import { en } from '../../i18n/strings';
+import { Card } from '../../components/Card';
 import { Icon } from '../../components/Icon';
 import { KeyValue } from '../../components/KeyValue';
 import { MonoIn } from '../../components/MonoIn';
@@ -21,7 +23,7 @@ function PaySheet({ id }: { id: string }) {
   const act = useActions();
   const { down } = useDepartments();
   const c = useChallans().data?.find((x) => x.id === id);
-  const [method, setMethod] = useState<PayMethod>(t.payMethods[0]);
+  const [method, setMethod] = useState<PayMethod>(en.payMethods[0] as PayMethod);
   const [paying, setPaying] = useState(false);
   if (!c) return null;
   const paused = down.vehicle;
@@ -30,7 +32,7 @@ function PaySheet({ id }: { id: string }) {
     setPaying(true);
     try {
       const receipt = await act.payChallan(c.id, method);
-      sheet.set(<PaidSheet c={c} receipt={receipt} />);
+      sheet.set(<PaidSheet c={c} receipt={receipt} method={method} />);
     } catch (e) {
       if (!(e instanceof DepartmentUnavailable)) throw e;
       setPaying(false); // the paused banner takes over
@@ -42,11 +44,8 @@ function PaySheet({ id }: { id: string }) {
       <SheetTitle>{t.payTitle}</SheetTitle>
       <p className="row-s">{c.offence}, {fd(c.date)}<br /><MonoIn line={t.challanNo(c.no)} part={c.no} /></p>
       <div className={`big ${s.amount}`}>{inr(c.amount)}</div>
-      <Field label={t.payWith}>
-        <select value={method} onChange={(e) => setMethod(e.target.value as PayMethod)}>
-          {t.payMethods.map((m) => <option key={m}>{m}</option>)}
-        </select>
-      </Field>
+      <Select<PayMethod> field label={t.payWith} value={method} onChange={setMethod}
+        options={en.payMethods.map((m, i) => [m as PayMethod, t.payMethods[i]] as const)} />
       {paused && <Banner spacing="pay" title={t.paymentsPausedTitle}>{t.paymentsPausedBody}</Banner>}
       <Button variant="primary" block trail="chev" disabled={paused || paying} onClick={pay}>{paying ? t.confirming : t.pay(inr(c.amount))}</Button>
       <p className={`note ${s.note}`}>{t.noMoney}</p>
@@ -54,7 +53,7 @@ function PaySheet({ id }: { id: string }) {
   );
 }
 
-function PaidSheet({ c, receipt }: { c: Challan; receipt: Receipt }) {
+function PaidSheet({ c, receipt, method }: { c: Challan; receipt: Receipt; method: PayMethod }) {
   const t = useT();
   const sheet = useSheet();
   const toast = useToast();
@@ -65,7 +64,17 @@ function PaidSheet({ c, receipt }: { c: Challan; receipt: Receipt }) {
         <SheetTitle>{t.challanPaid}</SheetTitle>
         <p className="row-s">{t.paidFor(inr(receipt.amount), c.no)}</p>
       </div>
-      <KeyValue items={[[t.utr, <span className="mono">{receipt.utr}</span>], [t.paidOn, fd(receipt.paidOn)], [t.status, <Pill tone="ok">{t.closed}</Pill>]]} />
+      <Card className={s.receipt}>
+        <KeyValue items={[
+          [t.amountPaid, inr(receipt.amount)],
+          [t.challanNoLabel, <span className="mono">{receipt.challanNo}</span>],
+          [t.paidTo, t.dept.vehicle],
+          [t.paidWith, t.payMethods[en.payMethods.indexOf(method)]],
+          [t.utr, <span className="mono">{receipt.utr}</span>],
+          [t.paidOn, fd(receipt.paidOn)],
+          [t.status, <Pill tone="ok">{t.closed}</Pill>],
+        ]} />
+      </Card>
       <div className="btn-row">
         <Button icon="download" onClick={() => toast(t.downloadToast)}>{t.receipt}</Button>
         <Button variant="primary" onClick={sheet.close}>{t.done}</Button>

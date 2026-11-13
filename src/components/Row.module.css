@@ -1,6 +1,6 @@
 .row { display: flex; align-items: center; gap: 14px; padding: 14px; border: 0; width: 100%; background: var(--tile, none); text-align: left; color: var(--text); -webkit-tap-highlight-color: transparent; transition: background-color var(--m-out) var(--ease); }
 .body { flex: 1; min-width: 0; }
-.right { text-align: right; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: -.01em; font-size: 17px; }
+.right { text-align: right; font-weight: var(--weight-strong); white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: -.01em; font-size: 17px; }
 .chev { color: var(--faint); flex: none; transition: transform var(--m-in) var(--ease), color var(--m-in) var(--ease); }
 @media (hover: hover) and (pointer: fine) {
   button.row:hover { background: var(--well-2); }

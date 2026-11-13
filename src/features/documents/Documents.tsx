@@ -43,7 +43,7 @@ export function Documents() {
             </Card>
             <h2 className="h">{t.activeCodes}</h2>
             {active.length ? (
-              <Card variant="list">
+              <Card variant="rows">
                 {active.map((x) => (
                   <Row key={x.id} title={t.codeRow(nameOf(x.doc), x.code)} sub={t.expires(fts(x.exp))}
                     right={<Button small danger onClick={() => revoke(x.id)}>{t.revoke}</Button>} />

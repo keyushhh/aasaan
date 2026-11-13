@@ -38,7 +38,7 @@ export function Epf() {
             <h2 className="h">{t.yourClaims}</h2>
             {claims.length ? <Card variant="list">{claims.map((r) => <RequestRow key={r.id} r={r} />)}</Card> : <Empty icon="wallet">{t.noClaims}</Empty>}
             <h2 className="h">{t.passbook}</h2>
-            <Card variant="list">
+            <Card variant="ledger">
               {b.months.map((m) => (
                 <Row key={m.month} title={m.month} sub={t.passbookLine(inr(m.employee), inr(m.employer), inr(m.pension))} figure={'+' + inr(m.employee + m.employer)} />
               ))}

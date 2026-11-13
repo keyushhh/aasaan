@@ -1,6 +1,6 @@
 .btn {
   border: 0; background: var(--surface-2); border-radius: var(--r-btn); padding: 0 22px; white-space: nowrap;
-  font-weight: 600; font-size: 17px; letter-spacing: -.01em; min-height: 56px;
+  font-weight: var(--weight-strong); font-size: 17px; letter-spacing: -.01em; min-height: 56px;
   display: inline-flex; align-items: center; justify-content: center; gap: 10px; color: var(--text);
   transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease), opacity var(--m-out) var(--ease);
 }

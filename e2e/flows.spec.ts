@@ -15,7 +15,7 @@ async function signIn(page: Page) {
   await page.getByLabel('6-digit OTP').fill('123456');
   await page.getByRole('button', { name: 'Verify' }).click();
   await page.getByRole('button', { name: 'Link and continue' }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('things need you today, Ananya');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('things need you');
 }
 const sheet = (page: Page) => page.getByRole('dialog');
 

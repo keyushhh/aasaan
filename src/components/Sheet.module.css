@@ -4,4 +4,4 @@
 .sheet { background: var(--sheet-glow), var(--sheet-bg); width: 100%; max-width: 480px; border-radius: var(--r-sheet) var(--r-sheet) 0 0; padding: 12px 20px calc(24px + env(safe-area-inset-bottom, 0px)); max-height: 92%; overflow-y: auto; animation: up .36s var(--ease-enter); outline: none; box-shadow: var(--shadow-float); }
 .core { display: contents; }
 .head { display: flex; justify-content: flex-end; margin: 0 -8px 2px 0; }
-.title { font-weight: 600; margin: 0 0 6px; font-size: 24px; line-height: 1.15; letter-spacing: var(--track-tight); text-wrap: balance; }
+.title { font-weight: var(--weight-strong); margin: 0 0 6px; font-size: 24px; line-height: 1.15; letter-spacing: var(--track-tight); text-wrap: balance; }

@@ -1,12 +1,23 @@
 /* The closed state is a raised pill; the menu is a raised card under it, aligned to its right edge. */
 .wrap { position: relative; flex: none; }
-.btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 12px 0 16px; border: 1px solid var(--card-edge); border-radius: var(--r-pill); background: var(--card); box-shadow: var(--shadow-card); color: var(--text); font-size: 15px; font-weight: 500; -webkit-tap-highlight-color: transparent; }
+.btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 12px 0 16px; border: 1px solid var(--card-edge); border-radius: var(--r-pill); background: var(--card); box-shadow: var(--shadow-card); color: var(--text); font-size: 15px; font-weight: var(--weight-medium); -webkit-tap-highlight-color: transparent; }
 .btn svg { color: var(--muted); transition: transform var(--m-in) var(--ease); }
 .btn[aria-expanded="true"] svg { transform: rotate(180deg); }
 .menu { position: absolute; top: calc(100% + 8px); right: 0; z-index: 10; min-width: 184px; padding: 6px; display: grid; gap: 2px; border: 1px solid var(--card-edge); border-radius: 20px; background: var(--raised); box-shadow: var(--shadow-dock); transform-origin: top right; animation: pop var(--m-in) var(--ease-enter); }
-.item { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 0 12px 0 14px; border: 0; border-radius: 14px; background: none; color: var(--text); font-size: 15px; font-weight: 500; text-align: left; -webkit-tap-highlight-color: transparent; }
+.item { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 0 12px 0 14px; border: 0; border-radius: 14px; background: none; color: var(--text); font-size: 15px; font-weight: var(--weight-medium); text-align: left; -webkit-tap-highlight-color: transparent; }
 .item[aria-checked="true"] { background: var(--dock-on); }
 .item:focus-visible { outline-offset: -2px; }
 .item:active { background: var(--well-2); }
 @media (hover: hover) and (pointer: fine) { .item:hover { background: var(--well-2); } }
+/* Field: the same box as a text field, label inside above the value; the menu spans its width. */
+.wide { flex: 1 1 auto; width: 100%; margin-top: 10px; }
+.field { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 16px 12px; border: 1px solid var(--card-edge); border-radius: var(--r-field); background: var(--card); box-shadow: var(--shadow-card); color: var(--text); text-align: left; -webkit-tap-highlight-color: transparent; }
+.field[aria-expanded="true"] { box-shadow: var(--shadow-card), inset 0 0 0 1px var(--sep); }
+.field > svg { flex: none; color: var(--muted); transition: transform var(--m-in) var(--ease); }
+.field[aria-expanded="true"] > svg { transform: rotate(180deg); }
+.fieldText { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.fieldLabel { font-size: 14px; color: var(--muted); }
+.fieldValue { margin-top: 2px; min-height: 30px; display: flex; align-items: center; font-size: 18px; font-weight: var(--weight-medium); letter-spacing: -.01em; }
+.menuWide { left: 0; right: 0; min-width: 0; }
+.menuWide .item { min-height: 52px; font-size: 16px; }
 @keyframes pop { from { opacity: 0; transform: translateY(-4px) scale(.96); } }

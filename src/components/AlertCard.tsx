@@ -5,7 +5,7 @@ import s from './AlertCard.module.css';
 export interface AlertCardProps { tone: 'danger' | 'warn' | 'info'; icon: IconName; title: string; body: string; cta: string; onClick: () => void }
 
 /**
- * One row of the home queue, in a grouped list: tinted icon tile, title, one line of reason, chevron.
+ * One row of the home queue, in a grouped list: tinted icon tile, title, the full reason, chevron.
  * The whole row is the action; its label is spoken but not shown, as in a native list.
  */
 export function AlertCard({ tone, icon, title, body, cta, onClick }: AlertCardProps) {

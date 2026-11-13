@@ -103,7 +103,7 @@ function LinkStep({ mobile }: { mobile: string }) {
     <div className={s.login}>
       <h1>{t.linkAccounts}</h1>
       <p className="row-s">{t.linkAccountsBody}</p>
-      <Card variant="list" className={s.consents}>
+      <Card variant="rows" className={s.consents}>
         {DEPTS.map((d) => (
           <label key={d} className={s.check}>
             <input type="checkbox" checked={picked[d]} onChange={(e) => setPicked((p) => ({ ...p, [d]: e.target.checked }))} />

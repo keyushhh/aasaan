@@ -74,6 +74,7 @@ function CodeSheet({ d, share }: { d: Document; share: Share }) {
       <SheetTitle>{t.codeReady}</SheetTitle>
       <p className="row-s">{t.codeReadyBody(d.name, fts(share.exp))}</p>
       <div className={`${s.code} mono`} aria-label={t.codeAria(share.code)}>{share.code}</div>
+      <KeyValue items={[[t.shareDoc, d.name], [t.worksUntil, fts(share.exp)]]} />
       <div className="btn-row">
         <Button onClick={copy}>{t.copyCode}</Button>
         <Button variant="primary" onClick={sheet.close}>{t.done}</Button>

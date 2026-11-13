@@ -4,3 +4,6 @@
 .success h2 { text-wrap: balance; margin-left: auto; margin-right: auto; }
 .ring { width: 68px; height: 68px; border-radius: 50%; background: var(--ok); color: var(--primary-ink); display: grid; place-items: center; margin: 4px auto 12px; animation: pop .5s var(--ease-enter) both; }
 @keyframes pop { from { transform: scale(.6); opacity: 0; } }
+/* The receipt: every detail someone might be asked for, in one card worth a screenshot. */
+.receipt { margin-top: 16px; padding: 4px 16px; }
+.receipt dl { margin: 0; }

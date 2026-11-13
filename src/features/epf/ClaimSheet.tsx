@@ -6,6 +6,8 @@ import { Field } from '../../components/Field';
 import { SheetTitle, useSheet } from '../../components/Sheet';
 import { useToast } from '../../components/Toast';
 import type { ClaimReason } from '../../data';
+import { Select } from '../../components/Select';
+import { en } from '../../i18n/strings';
 import { useActions, useDepartments } from '../../data/hooks';
 import { inr } from '../../lib/format';
 import { useT } from '../../app/session';
@@ -36,11 +38,8 @@ export function ClaimSheet({ eligible }: { eligible: number }) {
       <SheetTitle>{t.withdraw}</SheetTitle>
       <p className="row-s">{t.claimIntro(inr(eligible))}</p>
       {down && <Banner spacing="sheet" title={t.claimDownTitle}>{t.claimDownBody}</Banner>}
-      <Field label={t.reason}>
-        <select value={reason} onChange={(e) => setReason(e.target.value as ClaimReason)}>
-          {t.reasons.map((r) => <option key={r}>{r}</option>)}
-        </select>
-      </Field>
+      <Select<ClaimReason> field label={t.reason} value={reason} onChange={setReason}
+        options={en.reasons.map((r, i) => [r as ClaimReason, t.reasons[i]] as const)} />
       <Field label={t.amountLabel}>
         <input inputMode="numeric" placeholder={t.amountPlaceholder} autoComplete="off" value={raw} onChange={(e) => setRaw(e.target.value)} />
       </Field>

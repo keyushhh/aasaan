@@ -1,4 +1,4 @@
 .seg { display: flex; background: var(--surface); border-radius: var(--r-pill); padding: 4px; gap: 4px; }
-.seg button { flex: 1; min-height: 44px; border: 0; background: none; border-radius: var(--r-pill); padding: 8px; font-weight: 500; font-size: 15px; color: var(--muted); transition: background-color var(--m-out) var(--ease), color var(--m-out) var(--ease); }
+.seg button { flex: 1; min-height: 44px; border: 0; background: none; border-radius: var(--r-pill); padding: 8px; font-weight: var(--weight-medium); font-size: 15px; color: var(--muted); transition: background-color var(--m-out) var(--ease), color var(--m-out) var(--ease); }
 .seg button.on { background: var(--raised); color: var(--text); box-shadow: var(--shadow-card), inset 0 0 0 1px var(--card-edge); }
 @media (hover: hover) and (pointer: fine) { .seg button:not(.on):hover { color: var(--text); } }

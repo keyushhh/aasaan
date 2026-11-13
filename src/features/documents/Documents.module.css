@@ -2,8 +2,8 @@
 .doc::after { content: ""; position: absolute; right: -60px; top: -70px; width: 220px; height: 220px; border-radius: 50%; background: var(--svc-docs); opacity: .18; filter: blur(44px); }
 .doc > * { position: relative; z-index: 1; }
 .iss { font-size: 14px; color: var(--muted); }
-.name { font-weight: 600; font-size: 24px; line-height: 1.15; letter-spacing: var(--track-tight); margin-top: 2px; }
+.name { font-weight: var(--weight-strong); font-size: 24px; line-height: 1.15; letter-spacing: var(--track-tight); margin-top: 2px; }
 .no { font-size: 18px; margin-top: 12px; font-variant-numeric: tabular-nums; }
 .ver { display: flex; align-items: center; gap: 6px; font-size: 14px; margin-top: 10px; color: var(--muted); }
-.code { font-size: 36px; font-weight: 600; letter-spacing: .14em; text-align: center; padding: 18px; border: 0; border-radius: var(--r-card); background: var(--surface); color: var(--text); margin: 14px 0 6px; font-variant-numeric: tabular-nums; }
+.code { font-size: 36px; font-weight: var(--weight-strong); letter-spacing: .14em; text-align: center; padding: 18px; border: 0; border-radius: var(--r-card); background: var(--surface); color: var(--text); margin: 14px 0 6px; font-variant-numeric: tabular-nums; }
 .expiryHead { margin-top: 18px; }

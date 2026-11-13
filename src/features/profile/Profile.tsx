@@ -52,14 +52,14 @@ export function Profile() {
           <span className="logo" aria-hidden="true">{name[0]}</span>
           <div><span className="row-t">{name}</span><span className="row-s">{t.verified(masked)}</span></div>
         </Card>
-        <Card variant="list" className={s.settings}>
+        <Card variant="rows" className={s.settings}>
           <Row icon={<RowIcon icon="globe" />} title={t.language} sub={<span lang={lang}>{LANGS.find(([k]) => k === lang)![1]}</span>} chevron
             onClick={() => sheet.open(<LanguageSheet />)} />
           <Row icon={<RowIcon icon="contrast" />} title={t.appearance}
             right={<Select<Theme> label={t.appearance} value={theme} options={t.themes} onChange={(v) => setSession({ theme: v })} />} />
         </Card>
         <h2 className="h">{t.linkedAccounts}</h2>
-        <Card variant="list">
+        <Card variant="rows">
           {DEPTS.map((d) => (
             <Row key={d} icon={<RowIcon icon={SVC_ICON[d]} svc={d} />} title={t.svc[d]} sub={linked[d] ? t.linkedActive : t.notLinked}
               right={<Switch checked={linked[d]} label={t.linkSwitch(en.svc[d])} onChange={() => toggleLink(d)} />} />
@@ -67,7 +67,7 @@ export function Profile() {
         </Card>
         <p className="note">{t.unlinkNote}</p>
         <h2 className="h">{t.protoControls}</h2>
-        <Card variant="list">
+        <Card variant="rows">
           <Row><span className="row-s">{t.protoControlsIntro}</span></Row>
           {DEPTS.map((d) => (
             <Row key={d} title={t.simulate(t.dept[d])} right={<Switch warn checked={down[d]} label={t.simulate(t.dept[d])} onChange={() => toggleOutage(d)} />} />

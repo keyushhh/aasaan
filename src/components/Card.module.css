@@ -3,6 +3,14 @@
 /* A list holds its rows as recessed tiles with a small gap between them. */
 .list { --tile: var(--well); padding: 6px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; }
 .list > * { border-radius: var(--r-tile); }
+/* Rows: a quiet grouped list for settings and records, rows split by hairlines with no tiles. */
+.rows, .ledger { padding: 2px 16px; display: grid; grid-template-columns: minmax(0, 1fr); }
+.rows > * + *, .rows > [data-row] + [data-row] { border-top: 1px solid var(--line); }
+.rows > [data-row], .ledger > [data-row] { padding-inline: 0; border-radius: 0; }
+.rows > button[data-row]:is(:hover, :active), .ledger > button[data-row]:is(:hover, :active) { background: none; }
+/* Ledger: entries and figures, split by dotted rules like a printed statement. */
+.ledger > * + *, .ledger > [data-row] + [data-row] { border-top: 1px dotted var(--sep); }
+.ledger > [data-row] { padding-block: 13px; }
 /* Hero: the screen's one big figure, on a card tinted in the department colour, details in an inset panel. */
 .hero { padding: 20px; background: linear-gradient(165deg, color-mix(in srgb, var(--svc, var(--accent)) 24%, var(--card)), var(--card) 72%); }
 .hero dl { margin: 18px -8px -8px; padding: 2px 16px; background: var(--well); border-radius: var(--r-tile); }

@@ -1,7 +1,7 @@
 .top { position: relative; top: env(safe-area-inset-top, 0px); z-index: 5; background: transparent; color: var(--text); display: flex; align-items: center; gap: 2px; padding: 10px 12px 8px; margin-bottom: 8px; }
-.top h1 { font-weight: 600; font-size: 22px; line-height: 1.2; letter-spacing: -.02em; margin: 0; flex: 1; min-width: 0; text-align: left; }
+.top h1 { font-weight: var(--weight-strong); font-size: 22px; line-height: 1.2; letter-spacing: -.02em; margin: 0; flex: 1; min-width: 0; text-align: left; }
 .large { padding: 20px 20px 8px; }
 .large h1 { font-size: 28px; letter-spacing: var(--track-tight); }
 .title { display: flex; flex-direction: column; align-items: flex-start; }
-.dept { display: block; font-size: 15px; font-weight: 400; letter-spacing: 0; color: var(--muted); margin-top: 1px; }
+.dept { display: block; font-size: 15px; font-weight: var(--weight-normal); letter-spacing: 0; color: var(--muted); margin-top: 1px; }
 .slot { width: 44px; height: 44px; }

@@ -2,3 +2,11 @@
 .sync::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
 .down::before { background: var(--hi); }
 .linkIcon { margin-bottom: 12px; }
+/* Pull to refresh: a strip that opens above the content as the page is pulled down. */
+.pull { display: flex; align-items: center; justify-content: center; gap: 8px; overflow: hidden; font-size: 14px; color: var(--muted); }
+.pullIc { display: grid; place-items: center; }
+.pulling .pullIc svg { animation: spin .8s linear infinite; }
+/* On touch phones pulling replaces the refresh button; it stays in the tab order and appears when focused. */
+@media (hover: none) and (pointer: coarse) {
+  .refreshBtn:not(:focus-within) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+}

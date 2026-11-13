@@ -1,6 +1,10 @@
 import type { Dept } from '../data/types';
+import { bn } from './bn';
+import { hi } from './hi';
+import { mr } from './mr';
+import { te } from './te';
 
-/** Every word the UI shows, copied from reference/index.html. Hindi covers what the reference translates; the rest falls back to English. */
+/** Every word the UI shows. English is the base; each other language is a complete translation in its own file. */
 const plural = (n: number, one: string, many: string) => (n === 1 ? one : many);
 
 export const en = {
@@ -21,7 +25,27 @@ export const en = {
   hello: 'Namaste',
   allClear: 'All clear. Nothing needs you right now.',
   deptCount: (svc: string, n: number) => `${svc}: ${n}`,
-  needYou: (n: number, name: string) => `${plural(n, 'thing needs', 'things need')} you today, ${name}`,
+  needYou: (n: number) => plural(n, 'thing needs you', 'things need you'),
+  today: 'Today',
+  waiting: (n: number) => (n === 1 ? '1 saved action is waiting to send' : `${n} saved actions are waiting to send`),
+  comingUp: 'Coming up',
+  nextUp: (what: string, when: string) => `Next: ${what}, ${when}`,
+  dayUnit: (n: number) => plural(n, 'day', 'days'),
+  remindMe: (what: string) => `Remind me about ${what}`,
+  reminderOn: 'We’ll remind you 7 days before',
+  reminderOff: 'Reminder turned off',
+  deadline: { puc: 'PUC certificate renewal', insurance: 'Vehicle insurance renewal', fitness: 'Vehicle fitness renewal', licence: 'Driving licence renewal', advanceTax: 'Advance tax instalment', itr: 'Income tax return due' },
+  workingDay: (step: string, n: number) => `${step}, working day ${n}`,
+  paidTo: 'Paid to',
+  paidWith: 'Paid with',
+  challanNoLabel: 'Challan number',
+  amountPaid: 'Amount',
+  shareDoc: 'Document',
+  worksUntil: 'Works until',
+  scanOrRead: 'Show this QR code, or read out the code',
+  pullToRefresh: 'Pull to refresh',
+  releaseToRefresh: 'Release to refresh',
+  refreshing: 'Refreshing',
   yourServices: 'Your services',
   recent: 'Recent activity',
   notLinked: 'Not linked',
@@ -110,7 +134,7 @@ export const en = {
   claimDownTitle: 'EPFO is down right now',
   claimDownBody: 'Fill this in anyway. We’ll save it on your phone and submit it the moment EPFO is back.',
   reason: 'Reason',
-  reasons: ['Housing', 'Medical treatment', 'Education', 'Marriage'] as const,
+  reasons: ['Housing', 'Medical treatment', 'Education', 'Marriage'] as string[],
   amountLabel: 'Amount in ₹',
   amountPlaceholder: 'For example, 50000',
   payingInto: 'Paying into',
@@ -165,7 +189,7 @@ export const en = {
   payTitle: 'Pay challan',
   challanNo: (no: string) => `Challan ${no}`,
   payWith: 'Pay with',
-  payMethods: ['UPI app on this phone', 'UPI ID', 'Debit card', 'Net banking'] as const,
+  payMethods: ['UPI app on this phone', 'UPI ID', 'Debit card', 'Net banking'] as string[],
   paymentsPausedTitle: 'Payments are paused',
   paymentsPausedBody: 'Parivahan isn’t responding, so we can’t confirm the payment. Nothing has been charged.',
   confirming: 'Confirming with your bank…',
@@ -247,125 +271,10 @@ export const en = {
 
 export type Strings = typeof en;
 
-export const hi: Partial<Strings> = {
-  tabs: { home: 'होम', services: 'सेवाएँ', requests: 'अनुरोध', profile: 'प्रोफ़ाइल' },
-  svc: { epf: 'पीएफ़ (भविष्य निधि)', docs: 'दस्तावेज़', vehicle: 'वाहन और लाइसेंस', tax: 'आयकर', health: 'स्वास्थ्य आईडी' },
-  yourServices: 'आपकी सेवाएँ',
-  attention: 'आपके ध्यान के लिए',
-  hello: 'नमस्ते',
-  allClear: 'सब ठीक है। अभी कुछ करना नहीं है।',
-  recent: 'हाल की गतिविधि',
-  search: 'खोजें, जैसे “चालान” या “पीएफ़ बैलेंस”',
-  language: 'भाषा',
-  saveChanges: 'बदलाव सहेजें',
-  cancel: 'रद्द करें',
-};
-
-/*
- * The other major Indian languages, at the same depth as Hindi: navigation, department names and Home's headings.
- * Everything else falls back to English, and so does the search hint, since search matches English and Hindi words only.
- * These go beyond the reference and want a native speaker's review before anyone relies on them.
- */
-const more: Record<string, Partial<Strings>> = {
-  bn: {
-    tabs: { home: 'হোম', services: 'পরিষেবা', requests: 'অনুরোধ', profile: 'প্রোফাইল' },
-    svc: { epf: 'পিএফ (ভবিষ্য নিধি)', docs: 'নথিপত্র', vehicle: 'যানবাহন ও লাইসেন্স', tax: 'আয়কর', health: 'স্বাস্থ্য আইডি' },
-    yourServices: 'আপনার পরিষেবা',
-    attention: 'আপনার মনোযোগ প্রয়োজন',
-    hello: 'নমস্কার',
-    allClear: 'সব ঠিক আছে। এখন কিছু করার নেই।',
-    recent: 'সাম্প্রতিক কার্যকলাপ',
-  },
-  mr: {
-    tabs: { home: 'होम', services: 'सेवा', requests: 'विनंत्या', profile: 'प्रोफाइल' },
-    svc: { epf: 'पीएफ (भविष्य निर्वाह निधी)', docs: 'कागदपत्रे', vehicle: 'वाहन आणि परवाना', tax: 'आयकर', health: 'आरोग्य आयडी' },
-    yourServices: 'तुमच्या सेवा',
-    attention: 'तुमचे लक्ष हवे',
-    hello: 'नमस्कार',
-    allClear: 'सर्व ठीक आहे. आत्ता काही करायचे नाही.',
-    recent: 'अलीकडील घडामोडी',
-  },
-  te: {
-    tabs: { home: 'హోమ్', services: 'సేవలు', requests: 'అభ్యర్థనలు', profile: 'ప్రొఫైల్' },
-    svc: { epf: 'పీఎఫ్ (భవిష్య నిధి)', docs: 'పత్రాలు', vehicle: 'వాహనం మరియు లైసెన్స్', tax: 'ఆదాయపు పన్ను', health: 'ఆరోగ్య ఐడీ' },
-    yourServices: 'మీ సేవలు',
-    attention: 'మీ దృష్టి అవసరం',
-    hello: 'నమస్కారం',
-    allClear: 'అంతా బాగుంది. ఇప్పుడు చేయాల్సింది ఏమీ లేదు.',
-    recent: 'ఇటీవలి కార్యకలాపాలు',
-  },
-  ta: {
-    tabs: { home: 'முகப்பு', services: 'சேவைகள்', requests: 'கோரிக்கைகள்', profile: 'சுயவிவரம்' },
-    svc: { epf: 'பிஎஃப் (வருங்கால வைப்பு நிதி)', docs: 'ஆவணங்கள்', vehicle: 'வாகனம் மற்றும் உரிமம்', tax: 'வருமான வரி', health: 'சுகாதார ஐடி' },
-    yourServices: 'உங்கள் சேவைகள்',
-    attention: 'உங்கள் கவனம் தேவை',
-    hello: 'வணக்கம்',
-    allClear: 'எல்லாம் சரியாக உள்ளது. இப்போது செய்ய எதுவும் இல்லை.',
-    recent: 'சமீபத்திய செயல்பாடு',
-  },
-  gu: {
-    tabs: { home: 'હોમ', services: 'સેવાઓ', requests: 'વિનંતીઓ', profile: 'પ્રોફાઇલ' },
-    svc: { epf: 'પીએફ (ભવિષ્ય નિધિ)', docs: 'દસ્તાવેજો', vehicle: 'વાહન અને લાઇસન્સ', tax: 'આવકવેરો', health: 'આરોગ્ય આઈડી' },
-    yourServices: 'તમારી સેવાઓ',
-    attention: 'તમારું ધ્યાન જરૂરી',
-    hello: 'નમસ્તે',
-    allClear: 'બધું બરાબર છે. અત્યારે કંઈ કરવાનું નથી.',
-    recent: 'તાજેતરની પ્રવૃત્તિ',
-  },
-  kn: {
-    tabs: { home: 'ಮುಖಪುಟ', services: 'ಸೇವೆಗಳು', requests: 'ವಿನಂತಿಗಳು', profile: 'ಪ್ರೊಫೈಲ್' },
-    svc: { epf: 'ಪಿಎಫ್ (ಭವಿಷ್ಯ ನಿಧಿ)', docs: 'ದಾಖಲೆಗಳು', vehicle: 'ವಾಹನ ಮತ್ತು ಪರವಾನಗಿ', tax: 'ಆದಾಯ ತೆರಿಗೆ', health: 'ಆರೋಗ್ಯ ಐಡಿ' },
-    yourServices: 'ನಿಮ್ಮ ಸೇವೆಗಳು',
-    attention: 'ನಿಮ್ಮ ಗಮನ ಬೇಕು',
-    hello: 'ನಮಸ್ಕಾರ',
-    allClear: 'ಎಲ್ಲವೂ ಸರಿಯಾಗಿದೆ. ಈಗ ಮಾಡಬೇಕಾದದ್ದು ಏನೂ ಇಲ್ಲ.',
-    recent: 'ಇತ್ತೀಚಿನ ಚಟುವಟಿಕೆ',
-  },
-  ml: {
-    tabs: { home: 'ഹോം', services: 'സേവനങ്ങൾ', requests: 'അപേക്ഷകൾ', profile: 'പ്രൊഫൈൽ' },
-    svc: { epf: 'പിഎഫ് (പ്രോവിഡന്റ് ഫണ്ട്)', docs: 'രേഖകൾ', vehicle: 'വാഹനവും ലൈസൻസും', tax: 'ആദായനികുതി', health: 'ആരോഗ്യ ഐഡി' },
-    yourServices: 'നിങ്ങളുടെ സേവനങ്ങൾ',
-    attention: 'നിങ്ങളുടെ ശ്രദ്ധ ആവശ്യമാണ്',
-    hello: 'നമസ്കാരം',
-    allClear: 'എല്ലാം ശരിയാണ്. ഇപ്പോൾ ഒന്നും ചെയ്യാനില്ല.',
-    recent: 'സമീപകാല പ്രവർത്തനം',
-  },
-  pa: {
-    tabs: { home: 'ਹੋਮ', services: 'ਸੇਵਾਵਾਂ', requests: 'ਬੇਨਤੀਆਂ', profile: 'ਪ੍ਰੋਫਾਈਲ' },
-    svc: { epf: 'ਪੀਐਫ (ਭਵਿੱਖ ਨਿਧੀ)', docs: 'ਦਸਤਾਵੇਜ਼', vehicle: 'ਵਾਹਨ ਅਤੇ ਲਾਇਸੈਂਸ', tax: 'ਆਮਦਨ ਕਰ', health: 'ਸਿਹਤ ਆਈਡੀ' },
-    yourServices: 'ਤੁਹਾਡੀਆਂ ਸੇਵਾਵਾਂ',
-    attention: 'ਤੁਹਾਡਾ ਧਿਆਨ ਲੋੜੀਂਦਾ',
-    hello: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ',
-    allClear: 'ਸਭ ਠੀਕ ਹੈ। ਹੁਣ ਕੁਝ ਕਰਨ ਦੀ ਲੋੜ ਨਹੀਂ।',
-    recent: 'ਹਾਲੀਆ ਗਤੀਵਿਧੀ',
-  },
-  or: {
-    tabs: { home: 'ହୋମ', services: 'ସେବା', requests: 'ଅନୁରୋଧ', profile: 'ପ୍ରୋଫାଇଲ' },
-    svc: { epf: 'ପିଏଫ (ଭବିଷ୍ୟ ନିଧି)', docs: 'ଦସ୍ତାବିଜ', vehicle: 'ଯାନ ଓ ଲାଇସେନ୍ସ', tax: 'ଆୟକର', health: 'ସ୍ୱାସ୍ଥ୍ୟ ଆଇଡି' },
-    yourServices: 'ଆପଣଙ୍କ ସେବା',
-    attention: 'ଆପଣଙ୍କ ଧ୍ୟାନ ଆବଶ୍ୟକ',
-    hello: 'ନମସ୍କାର',
-    allClear: 'ସବୁ ଠିକ ଅଛି। ବର୍ତ୍ତମାନ କିଛି କରିବାକୁ ନାହିଁ।',
-    recent: 'ସାମ୍ପ୍ରତିକ କାର୍ଯ୍ୟକଳାପ',
-  },
-  as: {
-    tabs: { home: 'হোম', services: 'সেৱা', requests: 'অনুৰোধ', profile: 'প্ৰফাইল' },
-    svc: { epf: 'পিএফ (ভৱিষ্য নিধি)', docs: 'নথিপত্ৰ', vehicle: 'বাহন আৰু লাইচেন্স', tax: 'আয়কৰ', health: 'স্বাস্থ্য আইডি' },
-    yourServices: 'আপোনাৰ সেৱাসমূহ',
-    attention: 'আপোনাৰ মনোযোগ প্ৰয়োজন',
-    hello: 'নমস্কাৰ',
-    allClear: 'সকলো ঠিকেই আছে। এতিয়া একো কৰিবলগীয়া নাই।',
-    recent: 'শেহতীয়া কাৰ্যকলাপ',
-  },
-};
-
-/** Every language on offer: code, its own name, and its name in English. */
+/** The languages on offer: code, its own name, and its name in English. Each one is translated in full. */
 export const LANGS = [
-  ['en', 'English', 'English'], ['hi', 'हिन्दी', 'Hindi'], ['bn', 'বাংলা', 'Bengali'], ['mr', 'मराठी', 'Marathi'],
-  ['te', 'తెలుగు', 'Telugu'], ['ta', 'தமிழ்', 'Tamil'], ['gu', 'ગુજરાતી', 'Gujarati'], ['kn', 'ಕನ್ನಡ', 'Kannada'],
-  ['ml', 'മലയാളം', 'Malayalam'], ['pa', 'ਪੰਜਾਬੀ', 'Punjabi'], ['or', 'ଓଡ଼ିଆ', 'Odia'], ['as', 'অসমীয়া', 'Assamese'],
+  ['en', 'English', 'English'], ['hi', 'हिन्दी', 'Hindi'], ['bn', 'বাংলা', 'Bengali'], ['mr', 'मराठी', 'Marathi'], ['te', 'తెలుగు', 'Telugu'],
 ] as const;
 
 export type Lang = (typeof LANGS)[number][0];
-const partial: Record<Lang, Partial<Strings>> = { en: {}, hi, ...more } as Record<Lang, Partial<Strings>>;
-export const dictionaries = Object.fromEntries(LANGS.map(([k]) => [k, { ...en, ...partial[k] }])) as Record<Lang, Strings>;
+export const dictionaries: Record<Lang, Strings> = { en, hi, bn, mr, te };

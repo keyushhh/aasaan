@@ -1,14 +1,19 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { Icon } from './Icon';
+import { cx } from './cx';
 import s from './Select.module.css';
 
-interface Props<T extends string> { label: string; value: T; options: readonly (readonly [T, string])[]; onChange: (v: T) => void }
+interface Props<T extends string> {
+  label: string; value: T; options: readonly (readonly [T, string])[]; onChange: (v: T) => void;
+  /** a form field: a full-width box with the label inside it, like the other fields */
+  field?: boolean;
+}
 
 /**
  * A compact dropdown: a pill showing the current choice that opens a small raised menu under it.
  * Arrow keys move through the choices, Escape closes and returns focus, a tap outside closes it.
  */
-export function Select<T extends string>({ label, value, options, onChange }: Props<T>) {
+export function Select<T extends string>({ label, value, options, onChange, field }: Props<T>) {
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const btn = useRef<HTMLButtonElement>(null);
@@ -32,12 +37,13 @@ export function Select<T extends string>({ label, value, options, onChange }: Pr
   };
 
   return (
-    <div ref={root} className={s.wrap}>
-      <button ref={btn} type="button" className={s.btn} aria-haspopup="menu" aria-expanded={open} aria-label={`${label}: ${current}`} onClick={() => setOpen((o) => !o)}>
-        {current}<Icon name="down" size={16} />
+    <div ref={root} className={cx(s.wrap, field && s.wide)}>
+      <button ref={btn} type="button" className={field ? s.field : s.btn} aria-haspopup="menu" aria-expanded={open} aria-label={`${label}: ${current}`} onClick={() => setOpen((o) => !o)}>
+        {field ? <span className={s.fieldText}><span className={s.fieldLabel}>{label}</span><span className={s.fieldValue}>{current}</span></span> : current}
+        <Icon name="down" size={field ? 20 : 16} />
       </button>
       {open && (
-        <div role="menu" aria-label={label} className={s.menu} onKeyDown={keys}>
+        <div role="menu" aria-label={label} className={cx(s.menu, field && s.menuWide)} onKeyDown={keys}>
           {options.map(([v, text]) => (
             <button key={v} type="button" role="menuitemradio" aria-checked={v === value} className={s.item} onClick={() => { onChange(v); close(); }}>
               <span>{text}</span>{v === value && <Icon name="check" size={16} />}

@@ -2,6 +2,6 @@
 .kv { display: grid; grid-template-columns: 1fr auto; font-size: 16px; margin: 6px 0 0; }
 .kv dt, .kv dd { padding: 15px 0; border-bottom: 1px dotted var(--sep); display: flex; align-items: center; }
 .kv dt { color: var(--muted); }
-.kv dd { margin: 0; padding-left: 14px; justify-content: flex-end; font-weight: 600; font-size: 17px; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.kv dd { margin: 0; padding-left: 14px; justify-content: flex-end; font-weight: var(--weight-strong); font-size: 17px; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
 .kv dt:nth-last-child(2), .kv dd:last-child { border-bottom: 0; }
 .flush { margin-top: -8px; }

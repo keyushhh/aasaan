@@ -3,7 +3,7 @@ import { DEPTS, type Challan, type ConsentRequest, type Dept, type Registration,
 import type { Strings } from '../../i18n/strings';
 import { daysTo, fd, inr } from '../../lib/format';
 import { SVC_ICON, type Route } from '../../app/nav';
-import { currentStep } from '../requests/RequestRow';
+import { currentStep, stepDays } from '../requests/RequestRow';
 
 export type Target = { kind: 'pay'; id: string } | { kind: 'go'; route: Route } | { kind: 'request'; r: Request };
 export type Attention = Omit<AlertCardProps, 'onClick'> & { key: string; svc: Dept; target: Target };
@@ -33,7 +33,7 @@ export function attention({ challans, registration, consents, requests, linked, 
     a.push({ key: 'k' + c.id, svc: 'health', tone: 'info', icon: 'shield', title: att.consentTitle(c.from), body: att.consentBody(c.purpose), cta: att.review, target: { kind: 'go', route: 'health' } }),
   );
   requests.filter((r) => r.status !== 'done').forEach((r) =>
-    a.push({ key: 'r' + r.id, svc: r.svc, tone: r.status === 'queued' ? 'warn' : 'info', icon: SVC_ICON[r.svc], title: r.title, body: att.now(currentStep(r)), cta: r.svc === 'epf' ? att.trackClaim : att.trackRequest, target: { kind: 'request', r } }),
+    a.push({ key: 'r' + r.id, svc: r.svc, tone: r.status === 'queued' ? 'warn' : 'info', icon: SVC_ICON[r.svc], title: r.title, body: att.now(stepDays(r) ? t.workingDay(currentStep(r), stepDays(r)!) : currentStep(r)), cta: r.svc === 'epf' ? att.trackClaim : att.trackRequest, target: { kind: 'request', r } }),
   );
   DEPTS.filter((d) => down[d] && linked[d]).forEach((d) =>
     a.push({ key: 'd' + d, svc: d, tone: 'warn', icon: 'alert', title: att.downTitle(t.dept[d]), body: att.downBody, cta: att.open(t.dept[d]), target: { kind: 'go', route: d } }),
