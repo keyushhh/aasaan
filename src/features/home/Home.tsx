@@ -88,8 +88,12 @@ export function Home() {
           </div>
         </section>
 
-        {items.length > 0 && <h2 className="h"><Icon name="receipt" size={22} />{t.attention}</h2>}
-        {items.length > 0 && <Card variant="list" className={s.queue}>{items.map((x) => <AlertCard key={x.key} {...strip(x)} onClick={() => run(x.target)} />)}</Card>}
+        {items.length > 0 && (
+          <section aria-labelledby="queue-h">
+            <h2 className="h" id="queue-h"><Icon name="list" size={22} />{t.attention}</h2>
+            <div className={s.queue}>{items.map((x, i) => <AlertCard key={x.key} {...strip(x)} n={i + 1} onClick={() => run(x.target)} />)}</div>
+          </section>
+        )}
 
         <h2 className="h"><Icon name="grid" size={22} />{t.yourServices}</h2>
         <Card variant="list" className={s.list}>
