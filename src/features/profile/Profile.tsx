@@ -17,7 +17,7 @@ import fs from '../family/Family.module.css';
 import { en, LANGS } from '../../i18n/strings';
 import { SVC_ICON, useNav } from '../../app/nav';
 import { setSession, useSession, useT, type Theme } from '../../app/session';
-import { AccessSheet, ContactSheet, DevicesSheet, EditProfileSheet, maskMobile } from './sheets';
+import { AccessSheet, BioSheet, ContactSheet, DevicesSheet, EditProfileSheet, maskMobile } from './sheets';
 import s from './Profile.module.css';
 
 export function Profile() {
@@ -26,7 +26,7 @@ export function Profile() {
   const toast = useToast();
   const act = useActions();
   const sheet = useSheet();
-  const { name, mobile, lang, theme = 'system', email, photo, bio } = useSession();
+  const { name, mobile, lang, theme = 'system', email, photo, bio, found = DEPTS } = useSession();
   const devices = useDevices().data?.length ?? 1;
   const family = useFamily().data ?? [];
   const { linked, down } = useDepartments();
@@ -79,15 +79,15 @@ export function Profile() {
         </Card>
         <h2 className="h">{t.security}</h2>
         <Card variant="rows">
-          <Row icon={<RowIcon icon="lock" />} title={t.appLock} sub={t.appLockSub(!!bio)} />
+          <Row icon={<RowIcon icon="lock" />} title={t.appLock} sub={t.appLockSub(!!bio)} chevron onClick={() => sheet.open(<BioSheet />)} />
           <Row icon={<RowIcon icon="phone" />} title={t.devicesTitle} sub={t.devicesSub(devices)} chevron onClick={() => sheet.open(<DevicesSheet />)} />
           <Row icon={<RowIcon icon="eye" />} title={t.accessTitle} sub={t.accessSub} chevron onClick={() => sheet.open(<AccessSheet />)} />
         </Card>
         <h2 className="h">{t.linkedAccounts}</h2>
         <Card variant="rows">
           {DEPTS.map((d) => (
-            <Row key={d} icon={<RowIcon icon={SVC_ICON[d]} svc={d} />} title={t.svc[d]} sub={linked[d] ? t.linkedActive : t.notLinked}
-              right={<Switch checked={linked[d]} label={t.linkSwitch(en.svc[d])} onChange={() => toggleLink(d)} />} />
+            <Row key={d} icon={<RowIcon icon={SVC_ICON[d]} svc={d} />} title={t.svc[d]} sub={!found.includes(d) ? t.noRecordsHere : linked[d] ? t.linkedActive : t.notLinked}
+              right={found.includes(d) ? <Switch checked={linked[d]} label={t.linkSwitch(en.svc[d])} onChange={() => toggleLink(d)} /> : undefined} />
           ))}
         </Card>
         <p className="note">{t.unlinkNote}</p>

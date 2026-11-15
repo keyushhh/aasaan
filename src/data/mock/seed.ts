@@ -41,6 +41,8 @@ export const RECORDS: HealthRecord[] = [
 ];
 
 export const CITIZEN = { name: 'Ananya Rao' };
+/** The demo account: this number gets Ananya Rao's full sample history. Any other number is a first-time user. */
+export const DEMO_MOBILE = '9876543210';
 export const OTHER_SIM = '9123456780';
 /** Two Jan Suraksha schemes this person qualifies for: 32 years old, with the savings account EPFO pays into. */
 export const SCHEMES: Scheme[] = [

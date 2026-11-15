@@ -1,4 +1,5 @@
 import { todayISO } from '../lib/format';
+import { read as readStore, write as writeStore } from '../lib/storage';
 import * as dept from './department';
 import { mockAdapters } from './mock';
 import type { Adapters } from './services';
@@ -11,6 +12,8 @@ export const adapters: Adapters = SOURCES[SOURCE] ?? mockAdapters;
 dept.configure({ live: SOURCE !== 'mock' });
 
 const { read, call } = dept;
+/** The account whose copies are kept on this phone. */
+const ACCOUNT = 'aasaan-account-v1';
 const a = adapters;
 
 /* Queued claims are sent from the outbox when EPFO comes back. */
@@ -119,6 +122,18 @@ export const api = {
     await call(d, () => a.ping(d));
     dept.markSynced(d);
   },
+  /**
+   * Point the app at one account's records. Switching to a different account drops the previous account's copies,
+   * queued submissions and access log from this phone, then takes a first copy of the new account's linked departments.
+   */
+  setAccount: async (id: string) => {
+    a.setAccount?.(id);
+    if (readStore<string>(ACCOUNT, '') !== id) {
+      writeStore(ACCOUNT, id);
+      dept.clearCopies();
+    }
+    if (!dept.peek('epf', 'summary') && !dept.peek('docs', 'list')) await warm();
+  },
   reset: async () => {
     a.reset?.();
     dept.resetDepartments();
@@ -128,12 +143,19 @@ export const api = {
 };
 
 /** Take a first copy of everything, so a department that goes down before its screen is opened still has data to show. */
+/**
+ * Take a first copy of every linked department, so one that goes down before its screen is opened still has data to show.
+ * Only after sign-in and only for linked departments: nothing is read before the person has consented.
+ */
 function warm() {
-  const reads = [api.epf.summary, api.epf.passbook, api.docs.list, api.docs.shares, api.vehicle.registration, api.vehicle.licence,
-    api.vehicle.challans, api.tax.link, api.tax.ret, api.tax.demands, api.health.abha, api.health.consents, api.health.records, api.family.list];
-  return Promise.all(reads.map((r) => r().catch(() => {})));
+  const { linked } = dept.deptStore.get();
+  const reads: [Dept, () => Promise<unknown>][] = [
+    ['epf', api.epf.summary], ['epf', api.epf.passbook], ['epf', api.family.list], ['docs', api.docs.list], ['docs', api.docs.shares],
+    ['vehicle', api.vehicle.registration], ['vehicle', api.vehicle.licence], ['vehicle', api.vehicle.challans],
+    ['tax', api.tax.link], ['tax', api.tax.ret], ['tax', api.tax.demands], ['health', api.health.abha], ['health', api.health.consents], ['health', api.health.records],
+  ];
+  return Promise.all(reads.filter(([d]) => linked[d]).map(([, r]) => r().catch(() => {})));
 }
-if (!dept.peek('epf', 'summary')) void warm();
 
 export { accessStore, DepartmentUnavailable, deptStore, onRecovered, setDown, setLinked, setLinks, peek } from './department';
 export type * from './types';

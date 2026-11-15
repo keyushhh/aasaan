@@ -28,3 +28,19 @@
 .stepsHead { margin: 22px 0 8px; font-size: var(--type-row); font-weight: var(--weight-strong); }
 .steps { margin: 0; padding-left: 22px; display: grid; gap: 10px; font-size: var(--type-body); line-height: var(--line-body); color: var(--text); }
 .site { display: flex; align-items: center; justify-content: center; min-height: 56px; margin-top: 18px; border-radius: var(--r-pill); background: var(--surface-2); color: var(--text); font-weight: var(--weight-strong); text-decoration: none; }
+/* First-run checklist: a heading with progress, then one tile per step; finished steps tick off and dim. */
+.setup { margin-top: 30px; }
+.setupHead { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.setupHead h2 { margin: 0 0 4px; font-size: var(--type-section); font-weight: var(--weight-strong); letter-spacing: var(--track-tight); }
+.setupHead span { font-size: var(--type-small); color: var(--muted); }
+.setupHide { min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--muted); font-size: var(--type-small); font-weight: var(--weight-medium); }
+.setupBar { height: 6px; margin-top: 12px; border-radius: var(--r-pill); background: var(--surface-2); overflow: hidden; }
+.setupBar span { display: block; height: 100%; border-radius: inherit; background: var(--ok); transition: width var(--m-enter) var(--ease-enter); }
+.setupItem { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 60px; padding: 10px 14px; border: 0; background: var(--tile, none); color: var(--text); text-align: left; font-size: var(--type-body); font-weight: var(--weight-medium); -webkit-tap-highlight-color: transparent; }
+.setupItem > svg { color: var(--faint); flex: none; }
+.setupItem[data-done] { color: var(--muted); cursor: default; }
+.setupItem[data-done] .setupLabel { text-decoration: line-through; text-decoration-color: var(--faint); }
+.setupIc { width: 36px; height: 36px; flex: none; border-radius: var(--r-circle); display: grid; place-items: center; background: var(--surface-2); }
+.setupItem[data-done] .setupIc { background: var(--ok-soft); color: var(--ok); }
+.setupLabel { flex: 1; min-width: 0; }
+@media (hover: hover) and (pointer: fine) { .setupItem:not([data-done]):hover { background: var(--well-2); } }

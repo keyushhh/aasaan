@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Avatar, toAvatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
@@ -14,6 +14,7 @@ import { InvalidOtp } from '../../data/services';
 import { MOBILE_TARGETS, targetDept, type Contact, type MobileTarget } from '../../data/types';
 import { useAccessLog, useActions, useDepartments, useDevices } from '../../data/hooks';
 import { ago } from '../../lib/format';
+import { bioAvailable, enrollBio } from '../../lib/biometric';
 import { SVC_ICON } from '../../app/nav';
 import { setSession, useSession, useT } from '../../app/session';
 import s from './Profile.module.css';
@@ -242,6 +243,44 @@ export function AccessSheet() {
         </Card>
       ) : (
         <p className="note">{t.accessEmpty}</p>
+      )}
+    </>
+  );
+}
+
+/** Turn fingerprint or face unlock on or off after onboarding. Where the phone has none, say so. */
+export function BioSheet() {
+  const t = useT();
+  const sheet = useSheet();
+  const toast = useToast();
+  const { name, mobile, bio } = useSession();
+  const [available, setAvailable] = useState<boolean>();
+  const [err, setErr] = useState('');
+  useEffect(() => void bioAvailable().then(setAvailable), []);
+  const turnOn = async () => {
+    setErr('');
+    try {
+      setSession({ bio: await enrollBio(name, mobile) });
+      sheet.close();
+      toast(t.bioOnToast);
+    } catch {
+      setErr(t.bioFailed);
+    }
+  };
+  const turnOff = () => {
+    setSession({ bio: undefined });
+    sheet.close();
+    toast(t.bioOffToast);
+  };
+  return (
+    <>
+      <SheetTitle>{t.bioTitle}</SheetTitle>
+      <p className="row-s">{available === false && !bio ? t.bioUnavailable : t.bioBody}</p>
+      <div className="err" role="alert">{err}</div>
+      {bio ? (
+        <Button danger block onClick={turnOff}>{t.bioOff}</Button>
+      ) : (
+        <Button variant="primary" block disabled={!available} onClick={turnOn}>{t.bioOn}</Button>
       )}
     </>
   );

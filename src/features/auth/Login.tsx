@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Avatar } from '../../components/Avatar';
 import { Banner } from '../../components/Banner';
 import { Button } from '../../components/Button';
@@ -44,9 +45,12 @@ export function Login() {
   const [bio, setBio] = useState<string>();
   const nav = useNav();
 
+  const qc = useQueryClient();
   const finish = () => {
+    // A new sign-in must never see records another account left in memory.
+    qc.clear();
     setLinks(Object.fromEntries(DEPTS.map((d) => [d, picked.includes(d)])) as Record<Dept, boolean>);
-    setSession({ mobile, name: who?.name, pin, bio, loggedIn: true });
+    setSession({ mobile, name: who?.name, pin, bio, account: mobile, found: findings.filter((f) => f.found).map((f) => f.dept), setupHidden: false, loggedIn: true });
     nav.home();
   };
 
@@ -143,7 +147,9 @@ function MobileStep({ initial, onDone }: { initial: string; onDone: (m: string) 
         <input ref={ref} inputMode="numeric" maxLength={10} placeholder={t.mobilePlaceholder} autoComplete="tel-national" value={v} onChange={(e) => setV(e.target.value)} />
       </Field>
       <div className="err" role="alert">{err}</div>
-      <Button type="submit" variant="primary" block>{t.continueCta}</Button>
+      <div className={s.end}>
+        <Button type="submit" variant="primary" block>{t.continueCta}</Button>
+      </div>
     </form>
   );
 }

@@ -45,7 +45,7 @@ test('sign in, pay the challan from home, and see it leave the queue', async ({ 
 
 test('a claim made during an EPFO outage is sent when EPFO is back', async ({ page }) => {
   await signIn(page);
-  await page.getByRole('button', { name: 'Profile' }).click();
+  await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await page.getByRole('switch', { name: 'Simulate EPFO outage' }).click();
   await page.goto('/#/epf');
   await expect(page.getByText('EPFO isn’t responding right now')).toBeVisible();
@@ -58,13 +58,13 @@ test('a claim made during an EPFO outage is sent when EPFO is back', async ({ pa
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Welcome back, Ananya' })).toBeVisible();
   await page.keyboard.type('1234');
-  await page.getByRole('button', { name: 'Requests' }).click();
+  await page.getByRole('button', { name: /^Requests( \d+)?$/ }).click();
   await expect(page.getByText('Queued')).toBeVisible();
 
-  await page.getByRole('button', { name: 'Profile' }).click();
+  await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await page.getByRole('switch', { name: 'Simulate EPFO outage' }).click();
   await expect(page.getByText('EPFO is back. 1 queued request was submitted.')).toBeVisible();
-  await page.getByRole('button', { name: 'Requests' }).click();
+  await page.getByRole('button', { name: /^Requests( \d+)?$/ }).click();
   await expect(page.getByText('Queued')).toHaveCount(0);
 });
 
@@ -96,7 +96,7 @@ test('search in Hindi and switch the language', async ({ page }) => {
   await page.getByRole('searchbox', { name: 'Search services' }).fill('चालान');
   await page.getByRole('button', { name: /Pay a traffic challan/ }).click();
   await expect(page).toHaveURL(/#\/vehicle$/);
-  await page.getByRole('button', { name: 'Profile' }).click();
+  await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await page.getByRole('button', { name: /^Language/ }).click();
   await page.getByRole('radio', { name: /हिन्दी/ }).check();
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
@@ -124,7 +124,7 @@ test('keyboard: skip link reaches the main content and the sheet keeps focus', a
 
 test('change the mobile number and email everywhere at once, with one department down', async ({ page }) => {
   await signIn(page);
-  await page.getByRole('button', { name: 'Profile' }).click();
+  await page.getByRole('button', { name: 'Profile', exact: true }).click();
   await page.getByRole('switch', { name: 'Simulate Parivahan outage' }).click();
   await page.getByRole('button', { name: /^Mobile number/ }).click();
   await sheet(page).getByLabel('New mobile number').fill('9876543210');
@@ -181,4 +181,38 @@ test('onboarding: the wrong SIM is caught, a mismatched PIN starts over, and rel
   await expect(page.getByRole('alert')).toHaveText('That PIN isn’t right. Try again.');
   await page.keyboard.type('1234');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('things need you');
+});
+
+test('a new number starts as a new user: fewer records, nothing inherited, a setup checklist', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  // nothing is read from any department before sign-up
+  expect(await page.evaluate(() => Object.keys(localStorage).filter((k) => k.startsWith('aasaan-cache') || k.startsWith('aasaan-access')))).toEqual([]);
+  await page.getByRole('button', { name: 'Get started' }).click();
+  await page.getByLabel('Mobile number').fill('9000012345');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Send SMS' }).click();
+  await expect(page.getByText('Found records in 3 places')).toBeVisible({ timeout: 10000 });
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.getByText('Rohan Mehta')).toBeVisible();
+  await page.getByRole('button', { name: 'Yes, this is me' }).click();
+  await page.getByRole('button', { name: 'Start face check' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click({ timeout: 10000 });
+  await page.getByRole('button', { name: 'Link and continue' }).click();
+  await page.keyboard.type('1357');
+  await expect(page.getByRole('heading', { name: 'Enter it again' })).toBeVisible();
+  await page.keyboard.type('1357');
+  await page.getByRole('button', { name: /^(Continue|Not now)$/ }).click();
+  await page.getByRole('button', { name: 'Go to home' }).click();
+
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('All clear');
+  await expect(page.getByRole('heading', { name: 'Finish setting up' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Needs your attention' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: /Vehicle and licence/ })).toContainText('No records for your number');
+  await page.getByRole('button', { name: 'Profile', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Rohan Mehta' })).toHaveCount(0);
+  await expect(page.getByText('Suresh Rao')).toHaveCount(0);
+  await page.getByRole('button', { name: /^Requests( \d+)?$/ }).click();
+  await expect(page.getByText('PF withdrawal for housing')).toHaveCount(0);
 });

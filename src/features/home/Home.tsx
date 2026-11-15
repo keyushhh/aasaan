@@ -7,6 +7,7 @@ import { Icon } from '../../components/Icon';
 import { Row, RowIcon } from '../../components/Row';
 import { useSheet } from '../../components/Sheet';
 import { SchemeSheet } from './SchemeSheet';
+import { Setup } from './Setup';
 import { ServiceTile } from '../../components/ServiceTile';
 import { Switch } from '../../components/Switch';
 import { useToast } from '../../components/Toast';
@@ -35,10 +36,10 @@ export function Home() {
   const toast = useToast();
   const { name, photo, reminders = [] } = useSession();
   const { linked, down } = useDepartments();
-  const challans = useChallans().data ?? [];
-  const registration = useRegistration().data;
+  const challans = useChallans(linked.vehicle).data ?? [];
+  const registration = useRegistration(linked.vehicle).data;
   const licence = useLicence(linked.vehicle).data;
-  const consents = useConsents().data ?? [];
+  const consents = useConsents(linked.health).data ?? [];
   const requests = useRequests().data ?? [];
   const openRequest = useOpenRequest();
   const openPay = useOpenPay();
@@ -66,7 +67,8 @@ export function Home() {
     else if (target.kind === 'path') nav.path(target.to);
     else nav.go(target.route);
   };
-  const state = (d: (typeof DEPTS)[number]) => (!linked[d] ? t.notLinked : down[d] ? t.isDown(t.dept[d]) : t.dept[d]);
+  const { found = DEPTS } = useSession();
+  const state = (d: (typeof DEPTS)[number]) => (!found.includes(d) ? t.noRecordsHere : !linked[d] ? t.notLinked : down[d] ? t.isDown(t.dept[d]) : t.dept[d]);
 
   return (
     <>
@@ -105,6 +107,8 @@ export function Home() {
             </div>
           )}
         </section>
+
+        <Setup hasDates={dates.length > 0} />
 
         {items.length > 0 && (
           <section aria-labelledby="queue-h">

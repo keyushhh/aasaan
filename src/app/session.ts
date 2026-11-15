@@ -2,9 +2,18 @@ import { useSyncExternalStore } from 'react';
 import { createStore } from '../lib/storage';
 import { dictionaries, en, type Lang } from '../i18n/strings';
 import { setLocale } from '../lib/format';
+import { api } from '../data';
+import type { Dept } from '../data/types';
 
 export type Theme = 'system' | 'light' | 'dark';
-export interface Session { loggedIn: boolean; lang: Lang; mobile: string; name: string; theme?: Theme; reminders?: string[]; email?: string; photo?: string; pin?: string; bio?: string; notified?: string[] }
+export interface Session { loggedIn: boolean; lang: Lang; mobile: string; name: string; theme?: Theme; reminders?: string[]; email?: string; photo?: string; pin?: string; bio?: string; notified?: string[];
+  /** fixed at sign-up: whose records these are, even if the mobile number changes later */
+  account?: string;
+  /** departments that had records for this person at sign-up */
+  found?: Dept[];
+  /** the first-run checklist on Home was dismissed */
+  setupHidden?: boolean;
+}
 
 export const sessionStore = createStore<Session>('aasaan-session-v1', () => ({ loggedIn: false, lang: 'en', mobile: '', name: 'Ananya Rao', theme: 'system' }));
 
@@ -32,3 +41,11 @@ function applyTheme() {
 applyTheme();
 sessionStore.subscribe(applyTheme);
 darkQuery?.addEventListener('change', applyTheme);
+
+/** Serve the signed-in account's records. Sessions from before accounts existed use their mobile number. */
+const applyAccount = () => {
+  const s = sessionStore.get();
+  if (s.loggedIn) void api.setAccount(s.account ?? s.mobile);
+};
+applyAccount();
+sessionStore.subscribe(applyAccount);

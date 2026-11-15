@@ -4,6 +4,7 @@ import { DepartmentUnavailable, isDown } from '../department';
 import { InvalidOtp, SimMismatch, type Adapters } from '../services';
 import { maskContact, targetDept, type Dept, type FamilyMember, type Request } from '../types';
 import * as S from './seed';
+import * as N from './newcomer';
 
 /** Latency mirrors the reference prototype so screens feel the same. */
 export const LATENCY = {
@@ -12,7 +13,16 @@ export const LATENCY = {
   discover: { epf: 900, docs: 1300, vehicle: 1700, tax: 2100, health: 2500 } as Record<Dept, number>,
 };
 
-const store = createStore('aasaan-mock-v1', S.seedState);
+/** Which sample person a number belongs to: the demo number is Ananya Rao with a full history; any other is a newcomer. */
+const personaOf = (mobile: string) => (mobile === S.DEMO_MOBILE ? S : N);
+/** The signed-in account, fixed at sign-up so a later change of mobile number keeps the same records. */
+let account = S.DEMO_MOBILE;
+const P = () => personaOf(account);
+const stores = { demo: createStore('aasaan-mock-v1', S.seedState), new: createStore('aasaan-mock-new-v1', N.seedState) };
+const store = {
+  get: () => stores[P() === S ? 'demo' : 'new'].get(),
+  set: (f: S.MockState | ((s: S.MockState) => S.MockState)) => stores[P() === S ? 'demo' : 'new'].set(f),
+};
 const mutate = (f: (s: S.MockState) => S.MockState) => store.set(f);
 
 async function answer<T>(d: Dept, ms: number, fn: () => T): Promise<T> {
@@ -24,7 +34,8 @@ const addRequest = (r: Request) => mutate((s) => ({ ...s, requests: [r, ...s.req
 
 export const mockAdapters: Adapters = {
   ping: (d) => answer(d, LATENCY.ping, () => undefined),
-  reset: () => store.set(S.seedState()),
+  setAccount: (id) => void (account = id),
+  reset: () => store.set(P().seedState()),
 
   grievance: {
     raise: (input, queued) =>
@@ -44,21 +55,21 @@ export const mockAdapters: Adapters = {
         return r;
       }),
   },
-  schemes: { eligible: async () => S.SCHEMES },
+  schemes: { eligible: async () => P().SCHEMES },
 
   family: {
-    list: () => answer('epf', LATENCY.read, () => store.get().family ?? S.seedState().family),
+    list: () => answer('epf', LATENCY.read, () => store.get().family ?? P().seedState().family),
     add: (m) =>
       answer('epf', LATENCY.read, () => {
         const member: FamilyMember = { id: 'f' + Date.now(), ...m, consentUntil: `${new Date().getFullYear() + 1}-${todayISO().slice(5)}` };
-        mutate((s) => ({ ...s, family: [...(s.family ?? S.seedState().family), member] }));
+        mutate((s) => ({ ...s, family: [...(s.family ?? P().seedState().family), member] }));
         return member;
       }),
     remove: (id) => answer('epf', 0, () => mutate((s) => ({ ...s, family: (s.family ?? []).filter((f) => f.id !== id) }))),
     submitLifeCertificate: (id) =>
       answer('epf', LATENCY.face, () => {
         let out!: FamilyMember;
-        mutate((s) => ({ ...s, family: (s.family ?? S.seedState().family).map((f) => (f.id === id && f.pension ? (out = { ...f, pension: { ...f.pension, lcDone: todayISO() } }) : f)) }));
+        mutate((s) => ({ ...s, family: (s.family ?? P().seedState().family).map((f) => (f.id === id && f.pension ? (out = { ...f, pension: { ...f.pension, lcDone: todayISO() } }) : f)) }));
         return out;
       }),
   },
@@ -82,8 +93,8 @@ export const mockAdapters: Adapters = {
   },
 
   epf: {
-    getSummary: () => answer('epf', LATENCY.read, () => S.EPF),
-    getPassbook: () => answer('epf', LATENCY.read, () => S.PASSBOOK),
+    getSummary: () => answer('epf', LATENCY.read, () => P().EPF),
+    getPassbook: () => answer('epf', LATENCY.read, () => P().PASSBOOK),
     submitClaim: (input, queued) =>
       answer('epf', LATENCY.write, () => {
         const d = todayISO();
@@ -104,7 +115,7 @@ export const mockAdapters: Adapters = {
   },
 
   docs: {
-    listDocuments: () => answer('docs', LATENCY.read, () => S.DOCS),
+    listDocuments: () => answer('docs', LATENCY.read, () => P().DOCS),
     listShares: () => answer('docs', LATENCY.read, () => store.get().shares.filter((s) => s.exp > Date.now())),
     createShare: (doc, hours) =>
       answer('docs', LATENCY.write, () => {
@@ -116,8 +127,8 @@ export const mockAdapters: Adapters = {
   },
 
   vehicle: {
-    getRegistration: () => answer('vehicle', LATENCY.read, () => S.REGISTRATION),
-    getLicence: () => answer('vehicle', LATENCY.read, () => S.LICENCE),
+    getRegistration: () => answer('vehicle', LATENCY.read, () => P().REGISTRATION),
+    getLicence: () => answer('vehicle', LATENCY.read, () => P().LICENCE),
     listChallans: () => answer('vehicle', LATENCY.read, () => store.get().challans),
     payChallan: (id) =>
       answer('vehicle', LATENCY.pay, () => {
@@ -135,20 +146,20 @@ export const mockAdapters: Adapters = {
   },
 
   tax: {
-    getPanAadhaarLink: () => answer('tax', LATENCY.read, () => S.PAN_LINK),
-    getReturn: () => answer('tax', LATENCY.read, () => S.TAX_RETURN),
+    getPanAadhaarLink: () => answer('tax', LATENCY.read, () => P().PAN_LINK),
+    getReturn: () => answer('tax', LATENCY.read, () => P().TAX_RETURN),
     getDemands: () => answer('tax', LATENCY.read, () => []),
   },
 
   health: {
-    getAbha: () => answer('health', LATENCY.read, () => S.ABHA),
+    getAbha: () => answer('health', LATENCY.read, () => P().ABHA),
     listConsentRequests: () => answer('health', LATENCY.read, () => store.get().consents),
     respondToConsent: (id, decision) =>
       answer('health', LATENCY.write, () => {
         mutate((s) => ({ ...s, consents: s.consents.map((c) => (c.id === id ? { ...c, status: decision } : c)) }));
         return store.get().consents.find((c) => c.id === id)!;
       }),
-    listRecords: () => answer('health', LATENCY.read, () => S.RECORDS),
+    listRecords: () => answer('health', LATENCY.read, () => P().RECORDS),
   },
 
   requests: { list: async () => store.get().requests },
@@ -164,12 +175,13 @@ export const mockAdapters: Adapters = {
       await sleep(LATENCY.sms);
       if (sim !== 1) throw new SimMismatch();
     },
-    discover: async (_mobile, d) => {
+    discover: async (mobile, d) => {
       await sleep(LATENCY.discover[d]);
-      return { dept: d, found: true, id: S.FOUND[d] };
+      const id = personaOf(mobile).FOUND[d];
+      return { dept: d, found: !!id, id };
     },
-    identity: async () => S.IDENTITY,
-    devices: async () => [{ id: 'this', name: 'This phone', detail: S.describeDevice(navigator.userAgent), lastActive: Date.now(), current: true }, ...(store.get().devices ?? S.seedState().devices)],
+    identity: async (mobile) => personaOf(mobile).IDENTITY,
+    devices: async () => [{ id: 'this', name: 'This phone', detail: S.describeDevice(navigator.userAgent), lastActive: Date.now(), current: true }, ...(store.get().devices ?? P().seedState().devices)],
     signOutOthers: async () => mutate((s) => ({ ...s, devices: [] })),
     faceMatch: async () => sleep(LATENCY.face),
     sendOtp: async () => {},

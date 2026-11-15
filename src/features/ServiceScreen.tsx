@@ -10,10 +10,11 @@ import { Skeleton } from '../components/Skeleton';
 import { TopBar } from '../components/TopBar';
 import { useToast } from '../components/Toast';
 import { DepartmentUnavailable, type Dept } from '../data';
+import { DEPTS } from '../data/types';
 import { useActions, useDepartments, useOpening } from '../data/hooks';
 import { ago } from '../lib/format';
 import { SVC_ICON, useNav } from '../app/nav';
-import { useT } from '../app/session';
+import { useSession, useT } from '../app/session';
 import { cx } from '../components/cx';
 import s from './ServiceScreen.module.css';
 
@@ -26,6 +27,7 @@ export function ServiceScreen({ svc, queries, children }: { svc: Dept; queries: 
   const toast = useToast();
   const act = useActions();
   const { linked, down, sync } = useDepartments();
+  const { found = DEPTS } = useSession();
   const loading = useOpening(queries);
   const [spinning, setSpinning] = useState(false);
   const dept = t.dept[svc];
@@ -81,7 +83,17 @@ export function ServiceScreen({ svc, queries, children }: { svc: Dept; queries: 
   };
 
   let body: ReactNode;
-  if (!linked[svc]) {
+  if (!linked[svc] && !found.includes(svc)) {
+    // Nothing was found for this person here at sign-up: say so rather than offer a link to records that don't exist.
+    body = (
+      <Card>
+        <RowIcon icon={SVC_ICON[svc]} svc={svc} size={22} className={s.linkIcon} />
+        <div className="row-t">{t.noRecordsTitle(dept)}</div>
+        <p className="row-s">{t.noRecordsBody}</p>
+        <Button block onClick={() => nav.tab('profile')}>{t.goToProfile}</Button>
+      </Card>
+    );
+  } else if (!linked[svc]) {
     body = (
       <Card>
         <RowIcon icon={SVC_ICON[svc]} svc={svc} size={22} className={s.linkIcon} />

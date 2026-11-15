@@ -58,7 +58,12 @@ Across all five:
 
 ## Try it
 
-Sign in with any 10-digit mobile number starting with 6, 7, 8 or 9. The demo OTP is **123456**.
+Sign up with a 10-digit mobile number starting with 6, 7, 8 or 9. Which number you use decides the sample account:
+
+- **98765 43210** is the demo account, Ananya Rao, with a full history: a challan to pay, a PF claim in progress, a father whose life certificate is due, and records in all five departments.
+- **Any other number** is a first-time user, Rohan Mehta: records in three departments (EPFO, DigiLocker, Income Tax), nothing found with Parivahan or ABDM, no history, and a "Finish setting up" checklist on Home.
+
+On the SMS step, SIM 1 holds the number you entered. Where an OTP is asked for, the demo OTP is **123456**.
 
 Things worth trying:
 

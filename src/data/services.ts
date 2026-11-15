@@ -118,6 +118,8 @@ export interface Adapters {
   schemes: SchemeService;
   requests: RequestsService;
   auth: AuthService;
+  /** Which account's records to serve, fixed at sign-up. Mock only; a real backend knows from the session. */
+  setAccount?(id: string): void;
   /** Prototype only: restore the sample data. */
   reset?(): void;
 }

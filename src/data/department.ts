@@ -149,6 +149,13 @@ export function setLinked(d: Dept, on: boolean) {
 
 export const setLinks = (links: PerDept<boolean>) => deptStore.set((s) => ({ ...s, linked: links }));
 
+/** Forget everything kept on the phone for the previous account: synced copies, queued submissions, the access log. */
+export function clearCopies() {
+  writeStore(CACHE, {});
+  writeStore(OUTBOX, []);
+  accessStore.set([]);
+}
+
 export function resetDepartments() {
   deptStore.set(seed());
   writeStore(CACHE, {});
