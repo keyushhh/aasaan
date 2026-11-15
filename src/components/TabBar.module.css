@@ -8,3 +8,5 @@
 .tab:active, .fab:active { transform: scale(.96); }
 @media (hover: hover) and (pointer: fine) { .tab:not(.on):hover, .fab:hover { background: var(--well-2); color: var(--text); } }
 .badge { position: absolute; top: 4px; left: calc(50% + 5px); background: var(--accent); color: var(--primary-ink); font-size: var(--type-micro); font-weight: var(--weight-strong); border-radius: var(--r-pill); min-width: 16px; height: 16px; line-height: var(--line-badge); padding: 0 4px; }
+/* keyboard focus sits inside the pill, matching its shape */
+.tab:focus-visible, .fab:focus-visible { outline-offset: -3px; }

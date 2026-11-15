@@ -4,7 +4,7 @@ import { dictionaries, en, type Lang } from '../i18n/strings';
 import { setLocale } from '../lib/format';
 
 export type Theme = 'system' | 'light' | 'dark';
-export interface Session { loggedIn: boolean; lang: Lang; mobile: string; name: string; theme?: Theme; reminders?: string[]; email?: string; photo?: string; pin?: string; bio?: string }
+export interface Session { loggedIn: boolean; lang: Lang; mobile: string; name: string; theme?: Theme; reminders?: string[]; email?: string; photo?: string; pin?: string; bio?: string; notified?: string[] }
 
 export const sessionStore = createStore<Session>('aasaan-session-v1', () => ({ loggedIn: false, lang: 'en', mobile: '', name: 'Ananya Rao', theme: 'system' }));
 
@@ -20,14 +20,15 @@ applyLocale();
 sessionStore.subscribe(applyLocale);
 
 /**
- * Light, dark, or follow the device. The tokens read data-theme on <html>; with no attribute they follow
- * prefers-color-scheme. Applied at import, before React renders, so the first paint is already right.
+ * Light, dark, or follow the device. The app always resolves the choice itself and sets data-theme on <html>,
+ * so the tokens hold a single dark palette. System follows the device and keeps following it if it changes.
+ * Applied at import, before React renders, so the first paint is already right.
  */
+const darkQuery = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : undefined;
 function applyTheme() {
   const theme = sessionStore.get().theme ?? 'system';
-  const root = document.documentElement;
-  if (theme === 'system') root.removeAttribute('data-theme');
-  else root.dataset.theme = theme;
+  document.documentElement.dataset.theme = theme === 'system' ? (darkQuery?.matches ? 'dark' : 'light') : theme;
 }
 applyTheme();
 sessionStore.subscribe(applyTheme);
+darkQuery?.addEventListener('change', applyTheme);

@@ -2,7 +2,7 @@ import { todayISO } from '../lib/format';
 import * as dept from './department';
 import { mockAdapters } from './mock';
 import type { Adapters } from './services';
-import { maskContact, targetDept, type ClaimInput, type Contact, type Dept, type MobileTarget, type Request } from './types';
+import { maskContact, targetDept, type ClaimInput, type ComplaintInput, type Contact, type Dept, type MobileTarget, type NewMember, type Request } from './types';
 
 /** The single place that picks which adapters the app talks to. Add `real` adapters here when the APIs are ready. */
 const SOURCE = import.meta.env.VITE_DATA_SOURCE ?? 'mock';
@@ -27,6 +27,16 @@ const queuedContact = ({ kind, target, value }: ContactInput): Request => {
     id: 'r' + Date.now() + target, svc: targetDept(target), title: kind === 'mobile' ? 'Mobile number update' : 'Email update',
     ref: `New ${kind === 'mobile' ? 'number' : 'email'} ${maskContact(kind, value)}`, created: d, at: Date.now(), status: 'queued',
     steps: [{ label: 'Saved on your phone', date: d, state: 'done' }, { label: 'Request sent', date: '', state: 'current', note: 'Sends automatically when the department is back' }],
+  };
+};
+
+/* Complaints wait in the outbox too when their department is down. */
+dept.registerHandler<ComplaintInput>('grievance.raise', (input, item) => a.grievance.raise(input, { on: item.preview.created, at: item.preview.at }));
+const queuedComplaint = (input: ComplaintInput): Request => {
+  const d = todayISO();
+  return {
+    id: 'r' + Date.now(), svc: input.dept, title: `Complaint: ${input.topic}`, ref: 'Reference number arrives once submitted', created: d, at: Date.now(), status: 'queued',
+    steps: [{ label: 'Saved on your phone', date: d, state: 'done' }, { label: 'Complaint registered', date: '', state: 'current', note: 'Sends automatically when the department is back' }, { label: 'Resolved', date: '', state: 'todo' }],
   };
 };
 
@@ -86,6 +96,20 @@ export const api = {
       return { target, queued: out.queued };
     },
   },
+  grievance: {
+    raise: async (input: ComplaintInput) => {
+      const out = await dept.submit(input.dept, 'grievance.raise', input, () => a.grievance.raise(input), () => queuedComplaint(input));
+      return out.queued ? { queued: true, request: out.request } : { queued: false, request: out.result };
+    },
+  },
+  schemes: () => a.schemes.eligible(),
+  /** Family members whose records this person manages. Pensions sit with EPFO, so the family list follows EPFO's state. */
+  family: {
+    list: () => read('epf', 'family', a.family.list),
+    add: (m: NewMember) => call('epf', () => a.family.add(m)),
+    remove: (id: string) => call('epf', () => a.family.remove(id)),
+    submitLifeCertificate: (id: string) => call('epf', () => a.family.submitLifeCertificate(id)),
+  },
   /** Aasaan's tracker: what's waiting on the phone, then what departments know about. */
   requests: async (): Promise<Request[]> => {
     const sent = await a.requests.list();
@@ -106,10 +130,10 @@ export const api = {
 /** Take a first copy of everything, so a department that goes down before its screen is opened still has data to show. */
 function warm() {
   const reads = [api.epf.summary, api.epf.passbook, api.docs.list, api.docs.shares, api.vehicle.registration, api.vehicle.licence,
-    api.vehicle.challans, api.tax.link, api.tax.ret, api.tax.demands, api.health.abha, api.health.consents, api.health.records];
+    api.vehicle.challans, api.tax.link, api.tax.ret, api.tax.demands, api.health.abha, api.health.consents, api.health.records, api.family.list];
   return Promise.all(reads.map((r) => r().catch(() => {})));
 }
 if (!dept.peek('epf', 'summary')) void warm();
 
-export { DepartmentUnavailable, deptStore, onRecovered, setDown, setLinked, setLinks, peek } from './department';
+export { accessStore, DepartmentUnavailable, deptStore, onRecovered, setDown, setLinked, setLinks, peek } from './department';
 export type * from './types';

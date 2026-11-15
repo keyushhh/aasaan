@@ -1,7 +1,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
-import { api, deptStore, peek, setDown, setLinked } from './index';
-import type { ClaimInput, ConsentRequest, Challan, Contact, Dept, MobileTarget, PayMethod, Request, Share } from './types';
+import { accessStore, api, deptStore, peek, setDown, setLinked } from './index';
+import type { ClaimInput, ConsentRequest, Challan, ComplaintInput, Contact, Dept, FamilyMember, MobileTarget, NewMember, PayMethod, Request, Share } from './types';
 
 /** Department reads. Start from the last synced copy so the screen never paints empty, then fetch. */
 function useDeptQuery<T>(d: Dept, key: string, fn: () => Promise<T>, enabled = true) {
@@ -22,6 +22,11 @@ export const useAbha = (on = true) => useDeptQuery('health', 'abha', api.health.
 export const useConsents = (on = true) => useDeptQuery('health', 'consents', api.health.consents, on);
 export const useRecords = (on = true) => useDeptQuery('health', 'records', api.health.records, on);
 export const useRequests = () => useQuery({ queryKey: ['requests'], queryFn: api.requests });
+export const useSchemes = () => useQuery({ queryKey: ['schemes'], queryFn: api.schemes });
+export const useFamily = (on = true) => useDeptQuery('epf', 'family', api.family.list, on);
+export const useDevices = () => useQuery({ queryKey: ['devices'], queryFn: api.auth.devices });
+/** Every time a department shared data with Aasaan, newest first. */
+export const useAccessLog = () => useSyncExternalStore(accessStore.subscribe, accessStore.get);
 
 /** Linked, down and last-synced state for every department. */
 export const useDepartments = () => useSyncExternalStore(deptStore.subscribe, deptStore.get);
@@ -74,6 +79,29 @@ export function useActions() {
       const results = await Promise.all(targets.map((t) => api.profile.updateContact(kind, t, value)));
       await qc.refetchQueries({ queryKey: ['requests'] });
       return results;
+    },
+    raiseComplaint: async (input: ComplaintInput) => {
+      const out = await api.grievance.raise(input);
+      await qc.refetchQueries({ queryKey: ['requests'] });
+      return out;
+    },
+    addFamily: async (m: NewMember) => {
+      const f = await api.family.add(m);
+      set<FamilyMember[]>(['epf', 'family'], (old) => [...old, f]);
+      return f;
+    },
+    removeFamily: async (id: string) => {
+      await api.family.remove(id);
+      set<FamilyMember[]>(['epf', 'family'], (old) => old.filter((f) => f.id !== id));
+    },
+    submitLifeCertificate: async (id: string) => {
+      const f = await api.family.submitLifeCertificate(id);
+      set<FamilyMember[]>(['epf', 'family'], (old) => old.map((x) => (x.id === id ? f : x)));
+      return f;
+    },
+    signOutOthers: async () => {
+      await api.auth.signOutOthers();
+      await qc.invalidateQueries({ queryKey: ['devices'] });
     },
     refresh: async (d: Dept) => {
       await api.refresh(d);

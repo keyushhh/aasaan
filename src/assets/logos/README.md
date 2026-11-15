@@ -16,12 +16,14 @@ Sources of the files here, each taken from the department's own site:
 
 - `epf.png`: epfindia.gov.in site icon
 - `docs.png`: digilocker.gov.in app icon
-- `tax.svg`: incometax.gov.in mobile header logo
-- `health.svg`: abha.abdm.gov.in header logo (ABDM)
-- `aadhaar.svg`: uidai.gov.in header logo, framed to the Aadhaar mark (used in the mobile number update)
+- `tax.png`: incometax.gov.in mobile header logo
+- `health.png`: abha.abdm.gov.in header logo (ABDM)
+- `aadhaar.png`: uidai.gov.in header logo, framed to the Aadhaar mark
 
 - `carrier-jio.svg`: jio.com header logo, trimmed to the Jio circle
 - `carrier-airtel.svg`: Airtel icon from homarr-labs/dashboard-icons (dashboardicons.com)
 - `carrier-vi.svg`: myvi.in logo
 
 Parivahan publishes no square logo, so vehicle keeps its line icon.
+
+The Income Tax, ABDM and Aadhaar logos ship as 192 px PNGs rendered from the sites' SVGs, which were 48 to 196 KB each.

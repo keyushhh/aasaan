@@ -53,11 +53,23 @@ async function guard<T>(d: Dept, fn: () => Promise<T>): Promise<T> {
   }
 }
 
+/* ---------- access log: every time a department actually shared data with Aasaan ---------- */
+export interface Access { dept: Dept; key: string; at: number }
+export const accessStore = createStore<Access[]>('aasaan-access-v1', () => []);
+/** Reading the same thing again within a minute updates its entry instead of adding another. */
+const logAccess = (d: Dept, k: string) =>
+  accessStore.set((l) => {
+    const now = Date.now();
+    const rest = l.filter((a) => !(a.dept === d && a.key === k && now - a.at < 60_000));
+    return [{ dept: d, key: k, at: now }, ...rest].slice(0, 40);
+  });
+
 /** Read from a department. If it's down, fall back to the last synced copy. */
 export async function read<T>(d: Dept, k: string, fn: () => Promise<T>): Promise<T> {
   try {
     const out = await guard(d, fn);
     keep(d, k, out);
+    logAccess(d, k);
     if (live) markSynced(d);
     return out;
   } catch (e) {
@@ -141,4 +153,5 @@ export function resetDepartments() {
   deptStore.set(seed());
   writeStore(CACHE, {});
   writeStore(OUTBOX, []);
+  accessStore.set([]);
 }

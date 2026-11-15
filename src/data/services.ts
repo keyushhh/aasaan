@@ -1,7 +1,7 @@
 import type {
   Dept,
   Abha, ClaimInput, ConsentRequest, Document, EpfSummary, HealthRecord, Licence, PanAadhaarLink, Passbook,
-  PayMethod, Receipt, Registration, Request, Share, TaxDemand, TaxReturn, Challan, Contact, MobileTarget,
+  PayMethod, Receipt, Registration, Request, Share, TaxDemand, TaxReturn, Challan, ComplaintInput, Contact, FamilyMember, Scheme, MobileTarget, NewMember,
 }  from './types';
 
 /** One interface per department. A real adapter (API Setu, DigiLocker, Parivahan, ABDM, EPFO) implements the same shape. */
@@ -49,6 +49,8 @@ export interface Finding { dept: Dept; found: boolean; id?: string }
 /** The person the records belong to, as their Aadhaar has them, for the "is this you" check. */
 export interface Identity { name: string; born: number }
 /** A SIM in this phone: its slot, its operator and the number on it, as the phone reports them. */
+/** A device signed in to this account. */
+export interface Device { id: string; name: string; detail: string; lastActive: number; current?: boolean }
 export interface Sim { slot: 1 | 2; carrier: 'jio' | 'airtel' | 'vi'; name: string; number: string }
 
 export interface AuthService {
@@ -62,6 +64,9 @@ export interface AuthService {
   /** Ask one department whether it holds records for this number. */
   discover(mobile: string, dept: Dept): Promise<Finding>;
   identity(mobile: string): Promise<Identity>;
+  devices(): Promise<Device[]>;
+  /** End every session except this one. */
+  signOutOthers(): Promise<void>;
   /** UIDAI face authentication: match a live face against the Aadhaar photo for this number. */
   faceMatch(mobile: string): Promise<void>;
   sendOtp(mobile: string): Promise<void>;
@@ -74,6 +79,24 @@ export class InvalidOtp extends Error {
 }
 export class SimMismatch extends Error {
   name = 'SimMismatch';
+}
+
+export interface GrievanceService {
+  /** Register a complaint with the department's grievance system. */
+  raise(input: ComplaintInput, queued?: { on: string; at: number }): Promise<Request>;
+}
+export interface SchemeService {
+  /** Schemes this person looks eligible for, judged from their linked records. */
+  eligible(): Promise<Scheme[]>;
+}
+
+export interface FamilyService {
+  list(): Promise<FamilyMember[]>;
+  /** Add someone after they consent by OTP on their own phone. */
+  add(m: NewMember): Promise<FamilyMember>;
+  remove(id: string): Promise<void>;
+  /** Submit a pensioner's yearly life certificate after a face check (Jeevan Pramaan). */
+  submitLifeCertificate(id: string): Promise<FamilyMember>;
 }
 
 export interface ProfileService {
@@ -90,6 +113,9 @@ export interface Adapters {
   tax: TaxService;
   health: HealthService;
   profile: ProfileService;
+  family: FamilyService;
+  grievance: GrievanceService;
+  schemes: SchemeService;
   requests: RequestsService;
   auth: AuthService;
   /** Prototype only: restore the sample data. */

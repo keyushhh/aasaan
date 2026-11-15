@@ -1,0 +1,10 @@
+.who { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; padding: 26px 20px 22px; }
+.avatar { width: 72px; height: 72px; font-size: var(--type-page); margin-bottom: 6px; }
+.name { font-size: var(--type-identity); font-weight: var(--weight-medium); letter-spacing: var(--track-tight); }
+.consent { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 6px 12px; border-radius: var(--r-pill); background: var(--ok-soft); color: var(--ok); font-size: var(--type-caption); font-weight: var(--weight-medium); }
+/* the life certificate sheet: a face mark that spins while the check runs and turns green when it's done */
+.lcMark { width: 84px; height: 84px; margin: 6px 0 14px; border-radius: var(--r-circle); display: grid; place-items: center; background: var(--surface-2); color: var(--text); box-shadow: inset 0 0 0 3px var(--surface-3); }
+.lcMark[data-phase="checking"] { box-shadow: none; border: 3px solid var(--surface-3); border-top-color: var(--text); animation: spin .9s linear infinite; }
+.lcMark[data-phase="checking"] svg { animation: spin .9s linear infinite reverse; }
+.lcMark[data-phase="done"] { background: var(--ok-soft); color: var(--ok); box-shadow: inset 0 0 0 3px var(--ok); }
+.member { width: 44px; height: 44px; font-size: var(--type-row); }

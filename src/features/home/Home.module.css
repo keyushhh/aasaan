@@ -24,3 +24,7 @@
 .services > :last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 108px; flex-direction: row; align-items: center; }
 .services > :last-child:nth-child(odd) > :nth-child(2) { margin-top: 0; }
 .enter .hero { animation: rise var(--m-enter) var(--ease-enter) both; }
+/* scheme sheet: numbered steps and a link out to the official site */
+.stepsHead { margin: 22px 0 8px; font-size: var(--type-row); font-weight: var(--weight-strong); }
+.steps { margin: 0; padding-left: 22px; display: grid; gap: 10px; font-size: var(--type-body); line-height: var(--line-body); color: var(--text); }
+.site { display: flex; align-items: center; justify-content: center; min-height: 56px; margin-top: 18px; border-radius: var(--r-pill); background: var(--surface-2); color: var(--text); font-weight: var(--weight-strong); text-decoration: none; }

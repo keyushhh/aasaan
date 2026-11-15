@@ -8,8 +8,10 @@ import { TopBar } from '../../components/TopBar';
 import { DEPTS } from '../../data/types';
 import { useDepartments } from '../../data/hooks';
 import { SVC_ICON, useNav } from '../../app/nav';
-import { useT } from '../../app/session';
+import { useSession, useT } from '../../app/session';
 import { searchActions } from './search';
+import { useToast } from '../../components/Toast';
+import { canListen, listen } from '../../lib/voice';
 import s from './Services.module.css';
 
 export function Services() {
@@ -21,13 +23,31 @@ export function Services() {
   const focus = (useLocation().state as { focus?: number } | null)?.focus;
   useEffect(() => { if (focus) field.current?.focus(); }, [focus]);
   const hits = searchActions(q, t.actions);
+  const toast = useToast();
+  const { lang } = useSession();
+  const [listening, setListening] = useState(false);
+  const stopVoice = useRef<() => void>(() => {});
+  useEffect(() => () => stopVoice.current(), []);
+  const voice = () => {
+    if (listening) return stopVoice.current();
+    setListening(true);
+    stopVoice.current = listen(lang, (text) => setQ(text.replace(/[.।]$/, '')), (heard) => {
+      setListening(false);
+      if (!heard) toast(t.voiceFailed);
+    });
+  };
   return (
     <>
       <TopBar title={t.tabs.services} />
       <main className="pad" id="main">
         <label className={s.search}>
           <Icon name="search" size={20} />
-          <input ref={field} type="search" placeholder={t.search} autoComplete="off" aria-label={t.searchLabel} value={q} onChange={(e) => setQ(e.target.value)} />
+          <input ref={field} type="search" placeholder={listening ? t.listening : t.search} autoComplete="off" aria-label={t.searchLabel} value={q} onChange={(e) => setQ(e.target.value)} />
+          {canListen() && (
+            <button type="button" className={s.mic} data-on={listening || undefined} aria-label={t.voiceSearch} aria-pressed={listening} onClick={voice}>
+              <Icon name="mic" size={20} />
+            </button>
+          )}
         </label>
         {hits && (
           <Card variant="list" className={s.results}>

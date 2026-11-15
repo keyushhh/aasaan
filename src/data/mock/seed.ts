@@ -1,4 +1,5 @@
-import type { Challan, ConsentRequest, Document, EpfSummary, HealthRecord, Licence, PanAadhaarLink, Passbook, Registration, Request, Share, TaxReturn, MobileTarget, Dept } from '../types';
+import type { Challan, ConsentRequest, Document, EpfSummary, HealthRecord, Licence, PanAadhaarLink, Passbook, Registration, Request, Share, TaxReturn, MobileTarget, Dept, FamilyMember, Scheme } from '../types';
+import type { Device } from '../services';
 
 const EMPLOYEE = 342180;
 export const EPF: EpfSummary = {
@@ -41,6 +42,21 @@ export const RECORDS: HealthRecord[] = [
 
 export const CITIZEN = { name: 'Ananya Rao' };
 export const OTHER_SIM = '9123456780';
+/** Two Jan Suraksha schemes this person qualifies for: 32 years old, with the savings account EPFO pays into. */
+export const SCHEMES: Scheme[] = [
+  {
+    id: 'pmsby', name: 'Pradhan Mantri Suraksha Bima Yojana', what: 'Accident cover of ₹2 lakh for ₹20 a year',
+    why: 'You’re between 18 and 70 and have a savings account (HDFC Bank ••4417).',
+    steps: ['Open your bank’s app or net banking and find Jan Suraksha or insurance schemes.', 'Choose PMSBY and the savings account to pay from.', 'Confirm the yearly auto-debit of ₹20. Cover starts from the next day.'],
+    site: 'https://www.jansuraksha.gov.in',
+  },
+  {
+    id: 'pmjjby', name: 'Pradhan Mantri Jeevan Jyoti Bima Yojana', what: 'Life cover of ₹2 lakh for ₹436 a year',
+    why: 'You’re between 18 and 50 and have a savings account (HDFC Bank ••4417).',
+    steps: ['Open your bank’s app or net banking and find Jan Suraksha or insurance schemes.', 'Choose PMJJBY, the account to pay from and a nominee.', 'Confirm the yearly auto-debit of ₹436.'],
+    site: 'https://www.jansuraksha.gov.in',
+  },
+];
 export const IDENTITY = { name: 'Ananya Rao', born: 1994 };
 /** What each department finds for the sample number, already masked the way the department would show it. */
 export const FOUND: Record<Dept, string> = {
@@ -50,7 +66,14 @@ export const FOUND: Record<Dept, string> = {
 /** Who keeps the mobile number for each place it can be updated. */
 export const MOBILE_HOLDER: Record<MobileTarget, string> = { aadhaar: 'UIDAI', epf: 'EPFO', docs: 'DigiLocker', vehicle: 'Parivahan', tax: 'Income Tax Department', health: 'ABDM' };
 
-export interface MockState { challans: Challan[]; requests: Request[]; consents: ConsentRequest[]; shares: Share[] }
+export interface MockState { challans: Challan[]; requests: Request[]; consents: ConsentRequest[]; shares: Share[]; devices: Device[]; family: FamilyMember[] }
+
+/** "Chrome on Android" from a user agent, for the devices list. */
+export function describeDevice(ua: string) {
+  const browser = /Edg\//.test(ua) ? 'Edge' : /Firefox\//.test(ua) ? 'Firefox' : /Chrome\//.test(ua) ? 'Chrome' : /Safari\//.test(ua) ? 'Safari' : 'Browser';
+  const os = /Android/.test(ua) ? 'Android' : /iPhone|iPad/.test(ua) ? 'iPhone' : /Mac OS X/.test(ua) ? 'Mac' : /Windows/.test(ua) ? 'Windows' : 'this device';
+  return `${browser} on ${os}`;
+}
 
 export const seedState = (): MockState => ({
   challans: [
@@ -67,4 +90,9 @@ export const seedState = (): MockState => ({
   ],
   consents: [{ id: 'k1', from: 'City Care Hospital, Bengaluru', purpose: 'a doctor consultation', what: 'lab reports and prescriptions from the last 12 months', until: '7 days', status: 'pending' }],
   shares: [],
+  family: [{
+    id: 'f1', name: 'Suresh Rao', relation: 'father', mobile: '9845012345', born: 1958, consentUntil: '2027-11-01',
+    pension: { ppo: 'KN/BNG/0042817', monthly: 3250, lcDue: '2026-11-30' }, abha: '91-5531-••••-2210',
+  }],
+  devices: [{ id: 'd2', name: 'Windows PC', detail: 'Edge on Windows, Bengaluru', lastActive: Date.now() - 2 * 86400000 }],
 });

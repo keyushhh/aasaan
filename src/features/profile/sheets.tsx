@@ -12,7 +12,8 @@ import { useToast } from '../../components/Toast';
 import { api } from '../../data';
 import { InvalidOtp } from '../../data/services';
 import { MOBILE_TARGETS, targetDept, type Contact, type MobileTarget } from '../../data/types';
-import { useActions, useDepartments } from '../../data/hooks';
+import { useAccessLog, useActions, useDepartments, useDevices } from '../../data/hooks';
+import { ago } from '../../lib/format';
 import { SVC_ICON } from '../../app/nav';
 import { setSession, useSession, useT } from '../../app/session';
 import s from './Profile.module.css';
@@ -195,6 +196,53 @@ export function ContactSheet({ kind }: { kind: Contact }) {
         ))}
       </Card>
       <Button variant="primary" block onClick={sheet.close}>{t.done}</Button>
+    </>
+  );
+}
+
+/** Every device signed in to this account, with a way to end all sessions but this one. */
+export function DevicesSheet() {
+  const t = useT();
+  const toast = useToast();
+  const act = useActions();
+  const devices = useDevices().data ?? [];
+  const others = devices.filter((d) => !d.current);
+  return (
+    <>
+      <SheetTitle>{t.devicesTitle}</SheetTitle>
+      <Card variant="rows" className={s.langs}>
+        {devices.map((d) => (
+          <Row key={d.id} icon={<RowIcon icon={d.current ? 'phone' : 'monitor'} />} title={d.current ? t.thisDevice : d.name}
+            sub={`${d.detail}. ${d.current ? t.activeNow : t.activeAgo(ago(d.lastActive))}`} />
+        ))}
+      </Card>
+      {others.length ? (
+        <Button danger block onClick={async () => { await act.signOutOthers(); toast(t.signedOutOthers); }}>{t.signOutOthers}</Button>
+      ) : (
+        <p className="note">{t.onlyThisDevice}</p>
+      )}
+    </>
+  );
+}
+
+/** Every read a department answered, newest first: what was shared, by whom, and when. */
+export function AccessSheet() {
+  const t = useT();
+  const log = useAccessLog();
+  return (
+    <>
+      <SheetTitle>{t.accessTitle}</SheetTitle>
+      <p className="row-s">{t.accessIntro}</p>
+      {log.length ? (
+        <Card variant="rows" className={s.langs}>
+          {log.map((a) => (
+            <Row key={a.at + a.key + a.dept} icon={<RowIcon icon={SVC_ICON[a.dept]} svc={a.dept} />} title={t.accessWhat[`${a.dept}:${a.key}`] ?? a.key}
+              sub={t.accessRow(t.dept[a.dept], ago(a.at))} />
+          ))}
+        </Card>
+      ) : (
+        <p className="note">{t.accessEmpty}</p>
+      )}
     </>
   );
 }

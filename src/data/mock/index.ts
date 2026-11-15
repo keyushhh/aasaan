@@ -2,7 +2,7 @@ import { createStore } from '../../lib/storage';
 import { rnd, sleep, todayISO } from '../../lib/format';
 import { DepartmentUnavailable, isDown } from '../department';
 import { InvalidOtp, SimMismatch, type Adapters } from '../services';
-import { maskContact, targetDept, type Dept, type Request } from '../types';
+import { maskContact, targetDept, type Dept, type FamilyMember, type Request } from '../types';
 import * as S from './seed';
 
 /** Latency mirrors the reference prototype so screens feel the same. */
@@ -25,6 +25,43 @@ const addRequest = (r: Request) => mutate((s) => ({ ...s, requests: [r, ...s.req
 export const mockAdapters: Adapters = {
   ping: (d) => answer(d, LATENCY.ping, () => undefined),
   reset: () => store.set(S.seedState()),
+
+  grievance: {
+    raise: (input, queued) =>
+      answer(input.dept, LATENCY.write, () => {
+        const d = todayISO();
+        const r: Request = {
+          id: 'r' + Date.now(), svc: input.dept, title: `Complaint: ${input.topic}`, ref: 'DARPG/E/' + d.slice(0, 4) + '/0' + rnd(7),
+          created: queued?.on ?? d, at: queued?.at ?? Date.now(), status: 'active',
+          steps: [
+            ...(queued ? [{ label: 'Saved on your phone', date: queued.on, state: 'done' as const }] : []),
+            { label: 'Complaint registered', date: d, state: 'done' },
+            { label: 'With the department', date: '', state: 'current', note: 'Departments aim to reply within 21 days' },
+            { label: 'Resolved', date: '', state: 'todo' },
+          ],
+        };
+        addRequest(r);
+        return r;
+      }),
+  },
+  schemes: { eligible: async () => S.SCHEMES },
+
+  family: {
+    list: () => answer('epf', LATENCY.read, () => store.get().family ?? S.seedState().family),
+    add: (m) =>
+      answer('epf', LATENCY.read, () => {
+        const member: FamilyMember = { id: 'f' + Date.now(), ...m, consentUntil: `${new Date().getFullYear() + 1}-${todayISO().slice(5)}` };
+        mutate((s) => ({ ...s, family: [...(s.family ?? S.seedState().family), member] }));
+        return member;
+      }),
+    remove: (id) => answer('epf', 0, () => mutate((s) => ({ ...s, family: (s.family ?? []).filter((f) => f.id !== id) }))),
+    submitLifeCertificate: (id) =>
+      answer('epf', LATENCY.face, () => {
+        let out!: FamilyMember;
+        mutate((s) => ({ ...s, family: (s.family ?? S.seedState().family).map((f) => (f.id === id && f.pension ? (out = { ...f, pension: { ...f.pension, lcDone: todayISO() } }) : f)) }));
+        return out;
+      }),
+  },
 
   profile: {
     updateContact: (kind, target, value, queued) =>
@@ -132,6 +169,8 @@ export const mockAdapters: Adapters = {
       return { dept: d, found: true, id: S.FOUND[d] };
     },
     identity: async () => S.IDENTITY,
+    devices: async () => [{ id: 'this', name: 'This phone', detail: S.describeDevice(navigator.userAgent), lastActive: Date.now(), current: true }, ...(store.get().devices ?? S.seedState().devices)],
+    signOutOthers: async () => mutate((s) => ({ ...s, devices: [] })),
     faceMatch: async () => sleep(LATENCY.face),
     sendOtp: async () => {},
     verifyOtp: async (_mobile, otp) => {

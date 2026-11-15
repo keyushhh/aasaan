@@ -45,8 +45,15 @@ Across all five:
 
 - **Home** leads with what needs you today: a count, an urgency meter, the departments involved, and a card for each item with its next action.
 - **Requests** tracks everything you have applied for or paid, in every department, each with a timeline.
-- **Search** works in English and Hindi, for example "pay challan" or "चालान".
-- **Language and appearance:** switch between English and हिन्दी, and between light, dark or the device setting.
+- **Search** works in every app language, typed or spoken, for example "pay challan" or "चालान".
+- **Language and appearance:** English, हिन्दी, বাংলা, मराठी and తెలుగు, each translated in full, and light, dark or the device setting.
+- **Onboarding:** the number, an SMS from the SIM that holds it, discovery of what each department has, an "is this you" and face check, consent to link, an app PIN and optional fingerprint or face unlock.
+- **Profile:** edit your name and photo; change your mobile number or email once and send it to Aadhaar and every department together.
+- **Family:** manage a parent's records with their consent, including the yearly pension life certificate.
+- **Coming up and reminders:** renewal and tax dates count down, and reminders become phone notifications in the week before.
+- **Complaints and schemes:** raise a complaint with a department's grievance system and track it in Requests; see schemes you look eligible for.
+- **Security:** the app locks after 2 minutes in the background and blurs while hidden; see devices signed in, sign out the others, and see every time a department shared data.
+- **Installable and offline:** add it to the home screen; it opens without a network and shows your last synced records.
 - **When a department is down**, Aasaan shows your last synced data with the time it was updated, saves submissions on your phone, and sends them automatically when the department is back. Profile has prototype switches to simulate an outage for each department.
 
 ## Try it
@@ -91,6 +98,7 @@ npx playwright install chromium
 | `npm test` | Unit and UI tests (Vitest and Testing Library) |
 | `npm run e2e` | End-to-end flows in Chromium (Playwright) |
 | `npm run parity` | Side-by-side screenshots of the original prototype and the app, with a pixel count |
+| `npm run i18n:sheet` | Export every string in all five languages to `docs/translations.csv` for native-speaker review |
 | `npm run screenshots` | Regenerate the README screenshots in `docs/screenshots` (needs `cwebp`) |
 
 ## How it is built
@@ -118,6 +126,10 @@ UI (features/*)
 - **Actions that need an answer now** fail with a clear message instead. These are paying a challan, issuing a share code and answering a records request.
 - **Persistence** goes through `lib/storage.ts`, which guards every read and write so a full or blocked storage never breaks the app.
 
+## Going native
+
+SIM detection, Aadhaar face matching, secure PIN storage and scheduled push need a native shell. `docs/native.md` plans it, step by step. `docs/translation-review.md` explains how native speakers review the translations.
+
 ## Connecting real department APIs
 
 The interfaces live in `src/data/services.ts`: `EpfService`, `DocumentsService`, `VehicleService`, `TaxService`, `HealthService`, `RequestsService` and `AuthService`. To add real ones (API Setu, DigiLocker, Parivahan, ABDM, EPFO):
@@ -143,7 +155,10 @@ With a live source, a successful read marks the department as synced, and the de
 - **Targets and actions:** tap targets of at least 44px, and one filled primary button per view.
 - **Sheets** are native modal dialogs. Focus stays inside, Escape closes them, and focus returns to the control that opened them.
 - **Live updates:** toasts are announced through a persistent live region, and form errors through `role="alert"`.
-- **Language:** the `lang` attribute follows the selected language, so Hindi is read correctly.
+- **Language:** the `lang` attribute follows the selected language, so each script is read correctly.
+- **Contrast:** every text colour meets 4.5:1 on its background in both themes.
+- **Text size:** type sizes are in rem, so they grow with the text size set on the phone or in the browser.
+- **Motion:** reduced motion means fully still, including the keypad shake and the face check ring.
 
 ## Testing
 

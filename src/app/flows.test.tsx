@@ -121,6 +121,8 @@ describe('appearance', () => {
     expect(root.dataset.theme).toBe('dark');
     expect(JSON.parse(localStorage.getItem('aasaan-session-v1')!).theme).toBe('dark');
     await choose('System');
-    expect(root.hasAttribute('data-theme')).toBe(false);
+    // System follows the device; jsdom reports no dark preference, so it resolves to light.
+    expect(root.dataset.theme).toBe('light');
+    expect(JSON.parse(localStorage.getItem('aasaan-session-v1')!).theme).toBe('system');
   });
 });

@@ -4,14 +4,17 @@ import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { Icon } from '../../components/Icon';
-import { Row } from '../../components/Row';
+import { Row, RowIcon } from '../../components/Row';
+import { useSheet } from '../../components/Sheet';
+import { SchemeSheet } from './SchemeSheet';
 import { ServiceTile } from '../../components/ServiceTile';
 import { Switch } from '../../components/Switch';
 import { useToast } from '../../components/Toast';
 import { cx } from '../../components/cx';
 import { DEPTS } from '../../data/types';
-import { useChallans, useConsents, useDepartments, useLicence, useRegistration, useRequests } from '../../data/hooks';
+import { useChallans, useConsents, useDepartments, useFamily, useSchemes, useLicence, useRegistration, useRequests } from '../../data/hooks';
 import { fd, fday, num } from '../../lib/format';
+import { allowNotifications, canNotify } from '../../lib/notify';
 import { SVC_ICON, useNav } from '../../app/nav';
 import { setSession, useSession, useT } from '../../app/session';
 import { RequestRow } from '../requests/RequestRow';
@@ -42,7 +45,10 @@ export function Home() {
   const [enter] = useState(() => !entered);
   useEffect(() => void (entered = true), []);
 
-  const items = attention({ challans, registration, consents, requests, linked, down }, t);
+  const family = useFamily(linked.epf).data ?? [];
+  const schemes = useSchemes().data ?? [];
+  const sheet = useSheet();
+  const items = attention({ challans, registration, consents, requests, linked, down, family }, t);
   const [lead] = items;
   const dates = deadlines({ registration: linked.vehicle ? registration : undefined, licence, tax: linked.tax }, t);
   const saved = requests.filter((r) => r.status === 'queued').length;
@@ -51,10 +57,13 @@ export function Home() {
     const on = !reminders.includes(key);
     setSession({ reminders: on ? [...reminders, key] : reminders.filter((k) => k !== key) });
     toast(on ? t.reminderOn : t.reminderOff);
+    // Turning one on is the moment to ask for notification permission, with the reason in front of the person.
+    if (on) void allowNotifications().then((ok) => !ok && canNotify() && toast(t.notifBlocked));
   };
   const run = (target: Target) => {
     if (target.kind === 'pay') openPay(target.id);
     else if (target.kind === 'request') openRequest(target.r);
+    else if (target.kind === 'path') nav.path(target.to);
     else nav.go(target.route);
   };
   const state = (d: (typeof DEPTS)[number]) => (!linked[d] ? t.notLinked : down[d] ? t.isDown(t.dept[d]) : t.dept[d]);
@@ -112,6 +121,17 @@ export function Home() {
                 <Row key={d.key} title={d.title} sub={`${fd(d.date)}, ${t.dept[d.svc]}`}
                   icon={<span className={cx(s.days, d.days <= 30 && s.soon)} aria-hidden="true"><b>{num(d.days)}</b>{t.dayUnit(d.days)}</span>}
                   right={<Switch checked={reminders.includes(d.key)} label={t.remindMe(d.title)} onChange={() => remind(d.key)} />} />
+              ))}
+            </Card>
+          </section>
+        )}
+
+        {schemes.length > 0 && (
+          <section aria-labelledby="schemes-h">
+            <h2 className="h" id="schemes-h"><Icon name="shield" size={22} />{t.mayQualify}</h2>
+            <Card variant="list" className={s.list}>
+              {schemes.map((x) => (
+                <Row key={x.id} icon={<RowIcon icon="shield" ok />} title={x.name} sub={x.what} chevron onClick={() => sheet.open(<SchemeSheet scheme={x} />)} />
               ))}
             </Card>
           </section>

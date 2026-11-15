@@ -37,6 +37,11 @@ export function useNav() {
       depth = 0;
       navigate('/services', { state: { focus: Date.now() } });
     },
+    /** A screen with its own id in the path, such as one family member. */
+    path(p: string) {
+      depth++;
+      navigate(p);
+    },
     home: () => navigate('/home'),
   };
 }

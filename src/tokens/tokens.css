@@ -9,16 +9,17 @@
   /* type */
   --font: 'Geist Variable', 'Mukta', system-ui, sans-serif;
   --logo-font: 'Mukta', var(--font);
-  --fs: 16px;
-  --type-caption: 13px;
-  --type-small: 14px;
-  --type-body: 15px;
-  --type-row: 17px;
-  --type-section: 20px;
-  --type-title: 22px;
-  --type-sheet: 24px;
-  --type-number: clamp(32px, 10.5vw, 46px);
-  --type-count: 88px;
+  /* type sizes are in rem, so they grow with the text size set on the phone or in the browser */
+  --fs: 1rem;
+  --type-caption: 0.8125rem;
+  --type-small: 0.875rem;
+  --type-body: 0.9375rem;
+  --type-row: 1.0625rem;
+  --type-section: 1.25rem;
+  --type-title: 1.375rem;
+  --type-sheet: 1.5rem;
+  --type-number: clamp(2rem, 10.5vw, 2.875rem);
+  --type-count: 5.5rem;
   --weight-normal: 400;
   --weight-medium: 500;
   --weight-strong: 600;
@@ -37,13 +38,13 @@
   --track-tight: -.02em;
   --track-display: -.035em;
 
-  --type-micro: 11px;
-  --type-nav: 12px;
-  --type-input: 18px;
-  --type-page: 32px;
-  --type-intro: 42px;
-  --type-identity: 26px;
-  --type-code: 36px;
+  --type-micro: 0.6875rem;
+  --type-nav: 0.75rem;
+  --type-input: 1.125rem;
+  --type-page: 2rem;
+  --type-intro: 2.625rem;
+  --type-identity: 1.625rem;
+  --type-code: 2.25rem;
   --line-solid: 1;
   --line-number: 1.05;
   --line-compact: 1.15;
@@ -119,7 +120,7 @@
   --line: rgba(10, 11, 11, .1);
   --text: #0A0B0B;
   --muted: #5E6461;
-  --faint: #65776D;
+  --faint: #56645C;
   --hero-label: #2F5C4E;
   --primary: #0A0B0B;
   --primary-ink: #FFFFFF;
@@ -128,13 +129,13 @@
   --cta-bottom: #0A0B0B;
   --cta-shine: rgba(255, 255, 255, .16);
   --cta-glow: rgba(10, 11, 11, .45);
-  --accent: #1E9A4E;
+  --accent: #167A3B;
   --accent-soft: rgba(30, 154, 78, .14);
-  --hi: #A8650A;
+  --hi: #8A5208;
   --hi-soft: rgba(242, 165, 46, .16);
-  --danger: #D23B3B;
+  --danger: #B42727;
   --danger-soft: rgba(210, 59, 59, .12);
-  --ok: #1E9A4E;
+  --ok: #137036;
   --ok-soft: rgba(30, 154, 78, .14);
   --warn-fill: #E2A43A;
   --knob: #FFFFFF;
@@ -157,58 +158,7 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0A0A0A;
-    --glow: rgba(28, 92, 78, .85);
-    --ground-top: #0E1716;
-    --ground-a: rgba(103, 136, 77, .2);
-    --ground-b: rgba(0, 83, 79, .36);
-    --ground-c: rgba(79, 86, 43, .14);
-    --flag: #2A2113;
-    --surface: rgba(255, 255, 255, .06);
-    --surface-2: rgba(255, 255, 255, .1);
-    --surface-3: rgba(255, 255, 255, .14);
-    --sep: rgba(255, 255, 255, .18);
-    --line: rgba(255, 255, 255, .08);
-    --text: #FFFFFF;
-    --muted: #A3A7A5;
-    --faint: #8C8C8C;
-    --hero-label: #A8CDB6;
-    --primary: #FFFFFF;
-    --primary-ink: #0A0B0B;
-    --cta-top: #FFFFFF;
-    --cta-bottom: #DCDEDD;
-    --cta-shine: rgba(255, 255, 255, .9);
-    --cta-glow: rgba(255, 255, 255, .14);
-    --accent: #52D17A;
-    --accent-soft: rgba(82, 209, 122, .14);
-    --hi: #F2A52E;
-    --hi-soft: rgba(242, 165, 46, .12);
-    --danger: #FF6B6B;
-    --danger-soft: rgba(255, 107, 107, .12);
-    --ok: #52D17A;
-    --ok-soft: rgba(82, 209, 122, .14);
-    --warn-fill: #F2A52E;
-    --knob: #FFFFFF;
-    --knob-shadow: rgba(0, 0, 0, .5);
-    --scrim: rgba(0, 0, 0, .6);
-    --sheet-bg: #0B0B0A;
-    --card: #161616;
-    --card-edge: rgba(255, 255, 255, .07);
-    --well: #1E1E1E;
-    --well-2: #282828;
-    --raised: #2C2C2C;
-    --dock: rgba(22, 24, 23, .88);
-    --dock-on: rgba(255, 255, 255, .1);
-    --btn-ledge: rgba(10, 11, 11, .16);
-    --shadow-card: inset 0 1px 0 rgba(255, 255, 255, .03), 0 14px 32px -18px rgba(0, 0, 0, .9);
-    --shadow-dock: 0 16px 40px -10px rgba(0, 0, 0, .85);
-    --shadow-float: 0 30px 80px -20px rgba(0, 0, 0, .9);
-    color-scheme: dark;
-  }
-}
-
+/* Dark, once: the app sets data-theme="dark" when Dark is chosen, or when System is chosen and the device is dark. */
 :root[data-theme="dark"] {
   --bg: #0A0A0A;
   --glow: rgba(28, 92, 78, .85);

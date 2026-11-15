@@ -5,3 +5,7 @@
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
 .grid > :first-child { grid-column: 1 / -1; flex-direction: row; align-items: center; min-height: 108px; }
 .grid > :first-child > :nth-child(2) { margin-top: 0; }
+/* voice search: a round mic at the end of the field that glows while listening */
+.mic { flex: none; width: 44px; height: 44px; margin-right: -8px; border: 0; border-radius: var(--r-circle); display: grid; place-items: center; background: var(--surface-2); color: var(--text); -webkit-tap-highlight-color: transparent; }
+.mic[data-on] { background: var(--accent); color: var(--primary-ink); animation: pulse 1.2s var(--ease) infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 8px var(--accent-soft); } }

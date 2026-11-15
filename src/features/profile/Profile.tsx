@@ -10,11 +10,14 @@ import { Switch } from '../../components/Switch';
 import { TopBar } from '../../components/TopBar';
 import { useToast } from '../../components/Toast';
 import { DEPTS, type Dept } from '../../data/types';
-import { useActions, useDepartments } from '../../data/hooks';
+import { useActions, useDepartments, useDevices, useFamily } from '../../data/hooks';
+import { fd } from '../../lib/format';
+import { AddFamilySheet } from '../family/Member';
+import fs from '../family/Family.module.css';
 import { en, LANGS } from '../../i18n/strings';
 import { SVC_ICON, useNav } from '../../app/nav';
 import { setSession, useSession, useT, type Theme } from '../../app/session';
-import { ContactSheet, EditProfileSheet, maskMobile } from './sheets';
+import { AccessSheet, ContactSheet, DevicesSheet, EditProfileSheet, maskMobile } from './sheets';
 import s from './Profile.module.css';
 
 export function Profile() {
@@ -23,7 +26,9 @@ export function Profile() {
   const toast = useToast();
   const act = useActions();
   const sheet = useSheet();
-  const { name, mobile, lang, theme = 'system', email, photo } = useSession();
+  const { name, mobile, lang, theme = 'system', email, photo, bio } = useSession();
+  const devices = useDevices().data?.length ?? 1;
+  const family = useFamily().data ?? [];
   const { linked, down } = useDepartments();
   const masked = maskMobile(mobile);
 
@@ -63,6 +68,20 @@ export function Profile() {
             onClick={() => sheet.open(<LanguageSheet />)} />
           <Row icon={<RowIcon icon="contrast" />} title={t.appearance}
             right={<Select<Theme> label={t.appearance} value={theme} options={t.themes} onChange={(v) => setSession({ theme: v })} />} />
+        </Card>
+        <h2 className="h">{t.family}</h2>
+        <Card variant="rows">
+          {family.map((f) => (
+            <Row key={f.id} icon={<Avatar name={f.name} className={fs.member} />} title={f.name} chevron onClick={() => nav.path(`/family/${f.id}`)}
+              sub={f.pension && !f.pension.lcDone ? t.lcDue(fd(f.pension.lcDue)) : t.relations[f.relation]} />
+          ))}
+          <Row icon={<RowIcon icon="user" />} title={t.addFamily} sub={t.addFamilySub} chevron onClick={() => sheet.open(<AddFamilySheet />)} />
+        </Card>
+        <h2 className="h">{t.security}</h2>
+        <Card variant="rows">
+          <Row icon={<RowIcon icon="lock" />} title={t.appLock} sub={t.appLockSub(!!bio)} />
+          <Row icon={<RowIcon icon="phone" />} title={t.devicesTitle} sub={t.devicesSub(devices)} chevron onClick={() => sheet.open(<DevicesSheet />)} />
+          <Row icon={<RowIcon icon="eye" />} title={t.accessTitle} sub={t.accessSub} chevron onClick={() => sheet.open(<AccessSheet />)} />
         </Card>
         <h2 className="h">{t.linkedAccounts}</h2>
         <Card variant="rows">

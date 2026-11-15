@@ -1,11 +1,11 @@
 import type { AlertCardProps } from '../../components/AlertCard';
-import { DEPTS, type Challan, type ConsentRequest, type Dept, type Registration, type Request } from '../../data/types';
+import { DEPTS, type Challan, type ConsentRequest, type Dept, type FamilyMember, type Registration, type Request } from '../../data/types';
 import type { Strings } from '../../i18n/strings';
 import { daysTo, fd, inr } from '../../lib/format';
 import { SVC_ICON, type Route } from '../../app/nav';
 import { currentStep, stepDays } from '../requests/RequestRow';
 
-export type Target = { kind: 'pay'; id: string } | { kind: 'go'; route: Route } | { kind: 'request'; r: Request };
+export type Target = { kind: 'pay'; id: string } | { kind: 'go'; route: Route } | { kind: 'path'; to: string } | { kind: 'request'; r: Request };
 export type Attention = Omit<AlertCardProps, 'onClick'> & { key: string; svc: Dept; target: Target };
 
 interface Input {
@@ -15,10 +15,11 @@ interface Input {
   requests: Request[];
   linked: Record<Dept, boolean>;
   down: Record<Dept, boolean>;
+  family?: FamilyMember[];
 }
 
 /** Everything on the home queue, in the reference's order. */
-export function attention({ challans, registration, consents, requests, linked, down }: Input, t: Strings): Attention[] {
+export function attention({ challans, registration, consents, requests, linked, down, family = [] }: Input, t: Strings): Attention[] {
   const a: Attention[] = [];
   const att = t.att;
   challans.filter((c) => !c.paid).forEach((c) =>
@@ -29,6 +30,9 @@ export function attention({ challans, registration, consents, requests, linked, 
     if (p <= 30)
       a.push({ key: 'puc', svc: 'vehicle', tone: 'warn', icon: 'clock', title: p < 0 ? att.pucExpired : att.pucExpires(p), body: att.pucBody(registration.number), cta: att.viewPuc, target: { kind: 'go', route: 'vehicle' } });
   }
+  family.filter((f) => f.pension && !f.pension.lcDone && daysTo(f.pension.lcDue) <= 30).forEach((f) =>
+    a.push({ key: 'lc' + f.id, svc: 'epf', tone: 'warn', icon: 'user', title: att.lcTitle(f.name.split(' ')[0], fd(f.pension!.lcDue)), body: att.lcBody, cta: att.submitLc, target: { kind: 'path', to: `/family/${f.id}` } }),
+  );
   consents.filter((c) => c.status === 'pending').forEach((c) =>
     a.push({ key: 'k' + c.id, svc: 'health', tone: 'info', icon: 'shield', title: att.consentTitle(c.from), body: att.consentBody(c.purpose), cta: att.review, target: { kind: 'go', route: 'health' } }),
   );

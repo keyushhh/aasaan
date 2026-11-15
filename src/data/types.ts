@@ -4,6 +4,23 @@ export type Dept = 'epf' | 'docs' | 'vehicle' | 'tax' | 'health';
 export type MobileTarget = 'aadhaar' | Dept;
 export const MOBILE_TARGETS: MobileTarget[] = ['aadhaar', 'epf', 'docs', 'vehicle', 'tax', 'health'];
 export const targetDept = (t: MobileTarget): Dept => (t === 'aadhaar' ? 'docs' : t);
+/** Someone whose records this person manages, with that person's consent. */
+export type Relation = 'father' | 'mother' | 'spouse' | 'son' | 'daughter' | 'other';
+export interface FamilyMember {
+  id: string; name: string; relation: Relation; mobile: string; born?: number;
+  /** consent the member gave, by OTP to their own phone */
+  consentUntil: string;
+  /** EPS pension and the yearly life certificate (Jeevan Pramaan) */
+  pension?: { ppo: string; monthly: number; lcDue: string; lcDone?: string };
+  abha?: string;
+}
+export interface NewMember { name: string; relation: Relation; mobile: string }
+
+/** A complaint for a department's grievance system. */
+export interface ComplaintInput { dept: Dept; topic: string; details: string }
+/** A government scheme the citizen looks eligible for, from their linked records. */
+export interface Scheme { id: string; name: string; what: string; why: string; steps: string[]; site: string }
+
 /** The contact details Aasaan can change everywhere at once. */
 export type Contact = 'mobile' | 'email';
 export const maskContact = (kind: Contact, v: string) =>

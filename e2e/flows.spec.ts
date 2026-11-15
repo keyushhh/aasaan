@@ -34,13 +34,13 @@ const sheet = (page: Page) => page.getByRole('dialog');
 
 test('sign in, pay the challan from home, and see it leave the queue', async ({ page }) => {
   await signIn(page);
-  await expect(page.locator('h1 span').first()).toHaveText('4');
+  await expect(page.locator('h1 span').first()).toHaveText('5');
   await page.getByRole('button', { name: /Unpaid traffic challan/ }).click();
   await sheet(page).getByRole('button', { name: 'Pay ₹500' }).click();
   await expect(sheet(page).getByRole('button', { name: 'Confirming with your bank…' })).toBeDisabled();
   await expect(sheet(page).getByRole('heading', { name: 'Challan paid' })).toBeVisible();
   await sheet(page).getByRole('button', { name: 'Done' }).click();
-  await expect(page.locator('h1 span').first()).toHaveText('3');
+  await expect(page.locator('h1 span').first()).toHaveText('4');
 });
 
 test('a claim made during an EPFO outage is sent when EPFO is back', async ({ page }) => {
