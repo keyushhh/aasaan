@@ -1,6 +1,6 @@
-.row { display: flex; align-items: center; gap: 14px; padding: 14px; border: 0; width: 100%; background: var(--tile, none); text-align: left; color: var(--text); -webkit-tap-highlight-color: transparent; transition: background-color var(--m-out) var(--ease); }
+.row { display: flex; align-items: center; gap: 12px; padding: 18px 14px; border: 0; width: 100%; background: var(--tile, none); text-align: left; color: var(--text); -webkit-tap-highlight-color: transparent; transition: background-color var(--m-out) var(--ease); }
 .body { flex: 1; min-width: 0; }
-.right { text-align: right; font-weight: var(--weight-strong); white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: -.01em; font-size: 17px; }
+.right { text-align: right; font-weight: var(--weight-strong); white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: var(--track-body); font-size: var(--type-row); }
 .chev { color: var(--faint); flex: none; transition: transform var(--m-in) var(--ease), color var(--m-in) var(--ease); }
 @media (hover: hover) and (pointer: fine) {
   button.row:hover { background: var(--well-2); }
@@ -12,3 +12,6 @@ button.row:active { background: var(--well-2); transition-duration: 0ms; }
 .ic { width: 44px; height: 44px; border-radius: var(--r-mark); display: grid; place-items: center; background: var(--surface-2); color: var(--text); flex: none; }
 .ic[data-svc] { background: color-mix(in srgb, var(--svc) 16%, transparent); color: var(--svc); }
 .ok { background: var(--ok-soft); color: var(--ok); }
+/* A department logo sits on a light disc in both themes, since official artwork is drawn for a light background. */
+.ic.mark { background: var(--logo-plate); }
+.mark img { width: 72%; height: 72%; object-fit: contain; }

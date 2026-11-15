@@ -1,8 +1,8 @@
 import type {
   Dept,
   Abha, ClaimInput, ConsentRequest, Document, EpfSummary, HealthRecord, Licence, PanAadhaarLink, Passbook,
-  PayMethod, Receipt, Registration, Request, Share, TaxDemand, TaxReturn, Challan,
-} from './types';
+  PayMethod, Receipt, Registration, Request, Share, TaxDemand, TaxReturn, Challan, Contact, MobileTarget,
+}  from './types';
 
 /** One interface per department. A real adapter (API Setu, DigiLocker, Parivahan, ABDM, EPFO) implements the same shape. */
 export interface EpfService {
@@ -44,7 +44,20 @@ export interface RequestsService {
   list(): Promise<Request[]>;
 }
 
+/** What one department holds for a mobile number: a masked identifier when it has records, nothing when it doesn't. */
+export interface Finding { dept: Dept; found: boolean; id?: string }
+/** The person the records belong to, as their Aadhaar has them, for the "is this you" check. */
+export interface Identity { name: string; born: number }
+
 export interface AuthService {
+  /**
+   * Device binding: the app sends one SMS from the chosen SIM to the verification number, and the server checks it
+   * arrived from this mobile number. Rejects with SimMismatch when that SIM holds a different number.
+   */
+  verifySim(mobile: string, sim: 1 | 2): Promise<void>;
+  /** Ask one department whether it holds records for this number. */
+  discover(mobile: string, dept: Dept): Promise<Finding>;
+  identity(mobile: string): Promise<Identity>;
   sendOtp(mobile: string): Promise<void>;
   /** Resolves with the citizen's name, rejects with InvalidOtp. */
   verifyOtp(mobile: string, otp: string): Promise<{ name: string }>;
@@ -52,6 +65,14 @@ export interface AuthService {
 
 export class InvalidOtp extends Error {
   name = 'InvalidOtp';
+}
+export class SimMismatch extends Error {
+  name = 'SimMismatch';
+}
+
+export interface ProfileService {
+  /** Ask one department to replace the mobile number or email on the citizen's record. */
+  updateContact(kind: Contact, target: MobileTarget, value: string, queued?: { on: string; at: number }): Promise<Request>;
 }
 
 export interface Adapters {
@@ -62,6 +83,7 @@ export interface Adapters {
   vehicle: VehicleService;
   tax: TaxService;
   health: HealthService;
+  profile: ProfileService;
   requests: RequestsService;
   auth: AuthService;
   /** Prototype only: restore the sample data. */

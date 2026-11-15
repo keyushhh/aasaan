@@ -20,6 +20,9 @@ const PATHS = {
   clock: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
   close: '<path d="M6 6l12 12M18 6L6 18"/>',
   down: '<path d="M6 9l6 6 6-6"/>',
+  mail: '<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="M4 7l8 6 8-6"/>',
+  phone: '<rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/>',
+  camera: '<path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
   globe: '<circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c2.4 2.2 3.5 5 3.5 8s-1.1 5.8-3.5 8c-2.4-2.2-3.5-5-3.5-8s1.1-5.8 3.5-8z"/>',
   contrast: '<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/>',
 };

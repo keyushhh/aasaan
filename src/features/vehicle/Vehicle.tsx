@@ -1,3 +1,5 @@
+import { Icon } from '../../components/Icon';
+import s from './Vehicle.module.css';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { KeyValue } from '../../components/KeyValue';
@@ -29,7 +31,7 @@ export function Vehicle() {
         return (
           <>
             <Card variant="hero" data-svc="vehicle">
-              <div className="label">{t.rcLabel}</div>
+              <div className={s.cardLabel}><span className="label">{t.rcLabel}</span><Icon name="car" size={28} /></div>
               <div className="big md mono">{r.number}</div>
               <div className="row-s">{t.rcLine(r.model, r.fuel, fd(r.registered))}</div>
               <KeyValue items={[
@@ -46,7 +48,7 @@ export function Vehicle() {
               ))}
             </Card>
             <h2 className="h">{t.licence}</h2>
-            <Card>
+            <Card className={s.licence}>
               <span className="row-t mono">{l.number}</span>
               <span className="row-s">{t.licenceLine(l.classes, l.rto)}</span>
               <KeyValue items={[[t.status, <Pill tone="ok">{l.status}</Pill>], [t.validTillLabel, fd(l.validTill)]]} />

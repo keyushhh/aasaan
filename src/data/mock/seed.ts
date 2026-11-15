@@ -1,4 +1,4 @@
-import type { Challan, ConsentRequest, Document, EpfSummary, HealthRecord, Licence, PanAadhaarLink, Passbook, Registration, Request, Share, TaxReturn } from '../types';
+import type { Challan, ConsentRequest, Document, EpfSummary, HealthRecord, Licence, PanAadhaarLink, Passbook, Registration, Request, Share, TaxReturn, MobileTarget, Dept } from '../types';
 
 const EMPLOYEE = 342180;
 export const EPF: EpfSummary = {
@@ -40,6 +40,14 @@ export const RECORDS: HealthRecord[] = [
 ];
 
 export const CITIZEN = { name: 'Ananya Rao' };
+export const IDENTITY = { name: 'Ananya Rao', born: 1994 };
+/** What each department finds for the sample number, already masked the way the department would show it. */
+export const FOUND: Record<Dept, string> = {
+  epf: 'UAN 1012 •••• 7890', docs: 'Aadhaar •••• •••• 8421', vehicle: 'RC KA 01 MJ 4521', tax: 'PAN ABCPR••••K', health: 'ABHA 91-4821-••••-0062',
+};
+
+/** Who keeps the mobile number for each place it can be updated. */
+export const MOBILE_HOLDER: Record<MobileTarget, string> = { aadhaar: 'UIDAI', epf: 'EPFO', docs: 'DigiLocker', vehicle: 'Parivahan', tax: 'Income Tax Department', health: 'ABDM' };
 
 export interface MockState { challans: Challan[]; requests: Request[]; consents: ConsentRequest[]; shares: Share[] }
 

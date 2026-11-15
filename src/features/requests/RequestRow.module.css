@@ -1,0 +1,6 @@
+.request { display: flex; align-items: flex-start; gap: 14px; width: 100%; padding: 18px 16px; border: 0; background: var(--tile, var(--well)); color: var(--text); text-align: left; border-radius: var(--r-tile); transition: background-color var(--m-out) var(--ease); }
+.body { flex: 1; min-width: 0; }
+.body :global(.row-s) { margin-top: 6px; }
+.status { display: block; margin-top: 12px; }
+@media (hover: hover) and (pointer: fine) { .request:hover { background: var(--well-2); } }
+.request:active { background: var(--well-2); }

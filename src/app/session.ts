@@ -4,7 +4,7 @@ import { dictionaries, en, type Lang } from '../i18n/strings';
 import { setLocale } from '../lib/format';
 
 export type Theme = 'system' | 'light' | 'dark';
-export interface Session { loggedIn: boolean; lang: Lang; mobile: string; name: string; theme?: Theme; reminders?: string[] }
+export interface Session { loggedIn: boolean; lang: Lang; mobile: string; name: string; theme?: Theme; reminders?: string[]; email?: string; photo?: string; pin?: string }
 
 export const sessionStore = createStore<Session>('aasaan-session-v1', () => ({ loggedIn: false, lang: 'en', mobile: '', name: 'Ananya Rao', theme: 'system' }));
 

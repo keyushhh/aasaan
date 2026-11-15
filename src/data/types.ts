@@ -1,4 +1,13 @@
 export type Dept = 'epf' | 'docs' | 'vehicle' | 'tax' | 'health';
+
+/** Where a citizen's mobile number lives. Aadhaar is reached through the DigiLocker connection, so it shares that department's state. */
+export type MobileTarget = 'aadhaar' | Dept;
+export const MOBILE_TARGETS: MobileTarget[] = ['aadhaar', 'epf', 'docs', 'vehicle', 'tax', 'health'];
+export const targetDept = (t: MobileTarget): Dept => (t === 'aadhaar' ? 'docs' : t);
+/** The contact details Aasaan can change everywhere at once. */
+export type Contact = 'mobile' | 'email';
+export const maskContact = (kind: Contact, v: string) =>
+  kind === 'mobile' ? `+91 ${v.slice(0, 2)}••••••${v.slice(-2)}` : v.replace(/^(.)[^@]*(@.*)$/, '$1••••$2');
 export const DEPTS: Dept[] = ['epf', 'docs', 'vehicle', 'tax', 'health'];
 
 export type StepState = 'done' | 'current' | 'todo';

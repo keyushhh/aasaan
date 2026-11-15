@@ -38,8 +38,9 @@ export function Select<T extends string>({ label, value, options, onChange, fiel
 
   return (
     <div ref={root} className={cx(s.wrap, field && s.wide)}>
+      {field && <span className={s.fieldLabel} aria-hidden="true">{label}</span>}
       <button ref={btn} type="button" className={field ? s.field : s.btn} aria-haspopup="menu" aria-expanded={open} aria-label={`${label}: ${current}`} onClick={() => setOpen((o) => !o)}>
-        {field ? <span className={s.fieldText}><span className={s.fieldLabel}>{label}</span><span className={s.fieldValue}>{current}</span></span> : current}
+        {field ? <span>{current}</span> : current}
         <Icon name="down" size={field ? 20 : 16} />
       </button>
       {open && (

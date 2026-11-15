@@ -1,3 +1,8 @@
-.intro { margin-top: 0; }
-/* How long the current step has run, against how long it usually takes. */
+.intro { margin-top: 0; max-width: 34ch; }
+.summary { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+.summary > div { padding: 22px; }
+.summary b { display: block; font-size: var(--type-page); font-weight: var(--weight-medium); line-height: var(--line-tight); letter-spacing: var(--track-display); margin-bottom: 10px; font-variant-numeric: tabular-nums; }
+.summary span { color: var(--muted); font-size: var(--type-caption); }
+.summary > :first-child b { color: var(--hi); }
+.summary > :last-child b { color: var(--ok); }
 .wait { margin: 16px 0 6px; padding: 14px 16px; }

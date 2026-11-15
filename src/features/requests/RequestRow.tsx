@@ -1,5 +1,6 @@
+import s from './RequestRow.module.css';
 import { Pill } from '../../components/Pill';
-import { Row, RowIcon } from '../../components/Row';
+import { RowIcon } from '../../components/Row';
 import type { Request } from '../../data';
 import { SVC_ICON } from '../../app/nav';
 import { useT } from '../../app/session';
@@ -24,5 +25,10 @@ export function StatusPill({ r }: { r: Request }) {
 
 export function RequestRow({ r }: { r: Request }) {
   const open = useOpenRequest();
-  return <Row icon={<RowIcon icon={SVC_ICON[r.svc]} svc={r.svc} />} title={r.title} sub={currentStep(r)} right={<StatusPill r={r} />} onClick={() => open(r)} />;
+  return (
+    <button type="button" className={s.request} onClick={() => open(r)}>
+      <RowIcon icon={SVC_ICON[r.svc]} svc={r.svc} />
+      <span className={s.body}><span className="row-t">{r.title}</span><span className="row-s">{currentStep(r)}</span><span className={s.status}><StatusPill r={r} /></span></span>
+    </button>
+  );
 }

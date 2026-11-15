@@ -26,10 +26,12 @@ export function Tax() {
               <div><span className="row-t">{t.panLinked}</span><span className="row-s"><MonoIn line={t.panLine(l.pan, fd(l.linkedOn))} part={l.pan} /></span></div>
             </Card>
             <h2 className="h">{t.returnFor(r.ay)}</h2>
-            <Card>
-              <KeyValue flush items={[[t.form, r.form], [t.filedOn, fd(r.filedOn)], [t.status, <Pill tone="ok">{r.status}</Pill>], [t.refund, inr(r.refund)]]} />
-              <Timeline steps={r.steps} />
+            <Card variant="hero" data-svc="tax">
+              <div className="label">{t.refund}</div>
+              <div className="big">{inr(r.refund)}</div>
+              <KeyValue flush items={[[t.form, r.form], [t.filedOn, fd(r.filedOn)], [t.status, <Pill tone="ok">{r.status}</Pill>]]} />
             </Card>
+            <Card className={s.timeline}><Timeline steps={r.steps} /></Card>
             <h2 className="h">{t.demands}</h2>
             {demands.data!.length === 0 && <Card className={s.clear}><Icon name="check" size={20} /> {t.noDemand}</Card>}
           </>

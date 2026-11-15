@@ -1,7 +1,9 @@
+import { Icon } from '../../components/Icon';
+import s from './Documents.module.css';
 import { Button } from '../../components/Button';
 import { Empty } from '../../components/Empty';
 import { Card } from '../../components/Card';
-import { Row, RowIcon } from '../../components/Row';
+import { Row } from '../../components/Row';
 import { useSheet } from '../../components/Sheet';
 import { useToast } from '../../components/Toast';
 import { DepartmentUnavailable } from '../../data';
@@ -36,11 +38,16 @@ export function Documents() {
         const nameOf = (id: string) => docs.data!.find((d) => d.id === id)?.name ?? id;
         return (
           <>
-            <Card variant="list">
+            <div className={s.wallet}>
               {docs.data!.map((d) => (
-                <Row key={d.id} icon={<RowIcon icon="folder" />} title={d.name} sub={d.issuer} chevron onClick={() => sheet.open(<DocSheet d={d} />)} />
+                <button key={d.id} type="button" className={s.document} data-svc="docs" onClick={() => sheet.open(<DocSheet d={d} />)}>
+                  <span className={s.documentTop}><Icon name="folder" size={24} /><Icon name="check" size={16} /></span>
+                  <span className={s.documentName}>{d.name}</span>
+                  <span className={s.documentIssuer}>{d.issuer}</span>
+                  <span className={s.documentNumber}>{d.no}</span>
+                </button>
               ))}
-            </Card>
+            </div>
             <h2 className="h">{t.activeCodes}</h2>
             {active.length ? (
               <Card variant="rows">

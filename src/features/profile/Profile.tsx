@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { Avatar } from '../../components/Avatar';
 import { Card } from '../../components/Card';
+import { Choice } from '../../components/Choice';
 import { Row, RowIcon } from '../../components/Row';
 import { Button } from '../../components/Button';
 import { Select } from '../../components/Select';
@@ -12,6 +14,7 @@ import { useActions, useDepartments } from '../../data/hooks';
 import { en, LANGS } from '../../i18n/strings';
 import { SVC_ICON, useNav } from '../../app/nav';
 import { setSession, useSession, useT, type Theme } from '../../app/session';
+import { ContactSheet, EditProfileSheet, maskMobile } from './sheets';
 import s from './Profile.module.css';
 
 export function Profile() {
@@ -20,9 +23,9 @@ export function Profile() {
   const toast = useToast();
   const act = useActions();
   const sheet = useSheet();
-  const { name, mobile, lang, theme = 'system' } = useSession();
+  const { name, mobile, lang, theme = 'system', email, photo } = useSession();
   const { linked, down } = useDepartments();
-  const masked = mobile ? mobile.slice(0, 2) + '••••••' + mobile.slice(-2) : '98••••••21';
+  const masked = maskMobile(mobile);
 
   const toggleLink = (d: Dept) => {
     const on = !linked[d];
@@ -49,10 +52,13 @@ export function Profile() {
       <TopBar title={t.tabs.profile} />
       <main className="pad" id="main">
         <Card className={s.me}>
-          <span className="logo" aria-hidden="true">{name[0]}</span>
-          <div><span className="row-t">{name}</span><span className="row-s">{t.verified(masked)}</span></div>
+          <Avatar name={name} photo={photo} />
+          <div><span className="row-t">{name}</span><span className="row-s">{t.verified(masked)}</span>{email && <span className="row-s">{email}</span>}</div>
+          <Button small icon="user" onClick={() => sheet.open(<EditProfileSheet />)}>{t.editProfile}</Button>
         </Card>
         <Card variant="rows" className={s.settings}>
+          <Row icon={<RowIcon icon="phone" />} title={t.mobileNumber} sub={t.mobileRowSub(masked)} chevron onClick={() => sheet.open(<ContactSheet kind="mobile" />)} />
+          <Row icon={<RowIcon icon="mail" />} title={t.email} sub={t.emailRowSub(email)} chevron onClick={() => sheet.open(<ContactSheet kind="email" />)} />
           <Row icon={<RowIcon icon="globe" />} title={t.language} sub={<span lang={lang}>{LANGS.find(([k]) => k === lang)![1]}</span>} chevron
             onClick={() => sheet.open(<LanguageSheet />)} />
           <Row icon={<RowIcon icon="contrast" />} title={t.appearance}
@@ -87,7 +93,7 @@ export function Profile() {
  * Every language on offer as a radio list, each in its own script with its English name under it.
  * Picking one only marks it; Save changes applies it, Cancel leaves the language as it was.
  */
-function LanguageSheet() {
+export function LanguageSheet() {
   const t = useT();
   const sheet = useSheet();
   const { lang } = useSession();
@@ -97,14 +103,7 @@ function LanguageSheet() {
       <SheetTitle>{t.language}</SheetTitle>
       <Card variant="list" className={s.langs} role="radiogroup" aria-label={t.language}>
         {LANGS.map(([code, own, english]) => (
-          <label key={code} className={s.lang}>
-            <input type="radio" name="lang" value={code} checked={pick === code} onChange={() => setPick(code)} />
-            <span className={s.langName}>
-              <span className="row-t" lang={code}>{own}</span>
-              {code !== 'en' && <span className="row-s">{english}</span>}
-            </span>
-            <span className={s.radio} aria-hidden="true" />
-          </label>
+          <Choice key={code} type="radio" name="lang" checked={pick === code} onChange={() => setPick(code)} lang={code} title={own} sub={code === 'en' ? undefined : english} />
         ))}
       </Card>
       <div className={s.foot}>

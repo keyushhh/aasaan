@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router';
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
 import { SheetProvider } from '../components/Sheet';
@@ -8,7 +8,7 @@ import { onRecovered } from '../data';
 import { useRequests } from '../data/hooks';
 import { useSession, useT } from './session';
 import { useNav } from './nav';
-import { Login } from '../features/auth/Login';
+import { Lock, Login } from '../features/auth/Login';
 import { Home } from '../features/home/Home';
 import { Services } from '../features/search/Services';
 import { Requests } from '../features/requests/Requests';
@@ -38,7 +38,10 @@ export function App({ client = makeQueryClient() }: { client?: QueryClient }) {
 }
 
 function Root() {
-  const { loggedIn, lang } = useSession();
+  const { loggedIn, lang, pin } = useSession();
+  // The PIN is asked once per launch; a launch that starts at onboarding has just set it, so it starts unlocked.
+  const [unlocked, setUnlocked] = useState(!loggedIn);
+  useEffect(() => void (!loggedIn && setUnlocked(true)), [loggedIn]);
   const t = useT();
   const qc = useQueryClient();
   const toast = useToast();
@@ -55,6 +58,7 @@ function Root() {
   );
 
   if (!loggedIn) return <div className={`${s.shell} ${s.bare}`}><Login /></div>;
+  if (pin && !unlocked) return <div className={`${s.shell} ${s.bare}`}><Lock onUnlock={() => setUnlocked(true)} /></div>;
   return <Shell />;
 }
 

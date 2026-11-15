@@ -1,1 +1,5 @@
 .status { margin-top: 10px; }
+
+.cardLabel { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--svc-health); }
+.consent { padding: 24px 20px; }
+.consent :global(.row-s) { margin-top: 10px; line-height: var(--line-body); }

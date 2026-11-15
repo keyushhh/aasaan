@@ -1,7 +1,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 import { api, deptStore, peek, setDown, setLinked } from './index';
-import type { ClaimInput, ConsentRequest, Challan, Dept, PayMethod, Request, Share } from './types';
+import type { ClaimInput, ConsentRequest, Challan, Contact, Dept, MobileTarget, PayMethod, Request, Share } from './types';
 
 /** Department reads. Start from the last synced copy so the screen never paints empty, then fetch. */
 function useDeptQuery<T>(d: Dept, key: string, fn: () => Promise<T>, enabled = true) {
@@ -68,6 +68,12 @@ export function useActions() {
       const c = await api.health.respond(id, decision);
       set<ConsentRequest[]>(['health', 'consents'], (old) => old.map((x) => (x.id === id ? c : x)));
       return c;
+    },
+    /** Send a new mobile number or email to every chosen place at once. Each one reports back on its own. */
+    updateContact: async (kind: Contact, targets: MobileTarget[], value: string) => {
+      const results = await Promise.all(targets.map((t) => api.profile.updateContact(kind, t, value)));
+      await qc.refetchQueries({ queryKey: ['requests'] });
+      return results;
     },
     refresh: async (d: Dept) => {
       await api.refresh(d);

@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Card } from '../../components/Card';
 import { Icon } from '../../components/Icon';
-import { Row, RowIcon } from '../../components/Row';
+import { Row } from '../../components/Row';
+import { ServiceTile } from '../../components/ServiceTile';
 import { TopBar } from '../../components/TopBar';
 import { DEPTS } from '../../data/types';
 import { useDepartments } from '../../data/hooks';
@@ -40,11 +41,11 @@ export function Services() {
           </Card>
         )}
         <h2 className="h">{t.yourServices}</h2>
-        <Card variant="list" className={s.results}>
+        <div className={s.grid}>
           {DEPTS.map((d) => (
-            <Row key={d} icon={<RowIcon icon={SVC_ICON[d]} svc={d} size={20} />} title={t.svc[d]} sub={t.dept[d] + (linked[d] ? '' : t.notLinkedSuffix)} chevron onClick={() => nav.go(d)} />
+            <ServiceTile key={d} svc={d} icon={SVC_ICON[d]} name={t.svc[d]} state={t.dept[d] + (linked[d] ? '' : t.notLinkedSuffix)} onClick={() => nav.go(d)} />
           ))}
-        </Card>
+        </div>
       </main>
     </>
   );

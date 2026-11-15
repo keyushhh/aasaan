@@ -1,2 +1,2 @@
-.empty { display: flex; align-items: center; gap: 14px; padding: 18px; border-radius: var(--r-card); background: var(--surface); color: var(--muted); font-size: 15px; line-height: 1.45; }
+.empty { display: flex; align-items: center; gap: 14px; padding: 18px; border-radius: var(--r-card); background: var(--surface); color: var(--muted); font-size: var(--type-body); line-height: var(--line-default); }
 .mark { width: 44px; height: 44px; flex: none; border-radius: var(--r-mark); display: grid; place-items: center; background: var(--surface-2); color: var(--faint); }

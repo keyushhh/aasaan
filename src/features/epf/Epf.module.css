@@ -1,5 +1,7 @@
-.split { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.split > div { background: var(--well); border-radius: var(--r-item); padding: 12px 14px; min-width: 0; }
-.split span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 2px; }
-.split b { font-size: 16px; font-weight: var(--weight-strong); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
-.bank { padding: 14px 16px; margin-top: 4px; }
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--card-edge); border-radius: var(--r-tile); overflow: hidden; }
+.split > div { background: var(--well); padding: 16px 14px; min-width: 0; }
+.split > div:last-child { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.split span { display: block; font-size: var(--type-caption); color: var(--muted); margin-bottom: 6px; }
+.split > div:last-child span { margin-bottom: 0; }
+.split b { font-size: var(--type-row); font-weight: var(--weight-medium); font-variant-numeric: tabular-nums; }
+.bank { padding: 16px; margin-top: 8px; }

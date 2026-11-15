@@ -1,0 +1,4 @@
+.cardLabel { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--svc-vehicle); }
+.licence { padding-top: 24px; }
+.licence > :global(.row-t) { font-size: var(--type-section); font-weight: var(--weight-medium); }
+.licence > :global(.row-s) { margin-top: 8px; }

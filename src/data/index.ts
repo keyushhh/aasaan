@@ -2,7 +2,7 @@ import { todayISO } from '../lib/format';
 import * as dept from './department';
 import { mockAdapters } from './mock';
 import type { Adapters } from './services';
-import type { ClaimInput, Dept, Request } from './types';
+import { maskContact, targetDept, type ClaimInput, type Contact, type Dept, type MobileTarget, type Request } from './types';
 
 /** The single place that picks which adapters the app talks to. Add `real` adapters here when the APIs are ready. */
 const SOURCE = import.meta.env.VITE_DATA_SOURCE ?? 'mock';
@@ -17,6 +17,18 @@ const a = adapters;
 dept.registerHandler<ClaimInput>('epf.submitClaim', (input, item) =>
   a.epf.submitClaim(input, { on: item.preview.created, at: item.preview.at }),
 );
+
+/* Mobile number and email changes wait in the outbox the same way, one per department. */
+interface ContactInput { kind: Contact; target: MobileTarget; value: string }
+dept.registerHandler<ContactInput>('profile.updateContact', (p, item) => a.profile.updateContact(p.kind, p.target, p.value, { on: item.preview.created, at: item.preview.at }));
+const queuedContact = ({ kind, target, value }: ContactInput): Request => {
+  const d = todayISO();
+  return {
+    id: 'r' + Date.now() + target, svc: targetDept(target), title: kind === 'mobile' ? 'Mobile number update' : 'Email update',
+    ref: `New ${kind === 'mobile' ? 'number' : 'email'} ${maskContact(kind, value)}`, created: d, at: Date.now(), status: 'queued',
+    steps: [{ label: 'Saved on your phone', date: d, state: 'done' }, { label: 'Request sent', date: '', state: 'current', note: 'Sends automatically when the department is back' }],
+  };
+};
 
 const queuedClaim = (input: ClaimInput): Request => {
   const d = todayISO();
@@ -65,6 +77,14 @@ export const api = {
     consents: () => read('health', 'consents', a.health.listConsentRequests),
     respond: (id: string, decision: 'allowed' | 'denied') => call('health', () => a.health.respondToConsent(id, decision)),
     records: () => read('health', 'records', a.health.listRecords),
+  },
+  profile: {
+    /** Send a new mobile number or email to one place now, or keep it on the phone until that department is back. */
+    updateContact: async (kind: Contact, target: MobileTarget, value: string) => {
+      const input = { kind, target, value };
+      const out = await dept.submit(targetDept(target), 'profile.updateContact', input, () => a.profile.updateContact(kind, target, value), () => queuedContact(input));
+      return { target, queued: out.queued };
+    },
   },
   /** Aasaan's tracker: what's waiting on the phone, then what departments know about. */
   requests: async (): Promise<Request[]> => {

@@ -1,39 +1,26 @@
-/* Home's ground: the bright green-to-teal wash behind the greeting and the count, fading to black. */
-.ground { position: absolute; inset: 0 0 auto; height: 490px; z-index: -1; pointer-events: none; background: var(--home-glow); }
-.head { padding: 28px 20px 4px; }
+.ground { position: absolute; inset: 0 0 auto; height: 440px; z-index: -1; pointer-events: none; background: var(--home-glow); opacity: .55; }
+.head { padding: 30px 22px 24px; }
 .bar { display: flex; align-items: center; gap: 12px; }
-.who { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.hi { font-weight: var(--weight-strong); font-size: 18px; letter-spacing: -.015em; line-height: 1.25; }
-.date { font-size: 15px; color: var(--muted); line-height: 1.3; }
-
-/* The hero sits on the glow: a tinted label, the count, a chip, then the two white actions. */
-.hero { padding: 42px 0 8px; }
-.heroLabel { display: block; font-size: 17px; color: var(--hero-label); margin-bottom: 4px; }
-.count { margin: 0; font-weight: inherit; font-size: inherit; display: flex; flex-direction: column; gap: 6px; }
-.num { font-weight: var(--weight-medium); font-size: var(--type-count); line-height: 1; letter-spacing: var(--track-display); font-variant-numeric: tabular-nums; }
-.lbl { font-size: 17px; font-weight: var(--weight-normal); line-height: 1.35; color: var(--muted); text-wrap: pretty; max-width: 26ch; }
-.clear { display: flex; align-items: center; gap: 12px; margin: 4px 0 0; font-size: 20px; font-weight: var(--weight-strong); letter-spacing: -.015em; line-height: 1.25; max-width: 20ch; }
-.clearMark { width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--ok-soft); color: var(--ok); }
-.chip { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; padding: 0 18px 0 8px; min-height: 44px; border: 0; border-radius: var(--r-pill); background: var(--surface-2); color: var(--muted); font-size: 15px; white-space: nowrap; max-width: 100%; transition: background-color var(--m-out) var(--ease), transform var(--m-out) var(--ease); }
-.chip b { color: var(--text); font-weight: var(--weight-strong); font-variant-numeric: tabular-nums; }
-.chipIc { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-3); color: var(--text); }
-.chip:active { transform: scale(.97); transition-duration: var(--m-press); }
-@media (hover: hover) and (pointer: fine) { .chip:hover { background: var(--surface-3); } }
-.actions { display: flex; margin-top: 26px; }
+.who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.hi { font-weight: var(--weight-medium); font-size: var(--type-row); line-height: var(--line-title); }
+.date { font-size: var(--type-caption); color: var(--muted); }
+.hero { position: relative; border: 1px solid var(--card-edge); border-radius: var(--r-card); background: var(--dashboard-fill); box-shadow: var(--shadow-card); padding: 24px; }
+.heroLabel { display: block; font-size: var(--type-small); color: var(--hero-label); }
+.count { margin: 14px 0 20px; font-weight: inherit; display: flex; align-items: center; gap: 22px; }
+.num { font-weight: var(--weight-medium); font-size: var(--type-count); line-height: var(--line-solid); letter-spacing: var(--track-display); font-variant-numeric: tabular-nums; }
+.lbl { font-size: var(--type-title); font-weight: var(--weight-normal); line-height: var(--line-title); color: var(--text); max-width: 10ch; text-wrap: balance; }
+.clear { display: flex; align-items: center; gap: 12px; margin: 24px 0; font-size: var(--type-title); font-weight: var(--weight-medium); }
+.clearMark { width: 40px; height: 40px; flex: none; border-radius: var(--r-circle); display: grid; place-items: center; background: var(--ok-soft); color: var(--ok); }
+.actions { display: flex; margin-top: 16px; }
 .actions > * { flex: 1; min-width: 0; }
-/* Actions saved on the phone while a department was down: said plainly, never hidden. */
-.saved { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 0; border: 0; background: none; color: var(--hi); font-size: 15px; text-align: left; }
-.next { margin: 12px 0 0; font-size: 16px; color: var(--muted); }
-/* Coming up: a countdown block in place of an icon, amber inside 30 days. */
-.days { width: 52px; height: 52px; flex: none; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--surface-2); color: var(--muted); font-size: 11px; line-height: 1.1; }
-.days b { color: var(--text); font-size: 20px; font-weight: var(--weight-strong); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-.soon { background: var(--hi-soft); color: var(--hi); }
-.soon b { color: var(--hi); }
-
-.list { margin-top: 12px; }
-
-.enter .hero > * { animation: rise var(--m-enter) var(--ease-enter) both; }
-.enter .hero > :nth-child(2) { animation-delay: .06s; }
-.enter .hero > :nth-child(3) { animation-delay: .12s; }
-.enter .hero > :nth-child(4) { animation-delay: .18s; }
-.enter :global(.h), .enter .list { animation: rise var(--m-enter) var(--ease-enter) both; animation-delay: .24s; }
+.saved { display: flex; align-items: center; gap: 8px; margin-top: 12px; min-height: 44px; border: 0; background: none; color: var(--hi); font-size: var(--type-small); text-align: left; }
+.next { font-size: var(--type-body); color: var(--muted); }
+.days { width: 48px; height: 54px; flex: none; border-radius: var(--r-item); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: var(--well); color: var(--muted); font-size: var(--type-micro); }
+.days b { color: var(--text); font-size: var(--type-section); font-weight: var(--weight-medium); font-variant-numeric: tabular-nums; }
+.soon, .soon b { color: var(--hi); }
+.soon { background: var(--hi-soft); }
+.list { margin-top: 14px; }
+.services { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+.services > :last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 108px; flex-direction: row; align-items: center; }
+.services > :last-child:nth-child(odd) > :nth-child(2) { margin-top: 0; }
+.enter .hero { animation: rise var(--m-enter) var(--ease-enter) both; }

@@ -1,10 +1,11 @@
-/* A department tile: round marker, name, state, chevron. */
-.tile { display: flex; align-items: center; gap: 14px; width: 100%; color: var(--text); border: 0; padding: 14px; text-align: left; background: var(--tile, none); -webkit-tap-highlight-color: transparent; transition: background-color var(--m-out) var(--ease); }
-.mark { width: 44px; height: 44px; border-radius: var(--r-mark); display: grid; place-items: center; flex: none; background: color-mix(in srgb, var(--svc) 16%, transparent); color: var(--svc); }
-.body { flex: 1; min-width: 0; }
-.name { font-weight: var(--weight-strong); font-size: 17px; line-height: 1.3; letter-spacing: -.01em; display: block; }
-.state { font-size: 15px; color: var(--muted); margin-top: 2px; display: block; }
+.tile { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 24px; min-width: 0; width: 100%; min-height: 164px; padding: 18px; text-align: left; color: var(--text); border: 1px solid var(--card-edge); border-radius: var(--r-card); background: var(--tile-fill); box-shadow: var(--shadow-card); transition: transform var(--m-out) var(--ease), border-color var(--m-out) var(--ease); }
+.mark { width: 42px; height: 42px; border-radius: var(--r-mark); display: grid; place-items: center; background: color-mix(in srgb, var(--svc) 14%, var(--card)); color: var(--svc); }
+.body { min-width: 0; margin-top: auto; }
+.name { font-weight: var(--weight-medium); font-size: var(--type-body); line-height: var(--line-title); display: block; }
+.state { font-size: var(--type-caption); color: var(--muted); margin-top: 5px; display: block; overflow-wrap: anywhere; }
 .down { color: var(--hi); }
-.chev { color: var(--faint); flex: none; transition: transform var(--m-in) var(--ease), color var(--m-in) var(--ease); }
-@media (hover: hover) and (pointer: fine) { .tile:hover { background: var(--well-2); } .tile:hover .chev { transform: translateX(2px); color: var(--text); } }
-.tile:active { background: var(--well-2); transition-duration: 0ms; }
+.chev { position: absolute; right: 16px; top: 28px; color: var(--faint); }
+@media (hover: hover) and (pointer: fine) { .tile:hover { transform: translateY(-2px); border-color: var(--sep); } }
+.tile:active { transform: translateY(1px); }
+.mark.logo { background: var(--logo-plate); }
+.logo img { width: 72%; height: 72%; object-fit: contain; }

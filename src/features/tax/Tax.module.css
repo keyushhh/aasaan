@@ -1,2 +1,4 @@
 .pan { display: flex; gap: 12px; align-items: center; }
 .clear { display: flex; gap: 10px; align-items: center; color: var(--ok); font-weight: var(--weight-strong); }
+
+.timeline { margin-top: 14px; }

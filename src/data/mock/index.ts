@@ -1,12 +1,16 @@
 import { createStore } from '../../lib/storage';
 import { rnd, sleep, todayISO } from '../../lib/format';
 import { DepartmentUnavailable, isDown } from '../department';
-import { InvalidOtp, type Adapters } from '../services';
-import type { Dept, Request } from '../types';
+import { InvalidOtp, SimMismatch, type Adapters } from '../services';
+import { maskContact, targetDept, type Dept, type Request } from '../types';
 import * as S from './seed';
 
 /** Latency mirrors the reference prototype so screens feel the same. */
-export const LATENCY = { read: 420, ping: 700, pay: 1300, write: 0 };
+export const LATENCY = {
+  read: 420, ping: 700, pay: 1300, write: 0, sms: 2400,
+  /** each department answers in its own time, so discovery fills in one by one */
+  discover: { epf: 900, docs: 1300, vehicle: 1700, tax: 2100, health: 2500 } as Record<Dept, number>,
+};
 
 const store = createStore('aasaan-mock-v1', S.seedState);
 const mutate = (f: (s: S.MockState) => S.MockState) => store.set(f);
@@ -21,6 +25,24 @@ const addRequest = (r: Request) => mutate((s) => ({ ...s, requests: [r, ...s.req
 export const mockAdapters: Adapters = {
   ping: (d) => answer(d, LATENCY.ping, () => undefined),
   reset: () => store.set(S.seedState()),
+
+  profile: {
+    updateContact: (kind, target, value, queued) =>
+      answer(targetDept(target), LATENCY.pay / 2, () => {
+        const d = todayISO();
+        const r: Request = {
+          id: 'r' + Date.now() + target, svc: targetDept(target), title: `${kind === 'mobile' ? 'Mobile number' : 'Email'} update, ${S.MOBILE_HOLDER[target]}`,
+          ref: `New ${kind === 'mobile' ? 'number' : 'email'} ${maskContact(kind, value)}`, created: queued?.on ?? d, at: queued?.at ?? Date.now(), status: 'done',
+          steps: [
+            ...(queued ? [{ label: 'Saved on your phone', date: queued.on, state: 'done' as const }] : []),
+            { label: 'Request sent', date: d, state: 'done' },
+            { label: `Updated by ${S.MOBILE_HOLDER[target]}`, date: d, state: 'done' },
+          ],
+        };
+        addRequest(r);
+        return r;
+      }),
+  },
 
   epf: {
     getSummary: () => answer('epf', LATENCY.read, () => S.EPF),
@@ -95,6 +117,16 @@ export const mockAdapters: Adapters = {
   requests: { list: async () => store.get().requests },
 
   auth: {
+    // ponytail: the mock treats SIM 1 as the one holding the number and SIM 2 as a different number, so both paths can be seen.
+    verifySim: async (_mobile, sim) => {
+      await sleep(LATENCY.sms);
+      if (sim !== 1) throw new SimMismatch();
+    },
+    discover: async (_mobile, d) => {
+      await sleep(LATENCY.discover[d]);
+      return { dept: d, found: true, id: S.FOUND[d] };
+    },
+    identity: async () => S.IDENTITY,
     sendOtp: async () => {},
     verifyOtp: async (_mobile, otp) => {
       if (otp.trim() !== '123456') throw new InvalidOtp();

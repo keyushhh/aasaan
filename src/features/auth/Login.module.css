@@ -1,10 +1,66 @@
-.login { padding: 32px 22px 24px; }
-.login h1 { font-weight: var(--weight-strong); font-size: 34px; line-height: 1.1; letter-spacing: var(--track-display); margin: 24px 0 8px; max-width: 14ch; text-wrap: balance; }
-.login :global(.logo) { width: 64px; height: 64px; font-size: 30px; }
-.hint { background: var(--surface-2); color: var(--text); border-radius: var(--r-pill); padding: 8px 14px; font-size: 14px; font-weight: var(--weight-strong); margin-top: 12px; display: inline-block; font-variant-numeric: tabular-nums; }
-.proto { font-size: 13px; color: var(--muted); text-align: center; margin-top: 20px; }
-.consents { margin-top: 10px; }
-.check { display: flex; align-items: center; gap: 14px; padding: 16px 0; border-bottom: 1px dotted var(--sep); cursor: pointer; }
-.check:last-child { border-bottom: 0; }
-.check input { width: 22px; height: 22px; accent-color: var(--accent); flex: none; }
-.body { flex: 1; min-width: 0; }
+/* Onboarding: one question per screen, the action pinned to the bottom, progress across the top. */
+.login { display: flex; flex-direction: column; padding: 20px 24px 28px; min-height: 100dvh; }
+.login:not(.lock) > :not(.top) { flex: 1; display: flex; flex-direction: column; }
+.login h1 { font-weight: var(--weight-medium); font-size: var(--type-intro); line-height: var(--line-tight); letter-spacing: var(--track-display); margin: 36px 0 14px; max-width: 16ch; text-wrap: balance; }
+.login h1 + :global(.row-s) { font-size: var(--type-row); line-height: var(--line-body); margin: 0 0 22px; }
+.login :global(.logo) { width: 56px; height: 56px; font-size: var(--type-title); background: var(--primary); color: var(--primary-ink); }
+/* the action and its quiet alternative sit at the bottom, under the thumb */
+.end { margin-top: auto; padding-top: 24px; display: grid; gap: 6px; }
+.end > :global(button) { margin-top: 0; }
+.textBtn { min-height: 48px; border: 0; background: none; color: var(--text); font-size: var(--type-body); font-weight: var(--weight-strong); -webkit-tap-highlight-color: transparent; }
+@media (hover: hover) and (pointer: fine) { .textBtn:hover { text-decoration: underline; text-underline-offset: 3px; } }
+
+/* progress: back, six segments, the step count */
+.top { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+.topGap { width: 44px; flex: none; }
+.bar { flex: 1; display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.bar span { height: 4px; border-radius: var(--r-pill); background: var(--surface-2); transition: background-color var(--m-in) var(--ease); }
+.bar span[data-on] { background: var(--text); }
+.count { flex: none; font-size: var(--type-caption); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* welcome */
+.welcomeTop { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; }
+.lang { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border: 1px solid var(--card-edge); border-radius: var(--r-pill); background: var(--card); color: var(--text); font-size: var(--type-small); font-weight: var(--weight-medium); }
+.lang svg:last-child { color: var(--muted); }
+.points { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 16px; }
+.points li { display: flex; align-items: center; gap: 14px; font-size: var(--type-body); line-height: var(--line-body); }
+.pointIc { width: 40px; height: 40px; flex: none; border-radius: var(--r-circle); display: grid; place-items: center; background: var(--surface-2); color: var(--text); }
+.pointIc.ok { background: var(--ok-soft); color: var(--ok); }
+.proto { font-size: var(--type-caption); color: var(--muted); text-align: center; margin: 12px auto 0; max-width: 33ch; line-height: var(--line-body); }
+
+/* SIM choice and the SMS progress lines */
+.ask { margin: 4px 0 10px; font-size: var(--type-small); font-weight: var(--weight-medium); color: var(--muted); }
+.progress { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 18px; }
+.progress li { display: flex; align-items: center; gap: 14px; font-size: var(--type-body); color: var(--faint); transition: color var(--m-in) var(--ease); }
+.progress li[data-state="now"], .progress li[data-state="done"] { color: var(--text); }
+.dot { width: 28px; height: 28px; flex: none; border-radius: var(--r-circle); border: 2px solid var(--surface-3); display: grid; place-items: center; }
+li[data-state="now"] .dot { border-color: var(--surface-3); border-top-color: var(--text); animation: spin .8s linear infinite; }
+li[data-state="done"] .dot { border-color: var(--ok); background: var(--ok); color: var(--primary-ink); }
+
+/* discovery: a tick, a cross, or a spinner per department */
+.state { width: 26px; height: 26px; flex: none; border-radius: var(--r-circle); border: 2px solid var(--surface-3); border-top-color: var(--text); display: grid; place-items: center; animation: spin .8s linear infinite; }
+.state.ok, .state.none { animation: none; border: 0; }
+.state.ok { background: var(--ok-soft); color: var(--ok); }
+.state.none { background: var(--surface-2); color: var(--muted); }
+.summary { margin: 14px 4px 0; font-size: var(--type-body); color: var(--muted); }
+
+/* identity */
+.who { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; padding: 28px 20px 22px; }
+.whoAvatar { width: 72px; height: 72px; font-size: var(--type-page); margin-bottom: 8px; }
+.whoName { font-size: var(--type-identity); font-weight: var(--weight-medium); letter-spacing: var(--track-tight); }
+.whoSource { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font-size: var(--type-caption); color: var(--muted); }
+.whoMark { width: 24px; height: 24px; }
+
+/* PIN fields read as four spaced dots */
+.pin { letter-spacing: .6em; font-variant-numeric: tabular-nums; }
+
+/* ready and lock */
+.ready { align-items: flex-start; }
+.ready .end { align-self: stretch; }
+.readyMark { width: 64px; height: 64px; margin-top: 56px; border-radius: var(--r-circle); display: grid; place-items: center; background: var(--ok-soft); color: var(--ok); }
+.lock { align-items: center; text-align: center; padding-top: 72px; }
+.lock h1 { margin: 20px auto 10px; }
+.lock :global(label) { width: 100%; text-align: left; }
+.lock .end { width: 100%; }
+
+.hint { align-self: flex-start; background: var(--accent-soft); color: var(--hero-label); border-radius: var(--r-pill); padding: 8px 14px; font-size: var(--type-caption); margin-top: 14px; }

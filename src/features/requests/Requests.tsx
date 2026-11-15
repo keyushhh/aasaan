@@ -1,3 +1,4 @@
+import { num } from '../../lib/format';
 import { Card } from '../../components/Card';
 import { Empty } from '../../components/Empty';
 import { TopBar } from '../../components/TopBar';
@@ -16,6 +17,10 @@ export function Requests() {
       <TopBar title={t.tabs.requests} />
       <main className="pad" id="main">
         <p className={`note ${s.intro}`}>{t.requestsIntro}</p>
+        <div className={s.summary}>
+          <Card><b>{num(active.length)}</b><span>{t.inProgress}</span></Card>
+          <Card><b>{num(done.length)}</b><span>{t.completed}</span></Card>
+        </div>
         <h2 className="h">{t.inProgress}</h2>
         {active.length ? <Card variant="list">{active.map((r) => <RequestRow key={r.id} r={r} />)}</Card> : <Empty icon="list">{t.nothingInProgress}</Empty>}
         <h2 className="h">{t.completed}</h2>

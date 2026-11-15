@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { Dept } from '../data/types';
 import { Icon, type IconName } from './Icon';
 import { cx } from './cx';
+import { LOGO } from './logos';
 import s from './Row.module.css';
 
 interface Props {
@@ -44,7 +45,12 @@ export function Row({ title, sub, icon, right, figure, chevron, pressed, onClick
   );
 }
 
-/** The square icon used at the start of rows and cards. With svc it takes that department's signage colour. */
-export function RowIcon({ icon, svc, size = 18, ok, className, style }: { icon: IconName; svc?: Dept; size?: number; ok?: boolean; className?: string; style?: React.CSSProperties }) {
-  return <span className={cx(s.ic, ok && s.ok, className)} data-svc={svc} style={style}><Icon name={icon} size={size} /></span>;
+/** The round marker at the start of rows and cards. With svc it takes that department's colour, or its logo when one is supplied. */
+export function RowIcon({ icon, svc, logo: logoKey, size = 18, ok, className, style }: { icon: IconName; svc?: Dept; logo?: string; size?: number; ok?: boolean; className?: string; style?: React.CSSProperties }) {
+  const logo = LOGO[logoKey ?? svc ?? ''];
+  return (
+    <span className={cx(s.ic, ok && s.ok, logo && s.mark, className)} data-svc={svc} style={style}>
+      {logo ? <img src={logo} alt="" /> : <Icon name={icon} size={size} />}
+    </span>
+  );
 }

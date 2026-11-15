@@ -1,5 +1,5 @@
-.iconBtn { width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 0; background: none; color: var(--text); display: grid; place-items: center; flex: none; transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease); }
+.iconBtn { width: 44px; height: 44px; padding: 0; border-radius: var(--r-circle); border: 1px solid var(--card-edge); background: var(--surface); color: var(--text); display: grid; place-items: center; flex: none; transition: transform var(--m-out) var(--ease), background-color var(--m-out) var(--ease); }
 .onSign { background: var(--surface-2); }
-.spin svg { animation: spin .8s linear infinite; }
+.spin svg { animation: spin var(--m-spin) linear infinite; }
 @media (hover: hover) and (pointer: fine) { .iconBtn:hover { background: var(--surface-2); } }
 .iconBtn:active { transform: scale(.93); transition-duration: var(--m-press); }

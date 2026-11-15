@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AlertCard } from '../../components/AlertCard';
+import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { Icon } from '../../components/Icon';
@@ -9,8 +10,8 @@ import { Switch } from '../../components/Switch';
 import { useToast } from '../../components/Toast';
 import { cx } from '../../components/cx';
 import { DEPTS } from '../../data/types';
-import { useChallans, useConsents, useDepartments, useEpfSummary, useLicence, useRegistration, useRequests } from '../../data/hooks';
-import { fd, fday, inr, num } from '../../lib/format';
+import { useChallans, useConsents, useDepartments, useLicence, useRegistration, useRequests } from '../../data/hooks';
+import { fd, fday, num } from '../../lib/format';
 import { SVC_ICON, useNav } from '../../app/nav';
 import { setSession, useSession, useT } from '../../app/session';
 import { RequestRow } from '../requests/RequestRow';
@@ -29,14 +30,13 @@ export function Home() {
   const t = useT();
   const nav = useNav();
   const toast = useToast();
-  const { name, reminders = [] } = useSession();
+  const { name, photo, reminders = [] } = useSession();
   const { linked, down } = useDepartments();
   const challans = useChallans().data ?? [];
   const registration = useRegistration().data;
   const licence = useLicence(linked.vehicle).data;
   const consents = useConsents().data ?? [];
   const requests = useRequests().data ?? [];
-  const epf = useEpfSummary(linked.epf).data;
   const openRequest = useOpenRequest();
   const openPay = useOpenPay();
   const [enter] = useState(() => !entered);
@@ -45,7 +45,6 @@ export function Home() {
   const items = attention({ challans, registration, consents, requests, linked, down }, t);
   const [lead] = items;
   const dates = deadlines({ registration: linked.vehicle ? registration : undefined, licence, tax: linked.tax }, t);
-  const open = requests.filter((r) => r.status !== 'done').length;
   const saved = requests.filter((r) => r.status === 'queued').length;
   const first = name.split(' ')[0];
   const remind = (key: string) => {
@@ -65,7 +64,7 @@ export function Home() {
       <div className={s.ground} aria-hidden="true" />
       <header className={`${s.head} ${enter ? s.enter : ''}`}>
         <div className={s.bar}>
-          <span className="logo" aria-hidden="true">{name[0]}</span>
+          <Avatar name={name} photo={photo} />
           <span className={s.who}>
             <span className={s.hi}>{t.hello}, {first}</span>
             <span className={s.date}>{fday(Date.now())}</span>
@@ -85,15 +84,6 @@ export function Home() {
               <h1 className={s.clear} id="hero-count"><span className={s.clearMark}><Icon name="check" size={18} /></span>{t.allClear}</h1>
               {dates[0] && <p className={s.next}>{t.nextUp(dates[0].title, fd(dates[0].date))}</p>}
             </>
-          )}
-          {epf ? (
-            <button type="button" className={s.chip} onClick={() => nav.go('epf')}>
-              <span className={s.chipIc}><Icon name="wallet" size={14} /></span>{t.totalPf}: <b>{inr(epf.employee + epf.employer)}</b>
-            </button>
-          ) : (
-            <button type="button" className={s.chip} onClick={() => nav.tab('requests')}>
-              <span className={s.chipIc}><Icon name="list" size={14} /></span>{t.inProgress}: <b>{num(open)}</b>
-            </button>
           )}
           {saved > 0 && (
             <button type="button" className={s.saved} onClick={() => nav.tab('requests')}>
@@ -128,9 +118,9 @@ export function Home() {
         )}
 
         <h2 className="h"><Icon name="grid" size={22} />{t.yourServices}</h2>
-        <Card variant="list" className={s.list}>
+        <div className={s.services}>
           {DEPTS.map((d) => <ServiceTile key={d} svc={d} icon={SVC_ICON[d]} name={t.svc[d]} state={state(d)} down={linked[d] && down[d]} onClick={() => nav.go(d)} />)}
-        </Card>
+        </div>
         <h2 className="h"><Icon name="clock" size={22} />{t.recent}</h2>
         <Card variant="list" className={s.list}>{requests.slice(0, 3).map((r) => <RequestRow key={r.id} r={r} />)}</Card>
       </main>

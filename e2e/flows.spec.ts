@@ -1,20 +1,26 @@
 import { expect, test, type Page } from '@playwright/test';
 
+/** Onboarding, happy path: number, SMS from SIM 1, records found, it's me, link all, set PIN, home. */
 async function signIn(page: Page) {
   await page.goto('/');
   await page.evaluate(() => localStorage.clear());
   await page.reload();
+  await page.getByRole('button', { name: 'Get started' }).click();
   await page.getByLabel('Mobile number').fill('12345');
-  await page.getByRole('button', { name: 'Get OTP' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
   await expect(page.getByRole('alert')).toHaveText('Enter a valid 10-digit mobile number.');
   await page.getByLabel('Mobile number').fill('9876543210');
-  await page.getByRole('button', { name: 'Get OTP' }).click();
-  await page.getByLabel('6-digit OTP').fill('000000');
-  await page.getByRole('button', { name: 'Verify' }).click();
-  await expect(page.getByRole('alert')).toHaveText('That OTP doesn’t match. In this demo, use 123456.');
-  await page.getByLabel('6-digit OTP').fill('123456');
-  await page.getByRole('button', { name: 'Verify' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Send SMS' }).click();
+  await expect(page.getByRole('heading', { name: 'Finding your records' })).toBeVisible({ timeout: 8000 });
+  await expect(page.getByText('Found records in 5 places')).toBeVisible({ timeout: 8000 });
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Yes, this is me' }).click();
   await page.getByRole('button', { name: 'Link and continue' }).click();
+  await page.getByLabel('4-digit PIN').fill('1234');
+  await page.getByLabel('Enter it again').fill('1234');
+  await page.getByRole('button', { name: 'Set PIN' }).click();
+  await page.getByRole('button', { name: 'Go to home' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toContainText('things need you');
 }
 const sheet = (page: Page) => page.getByRole('dialog');
@@ -41,8 +47,10 @@ test('a claim made during an EPFO outage is sent when EPFO is back', async ({ pa
   await sheet(page).getByRole('button', { name: 'Save and submit later' }).click();
   await expect(page.getByText('Claim saved. It’ll be submitted when EPFO is back.')).toBeVisible();
 
-  // the queue survives a reload
+  // the queue survives a reload (which asks for the app PIN)
   await page.reload();
+  await page.getByLabel('4-digit PIN').fill('1234');
+  await page.getByRole('button', { name: 'Unlock' }).click();
   await page.getByRole('button', { name: 'Requests' }).click();
   await expect(page.getByText('Queued')).toBeVisible();
 
@@ -105,4 +113,65 @@ test('keyboard: skip link reaches the main content and the sheet keeps focus', a
   }
   await page.keyboard.press('Escape');
   await expect(page.getByRole('button', { name: /Track claim/ })).toBeFocused();
+});
+
+test('change the mobile number and email everywhere at once, with one department down', async ({ page }) => {
+  await signIn(page);
+  await page.getByRole('button', { name: 'Profile' }).click();
+  await page.getByRole('switch', { name: 'Simulate Parivahan outage' }).click();
+  await page.getByRole('button', { name: /^Mobile number/ }).click();
+  await sheet(page).getByLabel('New mobile number').fill('9876543210');
+  await sheet(page).getByRole('button', { name: 'Get OTP' }).click();
+  await expect(sheet(page).getByRole('alert')).toHaveText('That’s already your number. Enter the new one.');
+  await sheet(page).getByLabel('New mobile number').fill('9123456780');
+  await sheet(page).getByRole('button', { name: 'Get OTP' }).click();
+  await sheet(page).getByLabel('6-digit OTP').fill('123456');
+  await sheet(page).getByRole('button', { name: 'Verify' }).click();
+  await sheet(page).getByRole('button', { name: 'Update 6 places' }).click();
+  await expect(sheet(page).getByRole('heading', { name: 'Your number is updated' })).toBeVisible();
+  await expect(sheet(page).getByText('Updated', { exact: true })).toHaveCount(5);
+  await expect(sheet(page).getByText('Saved, sends when Parivahan is back')).toBeVisible();
+  await sheet(page).getByRole('button', { name: 'Done' }).click();
+  await expect(page.getByRole('button', { name: /^Mobile number/ })).toContainText('+91 91••••••80');
+
+  await page.getByRole('button', { name: /^Email/ }).click();
+  await sheet(page).getByLabel('New email').fill('ananya.rao@example.com');
+  await sheet(page).getByRole('button', { name: 'Get OTP' }).click();
+  await sheet(page).getByLabel('6-digit OTP').fill('123456');
+  await sheet(page).getByRole('button', { name: 'Verify' }).click();
+  await sheet(page).getByRole('button', { name: 'Update 6 places' }).click();
+  await expect(sheet(page).getByRole('heading', { name: 'Your email is updated' })).toBeVisible();
+  await sheet(page).getByRole('button', { name: 'Done' }).click();
+  await expect(page.getByRole('button', { name: /^Email/ })).toContainText('ananya.rao@example.com');
+});
+
+test('onboarding: the wrong SIM is caught, an OTP works instead, and relaunching asks for the PIN', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await page.getByRole('button', { name: 'Get started' }).click();
+  await page.getByLabel('Mobile number').fill('9876543210');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('radio', { name: 'SIM 2' }).check();
+  await page.getByRole('button', { name: 'Send SMS' }).click();
+  await expect(page.getByText('SIM 2 has a different number')).toBeVisible({ timeout: 8000 });
+  await page.getByRole('button', { name: 'Get an OTP instead' }).click();
+  await page.getByLabel('6-digit OTP').fill('123456');
+  await page.getByRole('button', { name: 'Verify' }).click();
+  await expect(page.getByText('Found records in 5 places')).toBeVisible({ timeout: 8000 });
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'This isn’t me' }).click();
+  await expect(page.getByText(/Aadhaar Seva Kendra/)).toBeVisible();
+  await page.getByRole('button', { name: 'Change number' }).click();
+  await expect(page.getByRole('heading', { name: 'What’s your mobile number?' })).toBeVisible();
+  // relaunch after a full onboarding asks for the PIN
+  await signIn(page);
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'Welcome back, Ananya' })).toBeVisible();
+  await page.getByLabel('4-digit PIN').fill('9999');
+  await page.getByRole('button', { name: 'Unlock' }).click();
+  await expect(page.getByRole('alert')).toHaveText('That PIN isn’t right. Try again.');
+  await page.getByLabel('4-digit PIN').fill('1234');
+  await page.getByRole('button', { name: 'Unlock' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('things need you');
 });

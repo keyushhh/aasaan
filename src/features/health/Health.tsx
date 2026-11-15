@@ -1,4 +1,5 @@
 import { Button } from '../../components/Button';
+import { Icon } from '../../components/Icon';
 import { Card } from '../../components/Card';
 import { Pill } from '../../components/Pill';
 import { Row } from '../../components/Row';
@@ -32,7 +33,7 @@ export function Health() {
       {() => (
         <>
           <Card variant="hero" data-svc="health">
-            <div className="label">{t.abhaNumber}</div>
+            <div className={s.cardLabel}><span className="label">{t.abhaNumber}</span><Icon name="heart" size={26} /></div>
             <div className="big md mono">{abha.data!.number}</div>
             <div className="row-s">{abha.data!.address}</div>
             <Button block icon="download" onClick={() => toast(t.downloadToast)}>{t.downloadAbha}</Button>
@@ -40,7 +41,7 @@ export function Health() {
           <h2 className="h">{t.recordRequests}</h2>
           <div className="stack">
             {consents.data!.map((c) => (
-              <Card key={c.id}>
+              <Card key={c.id} className={s.consent}>
                 <span className="row-t">{c.from}</span>
                 <span className="row-s">{t.consentLine(c.what, c.purpose, c.until)}</span>
                 {c.status === 'pending' ? (
