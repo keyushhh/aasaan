@@ -54,7 +54,7 @@ export function ShareSheet({ d }: { d: Document }) {
       <p className="row-s">{t.shareBody}</p>
       <h2 className={`h ${s.expiryHead}`}>{t.codeWorksFor}</h2>
       <Segmented label={t.expiry} value={hours} onChange={setHours} options={t.expiryOptions.map(([value, label]) => ({ value, label }))} />
-      <Button variant="primary" block trail="chev" onClick={create}>{t.createCode}</Button>
+      <Button variant="primary" block onClick={create}>{t.createCode}</Button>
     </>
   );
 }

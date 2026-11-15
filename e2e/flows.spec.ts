@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-/** Onboarding, happy path: number, SMS from SIM 1, records found, it's me, link all, set PIN, home. */
+/** Onboarding, happy path: number, SMS from SIM 1, records found, it's me, face check, link all, PIN on the keypad, home. */
 async function signIn(page: Page) {
   await page.goto('/');
   await page.evaluate(() => localStorage.clear());
@@ -12,14 +12,21 @@ async function signIn(page: Page) {
   await page.getByLabel('Mobile number').fill('9876543210');
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByRole('button', { name: 'Send SMS' }).click();
-  await expect(page.getByRole('heading', { name: 'Finding your records' })).toBeVisible({ timeout: 8000 });
-  await expect(page.getByText('Found records in 5 places')).toBeVisible({ timeout: 8000 });
+  await expect(page.getByText('Found records in 5 places')).toBeVisible({ timeout: 10000 });
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByRole('button', { name: 'Yes, this is me' }).click();
+  await page.getByRole('button', { name: 'Start face check' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click({ timeout: 10000 });
   await page.getByRole('button', { name: 'Link and continue' }).click();
-  await page.getByLabel('4-digit PIN').fill('1234');
-  await page.getByLabel('Enter it again').fill('1234');
-  await page.getByRole('button', { name: 'Set PIN' }).click();
+  await page.keyboard.type('1234');
+  await expect(page.getByRole('heading', { name: 'Enter it again' })).toBeVisible();
+  await page.getByRole('button', { name: '1', exact: true }).click();
+  await page.getByRole('button', { name: '2', exact: true }).click();
+  await page.getByRole('button', { name: '3', exact: true }).click();
+  await page.getByRole('button', { name: '4', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Unlock with fingerprint or face' })).toBeVisible();
+  // headless browsers have no fingerprint or face unlock, so the screen says so and moves on
+  await page.getByRole('button', { name: /^(Continue|Not now)$/ }).click();
   await page.getByRole('button', { name: 'Go to home' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toContainText('things need you');
 }
@@ -49,8 +56,8 @@ test('a claim made during an EPFO outage is sent when EPFO is back', async ({ pa
 
   // the queue survives a reload (which asks for the app PIN)
   await page.reload();
-  await page.getByLabel('4-digit PIN').fill('1234');
-  await page.getByRole('button', { name: 'Unlock' }).click();
+  await expect(page.getByRole('heading', { name: 'Welcome back, Ananya' })).toBeVisible();
+  await page.keyboard.type('1234');
   await page.getByRole('button', { name: 'Requests' }).click();
   await expect(page.getByText('Queued')).toBeVisible();
 
@@ -145,33 +152,33 @@ test('change the mobile number and email everywhere at once, with one department
   await expect(page.getByRole('button', { name: /^Email/ })).toContainText('ananya.rao@example.com');
 });
 
-test('onboarding: the wrong SIM is caught, an OTP works instead, and relaunching asks for the PIN', async ({ page }) => {
+test('onboarding: the wrong SIM is caught, a mismatched PIN starts over, and relaunching asks for the PIN', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => localStorage.clear());
   await page.reload();
   await page.getByRole('button', { name: 'Get started' }).click();
   await page.getByLabel('Mobile number').fill('9876543210');
   await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.getByRole('button', { name: 'Get an OTP instead' })).toHaveCount(0);
   await page.getByRole('radio', { name: 'SIM 2' }).check();
   await page.getByRole('button', { name: 'Send SMS' }).click();
-  await expect(page.getByText('SIM 2 has a different number')).toBeVisible({ timeout: 8000 });
-  await page.getByRole('button', { name: 'Get an OTP instead' }).click();
-  await page.getByLabel('6-digit OTP').fill('123456');
-  await page.getByRole('button', { name: 'Verify' }).click();
-  await expect(page.getByText('Found records in 5 places')).toBeVisible({ timeout: 8000 });
+  await expect(page.getByText('SIM 2 has a different number. Pick the other SIM.')).toBeVisible({ timeout: 8000 });
+  await page.getByRole('radio', { name: 'SIM 1' }).check();
+  await page.getByRole('button', { name: 'Send SMS' }).click();
+  await expect(page.getByText('Number verified')).toBeVisible({ timeout: 8000 });
+  await expect(page.getByText('Found records in 5 places')).toBeVisible({ timeout: 10000 });
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByRole('button', { name: 'This isn’t me' }).click();
   await expect(page.getByText(/Aadhaar Seva Kendra/)).toBeVisible();
   await page.getByRole('button', { name: 'Change number' }).click();
   await expect(page.getByRole('heading', { name: 'What’s your mobile number?' })).toBeVisible();
-  // relaunch after a full onboarding asks for the PIN
+
+  // relaunch after a full onboarding asks for the PIN on the keypad
   await signIn(page);
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Welcome back, Ananya' })).toBeVisible();
-  await page.getByLabel('4-digit PIN').fill('9999');
-  await page.getByRole('button', { name: 'Unlock' }).click();
+  await page.keyboard.type('9999');
   await expect(page.getByRole('alert')).toHaveText('That PIN isn’t right. Try again.');
-  await page.getByLabel('4-digit PIN').fill('1234');
-  await page.getByRole('button', { name: 'Unlock' }).click();
+  await page.keyboard.type('1234');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('things need you');
 });

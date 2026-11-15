@@ -40,6 +40,7 @@ export const RECORDS: HealthRecord[] = [
 ];
 
 export const CITIZEN = { name: 'Ananya Rao' };
+export const OTHER_SIM = '9123456780';
 export const IDENTITY = { name: 'Ananya Rao', born: 1994 };
 /** What each department finds for the sample number, already masked the way the department would show it. */
 export const FOUND: Record<Dept, string> = {

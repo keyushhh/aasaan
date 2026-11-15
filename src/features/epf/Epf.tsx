@@ -34,7 +34,7 @@ export function Epf() {
               </div>
               <div className="meta"><MonoIn line={t.uanLine(e.uan, e.org)} part={e.uan} /></div>
             </Card>
-            <Button variant="primary" block trail="chev" onClick={() => sheet.open(<ClaimSheet eligible={e.eligible} />)}>{t.withdraw}</Button>
+            <Button variant="primary" block onClick={() => sheet.open(<ClaimSheet eligible={e.eligible} />)}>{t.withdraw}</Button>
             <h2 className="h">{t.yourClaims}</h2>
             {claims.length ? <Card variant="list">{claims.map((r) => <RequestRow key={r.id} r={r} />)}</Card> : <Empty icon="wallet">{t.noClaims}</Empty>}
             <h2 className="h">{t.passbook}</h2>

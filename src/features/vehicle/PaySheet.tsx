@@ -47,7 +47,7 @@ function PaySheet({ id }: { id: string }) {
       <Select<PayMethod> field label={t.payWith} value={method} onChange={setMethod}
         options={en.payMethods.map((m, i) => [m as PayMethod, t.payMethods[i]] as const)} />
       {paused && <Banner spacing="pay" title={t.paymentsPausedTitle}>{t.paymentsPausedBody}</Banner>}
-      <Button variant="primary" block trail="chev" disabled={paused || paying} onClick={pay}>{paying ? t.confirming : t.pay(inr(c.amount))}</Button>
+      <Button variant="primary" block disabled={paused || paying} onClick={pay}>{paying ? t.confirming : t.pay(inr(c.amount))}</Button>
       <p className={`note ${s.note}`}>{t.noMoney}</p>
     </>
   );

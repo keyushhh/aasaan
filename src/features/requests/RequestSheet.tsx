@@ -30,7 +30,7 @@ function RequestSheet({ r }: { r: Request }) {
       <Timeline steps={r.steps} />
       <div className="btn-row">
         <Button onClick={sheet.close}>{t.close}</Button>
-        <Button variant="primary" trail="chev" onClick={() => nav.go(r.svc)}>{t.openSvc(t.svc[r.svc])}</Button>
+        <Button variant="primary" onClick={() => nav.go(r.svc)}>{t.openSvc(t.svc[r.svc])}</Button>
       </div>
     </>
   );

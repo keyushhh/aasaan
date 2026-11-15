@@ -7,7 +7,7 @@ import * as S from './seed';
 
 /** Latency mirrors the reference prototype so screens feel the same. */
 export const LATENCY = {
-  read: 420, ping: 700, pay: 1300, write: 0, sms: 2400,
+  read: 420, ping: 700, pay: 1300, write: 0, sms: 2400, face: 3200,
   /** each department answers in its own time, so discovery fills in one by one */
   discover: { epf: 900, docs: 1300, vehicle: 1700, tax: 2100, health: 2500 } as Record<Dept, number>,
 };
@@ -118,6 +118,11 @@ export const mockAdapters: Adapters = {
 
   auth: {
     // ponytail: the mock treats SIM 1 as the one holding the number and SIM 2 as a different number, so both paths can be seen.
+    // ponytail: the mock phone holds the entered number on SIM 1 (Jio) and a different number on SIM 2 (Airtel).
+    sims: async (mobile) => [
+      { slot: 1, carrier: 'jio', name: 'Jio', number: mobile },
+      { slot: 2, carrier: 'airtel', name: 'Airtel', number: mobile === S.OTHER_SIM ? '9988776655' : S.OTHER_SIM },
+    ],
     verifySim: async (_mobile, sim) => {
       await sleep(LATENCY.sms);
       if (sim !== 1) throw new SimMismatch();
@@ -127,6 +132,7 @@ export const mockAdapters: Adapters = {
       return { dept: d, found: true, id: S.FOUND[d] };
     },
     identity: async () => S.IDENTITY,
+    faceMatch: async () => sleep(LATENCY.face),
     sendOtp: async () => {},
     verifyOtp: async (_mobile, otp) => {
       if (otp.trim() !== '123456') throw new InvalidOtp();

@@ -123,6 +123,11 @@
   --hero-label: #2F5C4E;
   --primary: #0A0B0B;
   --primary-ink: #FFFFFF;
+  /* the main action: a soft sheen top to bottom, a hairline highlight and a low shadow instead of a hard ledge */
+  --cta-top: #2E302F;
+  --cta-bottom: #0A0B0B;
+  --cta-shine: rgba(255, 255, 255, .16);
+  --cta-glow: rgba(10, 11, 11, .45);
   --accent: #1E9A4E;
   --accent-soft: rgba(30, 154, 78, .14);
   --hi: #A8650A;
@@ -172,6 +177,10 @@
     --hero-label: #A8CDB6;
     --primary: #FFFFFF;
     --primary-ink: #0A0B0B;
+    --cta-top: #FFFFFF;
+    --cta-bottom: #DCDEDD;
+    --cta-shine: rgba(255, 255, 255, .9);
+    --cta-glow: rgba(255, 255, 255, .14);
     --accent: #52D17A;
     --accent-soft: rgba(82, 209, 122, .14);
     --hi: #F2A52E;
@@ -219,6 +228,10 @@
   --hero-label: #A8CDB6;
   --primary: #FFFFFF;
   --primary-ink: #0A0B0B;
+  --cta-top: #FFFFFF;
+  --cta-bottom: #DCDEDD;
+  --cta-shine: rgba(255, 255, 255, .9);
+  --cta-glow: rgba(255, 255, 255, .14);
   --accent: #52D17A;
   --accent-soft: rgba(82, 209, 122, .14);
   --hi: #F2A52E;

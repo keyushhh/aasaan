@@ -1,0 +1,16 @@
+/* Four boxes, a dot in each filled one; the next empty box is ringed. Under them, a 3 by 4 keypad of round keys. */
+.pad { display: flex; flex-direction: column; align-items: center; gap: 28px; }
+.boxes { display: flex; gap: 14px; }
+.boxes span { width: 58px; height: 64px; border-radius: var(--r-field); background: var(--well); display: grid; place-items: center; box-shadow: inset 0 0 0 1px transparent; transition: box-shadow var(--m-in) var(--ease), background-color var(--m-in) var(--ease); }
+.boxes span::after { content: ""; width: 12px; height: 12px; border-radius: var(--r-circle); background: var(--text); opacity: 0; transform: scale(0); transition: transform var(--m-in) var(--ease-enter), opacity var(--m-in) var(--ease); }
+.boxes span[data-on]::after { opacity: 1; transform: scale(1); }
+.boxes span[data-now] { box-shadow: inset 0 0 0 1.5px var(--text); background: var(--well-2); }
+.boxes[data-error] span { box-shadow: inset 0 0 0 1.5px var(--danger); background: var(--danger-soft); }
+.boxes[data-error] { animation: shake .36s var(--ease); }
+@keyframes shake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+.keys { display: grid; grid-template-columns: repeat(3, 72px); gap: 12px 28px; justify-content: center; }
+.key, .slot > button { width: 72px; height: 72px; border: 0; border-radius: var(--r-circle); background: var(--surface); color: var(--text); font-size: var(--type-title); font-weight: var(--weight-medium); font-variant-numeric: tabular-nums; display: grid; place-items: center; -webkit-tap-highlight-color: transparent; transition: background-color var(--m-out) var(--ease), transform var(--m-out) var(--ease); }
+.key:active, .slot > button:active { background: var(--surface-3); transform: scale(.94); transition-duration: var(--m-press); }
+@media (hover: hover) and (pointer: fine) { .key:hover, .slot > button:hover { background: var(--surface-2); } }
+.quiet, .slot > button { background: none; color: var(--muted); }
+.slot { display: grid; place-items: center; }

@@ -7,13 +7,16 @@ import { Choice } from '../../components/Choice';
 import { Field } from '../../components/Field';
 import { Icon, type IconName } from '../../components/Icon';
 import { IconButton } from '../../components/IconButton';
+import { PinPad } from '../../components/PinPad';
 import { Row, RowIcon } from '../../components/Row';
 import { useSheet } from '../../components/Sheet';
 import { cx } from '../../components/cx';
 import { api, setLinks } from '../../data';
 import { DEPTS, type Dept } from '../../data/types';
-import { InvalidOtp, SimMismatch, type Finding, type Identity } from '../../data/services';
+import { SimMismatch, type Finding, type Identity, type Sim } from '../../data/services';
 import { LANGS } from '../../i18n/strings';
+import { bioAvailable, enrollBio, verifyBio } from '../../lib/biometric';
+import { rnd } from '../../lib/format';
 import { hashPin } from '../../lib/pin';
 import { SVC_ICON, useNav } from '../../app/nav';
 import { setSession, useSession, useT } from '../../app/session';
@@ -24,11 +27,12 @@ import s from './Login.module.css';
 /**
  * Onboarding, in the order a citizen-services app has to earn trust:
  * the number, proof that its SIM is in this phone, what each department holds for it,
- * whose records those are, consent for what to link, a PIN for this phone, then home.
+ * whose records those are, a face check against Aadhaar, consent for what to link,
+ * a PIN for this phone and, if the phone offers it, fingerprint or face unlock. Then home.
  */
-type Step = 'welcome' | 'mobile' | 'sim' | 'otp' | 'discover' | 'identity' | 'link' | 'pin' | 'ready';
-const NUMBERED: Step[] = ['mobile', 'sim', 'discover', 'identity', 'link', 'pin'];
-const BACK: Partial<Record<Step, Step>> = { mobile: 'welcome', sim: 'mobile', otp: 'sim' };
+type Step = 'welcome' | 'mobile' | 'sim' | 'discover' | 'identity' | 'face' | 'link' | 'pin' | 'bio' | 'ready';
+const NUMBERED: Step[] = ['mobile', 'sim', 'discover', 'identity', 'face', 'link', 'pin'];
+const BACK: Partial<Record<Step, Step>> = { mobile: 'welcome', sim: 'mobile' };
 
 export function Login() {
   const [step, setStep] = useState<Step>('welcome');
@@ -37,24 +41,26 @@ export function Login() {
   const [who, setWho] = useState<Identity>();
   const [picked, setPicked] = useState<Dept[]>([]);
   const [pin, setPin] = useState('');
+  const [bio, setBio] = useState<string>();
   const nav = useNav();
 
   const finish = () => {
     setLinks(Object.fromEntries(DEPTS.map((d) => [d, picked.includes(d)])) as Record<Dept, boolean>);
-    setSession({ mobile, name: who?.name, pin, loggedIn: true });
+    setSession({ mobile, name: who?.name, pin, bio, loggedIn: true });
     nav.home();
   };
 
   let body: ReactNode;
   if (step === 'welcome') body = <Welcome onNext={() => setStep('mobile')} />;
   else if (step === 'mobile') body = <MobileStep initial={mobile} onDone={(m) => { setMobile(m); setStep('sim'); }} />;
-  else if (step === 'sim') body = <SimStep mobile={mobile} onDone={() => setStep('discover')} onOtp={() => setStep('otp')} />;
-  else if (step === 'otp') body = <OtpStep mobile={mobile} onDone={() => setStep('discover')} onChange={() => setStep('mobile')} />;
+  else if (step === 'sim') body = <SimStep mobile={mobile} onDone={() => setStep('discover')} />;
   else if (step === 'discover') body = <DiscoverStep mobile={mobile} onDone={(f) => { setFindings(f); setPicked(f.filter((x) => x.found).map((x) => x.dept)); setStep('identity'); }} />;
-  else if (step === 'identity') body = <IdentityStep mobile={mobile} onDone={(w) => { setWho(w); setStep('link'); }} onRestart={() => setStep('mobile')} />;
+  else if (step === 'identity') body = <IdentityStep mobile={mobile} onDone={(w) => { setWho(w); setStep('face'); }} onRestart={() => setStep('mobile')} />;
+  else if (step === 'face') body = <FaceStep mobile={mobile} onDone={() => setStep('link')} />;
   else if (step === 'link') body = <LinkStep findings={findings} picked={picked} setPicked={setPicked} onDone={() => setStep('pin')} />;
-  else if (step === 'pin') body = <PinStep mobile={mobile} onDone={(h) => { setPin(h); setStep('ready'); }} />;
-  else body = <ReadyStep name={who?.name ?? ''} linked={picked.length} onDone={finish} />;
+  else if (step === 'pin') body = <PinStep mobile={mobile} onDone={(h) => { setPin(h); setStep('bio'); }} />;
+  else if (step === 'bio') body = <BioStep name={who?.name ?? ''} mobile={mobile} onDone={(id) => { setBio(id); setStep('ready'); }} />;
+  else body = <ReadyStep name={who?.name ?? ''} linked={picked.length} bio={!!bio} onDone={finish} />;
 
   return <Frame step={step} onBack={BACK[step] && (() => setStep(BACK[step]!))}>{body}</Frame>;
 }
@@ -62,7 +68,7 @@ export function Login() {
 /** The progress bar and back button around every numbered step. */
 function Frame({ step, onBack, children }: { step: Step; onBack?: () => void; children: ReactNode }) {
   const t = useT();
-  const i = NUMBERED.indexOf(step === 'otp' ? 'sim' : step);
+  const i = NUMBERED.indexOf(step === 'bio' ? 'pin' : step);
   return (
     <div className={s.login}>
       {i >= 0 && (
@@ -111,7 +117,7 @@ function Welcome({ onNext }: { onNext: () => void }) {
         ))}
       </ul>
       <div className={s.end}>
-        <Button variant="primary" block trail="chev" onClick={onNext}>{t.getStarted}</Button>
+        <Button variant="primary" block onClick={onNext}>{t.getStarted}</Button>
         <p className={s.proto}>{t.protoLogin}</p>
       </div>
     </div>
@@ -137,46 +143,43 @@ function MobileStep({ initial, onDone }: { initial: string; onDone: (m: string) 
         <input ref={ref} inputMode="numeric" maxLength={10} placeholder={t.mobilePlaceholder} autoComplete="tel-national" value={v} onChange={(e) => setV(e.target.value)} />
       </Field>
       <div className="err" role="alert">{err}</div>
-      <Button type="submit" variant="primary" block trail="chev">{t.continueCta}</Button>
+      <Button type="submit" variant="primary" block>{t.continueCta}</Button>
     </form>
-  );
-}
-
-/** A spinner while a line is in progress, a tick once it is done, an empty ring before it starts. */
-function Progress({ items, at }: { items: ReactNode[]; at: number }) {
-  return (
-    <ol className={s.progress}>
-      {items.map((label, i) => (
-        <li key={i} data-state={i < at ? 'done' : i === at ? 'now' : 'todo'}>
-          <span className={s.dot} aria-hidden="true">{i < at && <Icon name="check" size={14} />}</span>
-          {label}
-        </li>
-      ))}
-    </ol>
   );
 }
 
 /**
  * Device binding by SMS: the phone sends one message from the chosen SIM, and the number is verified when it
- * arrives from that number. Picking the wrong SIM says so; an OTP is always there as a fallback.
+ * arrives from that number. The message shows as a thread with ticks: sending, sent, delivered, then verified.
+ * Picking the wrong SIM says so.
  */
-function SimStep({ mobile, onDone, onOtp }: { mobile: string; onDone: () => void; onOtp: () => void }) {
+function SimStep({ mobile, onDone }: { mobile: string; onDone: () => void }) {
   const t = useT();
   const [sim, setSim] = useState<1 | 2>(1);
+  const [sims, setSims] = useState<Sim[]>([]);
+  // Read the phone's SIMs and start on the one that holds the number entered.
+  useEffect(() => {
+    void api.auth.sims(mobile).then((list) => {
+      setSims(list);
+      const own = list.find((x) => x.number === mobile);
+      if (own) setSim(own.slot);
+    });
+  }, [mobile]);
   const [at, setAt] = useState(-1);
   const [err, setErr] = useState('');
+  const [token] = useState(() => 'AASAAN ' + rnd(4, 'ABCDEFGHJKLMNPQRSTUVWXYZ') + ' ' + rnd(4));
   const timers = useRef<number[]>([]);
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
   const send = async () => {
     setErr('');
     setAt(0);
-    timers.current = [window.setTimeout(() => setAt(1), 700), window.setTimeout(() => setAt(2), 1500)];
+    timers.current = [window.setTimeout(() => setAt(1), 800), window.setTimeout(() => setAt(2), 1700)];
     try {
       await api.auth.verifySim(mobile, sim);
       timers.current.forEach(clearTimeout);
       setAt(3);
-      timers.current = [window.setTimeout(onDone, 700)];
+      timers.current = [window.setTimeout(onDone, 900)];
     } catch (x) {
       timers.current.forEach(clearTimeout);
       setAt(-1);
@@ -191,57 +194,33 @@ function SimStep({ mobile, onDone, onOtp }: { mobile: string; onDone: () => void
       <h1>{t.simTitle}</h1>
       <p className="row-s">{t.simBody(mobile)}</p>
       {sending ? (
-        <Progress items={t.smsSteps} at={at} />
+        <div className={s.thread} aria-live="polite">
+          <div className={s.threadHead}><span className={s.threadIc}><Icon name="message" size={16} /></span>{t.smsTo}</div>
+          <div className={s.bubble}><span className="mono">{token}</span></div>
+          <div className={s.ticks} data-at={at}>
+            {at === 3 ? <span className={s.verified}><Icon name="check" size={14} />{t.smsStatus[3]}</span> : (
+              <>{t.smsFrom(sim)}, {t.smsStatus[at]}<span className={s.tickIc}>{at === 0 ? <Icon name="clock" size={13} /> : <><Icon name="check" size={13} />{at === 2 && <Icon name="check" size={13} />}</>}</span></>
+            )}
+          </div>
+        </div>
       ) : (
         <>
           <h2 className={s.ask}>{t.simPick}</h2>
           <Card variant="list" role="radiogroup" aria-label={t.simPick}>
-            {([1, 2] as const).map((n) => (
-              <Choice key={n} type="radio" name="sim" checked={sim === n} onChange={() => setSim(n)} icon={<RowIcon icon="phone" />} title={t.simN(n)} />
+            {sims.map((x) => (
+              <Choice key={x.slot} type="radio" name="sim" checked={sim === x.slot} onChange={() => setSim(x.slot)}
+                icon={<RowIcon icon="phone" logo={`carrier-${x.carrier}`} />}
+                title={`${t.simN(x.slot)}, ${x.name}`}
+                sub={<><span className="mono">+91 {x.number.slice(0, 5)} {x.number.slice(5)}</span>{x.number === mobile && <span className={s.simMatch}>{t.simMatch}</span>}</>} />
             ))}
           </Card>
           {err && <Banner spacing="sheet" title={err} />}
         </>
       )}
       <div className={s.end}>
-        <Button variant="primary" block trail="chev" disabled={sending} onClick={send}>{t.sendSms}</Button>
-        {!sending && <button type="button" className={s.textBtn} onClick={onOtp}>{t.useOtpInstead}</button>}
+        <Button variant="primary" block disabled={sending || sims.length === 0} onClick={send}>{t.sendSms}</Button>
       </div>
     </div>
-  );
-}
-
-/** The fallback when the SIM can't send an SMS: a one-time code to the number. */
-function OtpStep({ mobile, onDone, onChange }: { mobile: string; onDone: () => void; onChange: () => void }) {
-  const t = useT();
-  const [v, setV] = useState('');
-  const [err, setErr] = useState('');
-  const ref = useFocusOnMount();
-  useEffect(() => void api.auth.sendOtp(mobile), [mobile]);
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    try {
-      await api.auth.verifyOtp(mobile, v);
-      onDone();
-    } catch (x) {
-      if (x instanceof InvalidOtp) setErr(t.errOtp);
-      else throw x;
-    }
-  };
-  return (
-    <form onSubmit={submit} noValidate>
-      <h1>{t.otpTitle}</h1>
-      <p className="row-s">{t.sentTo(mobile)}</p>
-      <Field label={t.otpLabel}>
-        <input ref={ref} inputMode="numeric" maxLength={6} autoComplete="one-time-code" value={v} onChange={(e) => setV(e.target.value)} />
-      </Field>
-      <span className={s.hint}>{t.demoOtp}</span>
-      <div className="err" role="alert">{err}</div>
-      <div className={s.end}>
-        <Button type="submit" variant="primary" block trail="chev">{t.verify}</Button>
-        <button type="button" className={s.textBtn} onClick={onChange}>{t.changeNumber}</button>
-      </div>
-    </form>
   );
 }
 
@@ -276,7 +255,7 @@ function DiscoverStep({ mobile, onDone }: { mobile: string; onDone: (f: Finding[
       </Card>
       {done && <p className={s.summary}>{t.foundIn(hits)}</p>}
       <div className={s.end}>
-        <Button variant="primary" block trail="chev" disabled={!done} onClick={() => onDone(all as Finding[])}>{t.continueCta}</Button>
+        <Button variant="primary" block disabled={!done} onClick={() => onDone(all as Finding[])}>{t.continueCta}</Button>
       </div>
     </div>
   );
@@ -306,9 +285,57 @@ function IdentityStep({ mobile, onDone, onRestart }: { mobile: string; onDone: (
           <Button variant="primary" block onClick={onRestart}>{t.changeNumber}</Button>
         ) : (
           <>
-            <Button variant="primary" block trail="chev" disabled={!who} onClick={() => who && onDone(who)}>{t.itsMe}</Button>
+            <Button variant="primary" block disabled={!who} onClick={() => who && onDone(who)}>{t.itsMe}</Button>
             <button type="button" className={s.textBtn} onClick={() => setNotMe(true)}>{t.notMe}</button>
           </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * A face check against the Aadhaar photo, as UIDAI face authentication does. The live camera shows in a ring that fills
+ * while the match runs. Without a camera the check still runs, just without the preview.
+ */
+function FaceStep({ mobile, onDone }: { mobile: string; onDone: () => void }) {
+  const t = useT();
+  const [phase, setPhase] = useState<'ready' | 'scanning' | 'matched'>('ready');
+  const [noCamera, setNoCamera] = useState(false);
+  const video = useRef<HTMLVideoElement>(null);
+  const stream = useRef<MediaStream | null>(null);
+  const stop = () => stream.current?.getTracks().forEach((k) => k.stop());
+  useEffect(() => stop, []);
+
+  const start = async () => {
+    setPhase('scanning');
+    try {
+      stream.current = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+      if (video.current) video.current.srcObject = stream.current;
+    } catch {
+      setNoCamera(true);
+    }
+    await api.auth.faceMatch(mobile);
+    stop();
+    setPhase('matched');
+  };
+
+  return (
+    <div>
+      <h1>{t.faceTitle}</h1>
+      <p className="row-s">{phase === 'scanning' ? t.faceHold : phase === 'matched' ? t.faceMatched : t.faceBody}</p>
+      <div className={s.face} data-phase={phase}>
+        <svg className={s.faceRing} viewBox="0 0 100 100" aria-hidden="true"><circle className={s.track} cx="50" cy="50" r="47" /><circle className={s.arc} cx="50" cy="50" r="47" pathLength="100" /></svg>
+        <div className={s.faceWindow}>
+          {phase === 'scanning' && !noCamera ? <video ref={video} autoPlay playsInline muted /> : <Icon name={phase === 'matched' ? 'check' : 'face'} size={56} />}
+        </div>
+      </div>
+      {noCamera && phase !== 'ready' && <p className={s.faceNote}>{t.faceNoCamera}</p>}
+      <div className={s.end}>
+        {phase === 'matched' ? (
+          <Button variant="primary" block onClick={onDone}>{t.continueCta}</Button>
+        ) : (
+          <Button variant="primary" block disabled={phase === 'scanning'} onClick={start}>{t.faceStart}</Button>
         )}
       </div>
     </div>
@@ -330,86 +357,131 @@ function LinkStep({ findings, picked, setPicked, onDone }: { findings: Finding[]
         ))}
       </Card>
       <div className={s.end}>
-        <Button variant="primary" block trail="chev" disabled={picked.length === 0} onClick={onDone}>{t.linkContinue}</Button>
+        <Button variant="primary" block disabled={picked.length === 0} onClick={onDone}>{t.linkContinue}</Button>
       </div>
     </div>
   );
 }
 
+/** Set the PIN on the keypad, then enter it again. A mismatch shakes the boxes and starts over. */
 function PinStep({ mobile, onDone }: { mobile: string; onDone: (hash: string) => void }) {
   const t = useT();
-  const [a, setA] = useState('');
-  const [b, setB] = useState('');
+  const [first, setFirst] = useState('');
+  const [v, setV] = useState('');
   const [err, setErr] = useState('');
-  const ref = useFocusOnMount();
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!/^\d{4}$/.test(a)) return setErr(t.errPin);
-    if (a !== b) return setErr(t.errPinMatch);
-    onDone(await hashPin(a, mobile));
-  };
+  const confirming = first !== '';
+  useEffect(() => {
+    if (v.length < 4) return;
+    const id = setTimeout(async () => {
+      if (!confirming) return (setFirst(v), setV(''), setErr(''));
+      if (v !== first) return (setFirst(''), setV(''), setErr(t.errPinMatch));
+      onDone(await hashPin(v, mobile));
+    }, 180);
+    return () => clearTimeout(id);
+  }, [v, first, confirming, mobile, onDone, t]);
   return (
-    <form onSubmit={submit} noValidate>
-      <h1>{t.pinTitle}</h1>
+    <div>
+      <h1>{confirming ? t.pinAgain : t.pinTitle}</h1>
       <p className="row-s">{t.pinBody}</p>
-      <Field label={t.pinLabel}>
-        <input ref={ref} type="password" inputMode="numeric" maxLength={4} autoComplete="new-password" className={s.pin} value={a} onChange={(e) => setA(e.target.value.replace(/\D/g, ''))} />
-      </Field>
-      <Field label={t.pinAgain}>
-        <input type="password" inputMode="numeric" maxLength={4} autoComplete="new-password" className={s.pin} value={b} onChange={(e) => setB(e.target.value.replace(/\D/g, ''))} />
-      </Field>
       <div className="err" role="alert">{err}</div>
       <div className={s.end}>
-        <Button type="submit" variant="primary" block trail="chev">{t.setPin}</Button>
+        <PinPad value={v} onChange={(x) => { setV(x); setErr(''); }} error={!!err} label={t.pinDigits(v.length)} deleteLabel={t.deleteDigit} />
       </div>
-    </form>
+    </div>
   );
 }
 
-function ReadyStep({ name, linked, onDone }: { name: string; linked: number; onDone: () => void }) {
+/** Offer the phone's fingerprint or face unlock. Where the phone or browser has none, say so and move on. */
+function BioStep({ name, mobile, onDone }: { name: string; mobile: string; onDone: (id?: string) => void }) {
+  const t = useT();
+  const [available, setAvailable] = useState<boolean>();
+  const [err, setErr] = useState('');
+  useEffect(() => void bioAvailable().then(setAvailable), []);
+  const turnOn = async () => {
+    setErr('');
+    try {
+      onDone(await enrollBio(name, mobile));
+    } catch {
+      setErr(t.bioFailed);
+    }
+  };
+  return (
+    <div>
+      <div className={s.bioArt} aria-hidden="true">
+        <span><Icon name="finger" size={36} /></span>
+        <span><Icon name="face" size={36} /></span>
+      </div>
+      <h1>{t.bioTitle}</h1>
+      <p className="row-s">{available === false ? t.bioUnavailable : t.bioBody}</p>
+      <div className="err" role="alert">{err}</div>
+      <div className={s.end}>
+        {available === false ? (
+          <Button variant="primary" block onClick={() => onDone()}>{t.continueCta}</Button>
+        ) : (
+          <>
+            <Button variant="primary" block disabled={available === undefined} onClick={turnOn}>{t.bioOn}</Button>
+            <button type="button" className={s.textBtn} onClick={() => onDone()}>{t.notNow}</button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ReadyStep({ name, linked, bio, onDone }: { name: string; linked: number; bio: boolean; onDone: () => void }) {
   const t = useT();
   return (
     <div className={s.ready}>
       <span className={s.readyMark} aria-hidden="true"><Icon name="check" size={32} /></span>
       <h1>{t.readyTitle(name.split(' ')[0])}</h1>
       <ul className={s.points}>
-        {[t.readyVerified, t.readyLinked(linked), t.readyPin].map((p) => (
+        {[t.readyVerified, t.readyLinked(linked), t.readyPin, ...(bio ? [t.readyBio] : [])].map((p) => (
           <li key={p}><span className={cx(s.pointIc, s.ok)}><Icon name="check" size={16} /></span>{p}</li>
         ))}
       </ul>
       <div className={s.end}>
-        <Button variant="primary" block trail="chev" onClick={onDone}>{t.goHome}</Button>
+        <Button variant="primary" block onClick={onDone}>{t.goHome}</Button>
       </div>
     </div>
   );
 }
 
-/** Opening the app again asks for the PIN set during onboarding. Forgetting it means signing in again. */
+/** Opening the app again asks for the PIN, or the fingerprint or face if that was turned on. Forgetting the PIN means signing in again. */
 export function Lock({ onUnlock }: { onUnlock: () => void }) {
   const t = useT();
-  const { name, photo, pin, mobile } = useSession();
+  const { name, photo, pin, mobile, bio } = useSession();
   const [v, setV] = useState('');
   const [err, setErr] = useState('');
-  const ref = useFocusOnMount();
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    if ((await hashPin(v, mobile)) === pin) return onUnlock();
-    setV('');
-    setErr(t.errPinWrong);
+  const tryBio = async () => {
+    if (!bio) return;
+    try {
+      await verifyBio(bio);
+      onUnlock();
+    } catch {
+      setErr(t.bioFailed);
+    }
   };
+  useEffect(() => {
+    if (v.length < 4) return;
+    let live = true;
+    void hashPin(v, mobile).then((h) => {
+      if (!live) return;
+      if (h === pin) onUnlock();
+      else (setV(''), setErr(t.errPinWrong));
+    });
+    return () => void (live = false);
+  }, [v, pin, mobile, onUnlock, t]);
   return (
-    <form className={cx(s.login, s.lock)} onSubmit={submit} noValidate>
+    <div className={cx(s.login, s.lock)}>
       <Avatar name={name} photo={photo} className={s.whoAvatar} />
       <h1>{t.lockTitle(name.split(' ')[0])}</h1>
       <p className="row-s">{t.lockBody}</p>
-      <Field label={t.pinLabel}>
-        <input ref={ref} type="password" inputMode="numeric" maxLength={4} autoComplete="current-password" className={s.pin} value={v} onChange={(e) => setV(e.target.value.replace(/\D/g, ''))} />
-      </Field>
       <div className="err" role="alert">{err}</div>
       <div className={s.end}>
-        <Button type="submit" variant="primary" block>{t.unlock}</Button>
-        <button type="button" className={s.textBtn} onClick={() => setSession({ loggedIn: false, pin: undefined })}>{t.forgotPin}</button>
+        <PinPad value={v} onChange={(x) => { setV(x); setErr(''); }} error={!!err} label={t.pinDigits(v.length)} deleteLabel={t.deleteDigit}
+          extra={bio && <button type="button" aria-label={t.useBio} onClick={tryBio}><Icon name="finger" size={28} /></button>} />
+        <button type="button" className={s.textBtn} onClick={() => setSession({ loggedIn: false, pin: undefined, bio: undefined })}>{t.forgotPin}</button>
       </div>
-    </form>
+    </div>
   );
 }

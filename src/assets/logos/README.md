@@ -20,4 +20,8 @@ Sources of the files here, each taken from the department's own site:
 - `health.svg`: abha.abdm.gov.in header logo (ABDM)
 - `aadhaar.svg`: uidai.gov.in header logo, framed to the Aadhaar mark (used in the mobile number update)
 
+- `carrier-jio.svg`: jio.com header logo, trimmed to the Jio circle
+- `carrier-airtel.svg`: Airtel icon from homarr-labs/dashboard-icons (dashboardicons.com)
+- `carrier-vi.svg`: myvi.in logo
+
 Parivahan publishes no square logo, so vehicle keeps its line icon.

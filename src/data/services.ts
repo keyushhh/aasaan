@@ -48,6 +48,8 @@ export interface RequestsService {
 export interface Finding { dept: Dept; found: boolean; id?: string }
 /** The person the records belong to, as their Aadhaar has them, for the "is this you" check. */
 export interface Identity { name: string; born: number }
+/** A SIM in this phone: its slot, its operator and the number on it, as the phone reports them. */
+export interface Sim { slot: 1 | 2; carrier: 'jio' | 'airtel' | 'vi'; name: string; number: string }
 
 export interface AuthService {
   /**
@@ -55,9 +57,13 @@ export interface AuthService {
    * arrived from this mobile number. Rejects with SimMismatch when that SIM holds a different number.
    */
   verifySim(mobile: string, sim: 1 | 2): Promise<void>;
+  /** The SIMs in this phone. A native build reads them from the phone (Android SubscriptionManager); a web page cannot. */
+  sims(mobile: string): Promise<Sim[]>;
   /** Ask one department whether it holds records for this number. */
   discover(mobile: string, dept: Dept): Promise<Finding>;
   identity(mobile: string): Promise<Identity>;
+  /** UIDAI face authentication: match a live face against the Aadhaar photo for this number. */
+  faceMatch(mobile: string): Promise<void>;
   sendOtp(mobile: string): Promise<void>;
   /** Resolves with the citizen's name, rejects with InvalidOtp. */
   verifyOtp(mobile: string, otp: string): Promise<{ name: string }>;

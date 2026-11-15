@@ -160,7 +160,7 @@ export function ContactSheet({ kind }: { kind: Contact }) {
           </Field>
         )}
         <div className="err" role="alert">{error}</div>
-        <Button type="submit" variant="primary" block trail="chev" disabled={busy}>{first ? t.getOtp : t.verify}</Button>
+        <Button type="submit" variant="primary" block disabled={busy}>{first ? t.getOtp : t.verify}</Button>
       </form>
     );
   }
